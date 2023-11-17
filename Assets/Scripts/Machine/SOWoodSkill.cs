@@ -5,11 +5,17 @@ using UnityEngine.Serialization;
 public class SOWoodSkill : ScriptableObject
 {
     public SOWaterSkill waterSkill;
-    public float machineSpeed;
-    public float humanCount; 
+    
     public GameObject outPutObj;
     public GameObject inPutObj;
+    
+    [Header("Machine Settings")]
     public float defaultTime;
+    public float machineSpeed;
+    public float humanCount; 
+    
+    [Header("Earn Money Settings")]
+    public float earnMoneyTime; //Satarken beklenen süre
     public int earnMoneyRate; //Satarken kaçar adeet satılacağı
 
 }

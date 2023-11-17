@@ -100,9 +100,10 @@ public class WoodMachine : MonoBehaviour
         while (true)
         {
             
-            yield return new WaitForSeconds(_multiplier);
-            if (_outPutToMoneySlots.Count % woodSkill.earnMoneyRate == 0)
+            yield return new WaitForSeconds(woodSkill.earnMoneyTime);
+            if (_outPutToMoneySlots.Count / woodSkill.earnMoneyRate >= 1)
             {
+               
                 for (int i = 0; i <  woodSkill.earnMoneyRate; i++)
                 {
                     var obj = _outPutToMoneySlots[^1];
