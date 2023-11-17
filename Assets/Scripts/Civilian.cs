@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class Civilian : Human
         WorkCoroutine = MoveToWork(true);
         HumanPoints( GameManager.Instance.buildManager.civilBuilding);
         StartCoroutine(WorkCoroutine);
-        shiftControl.onClick.AddListener(ShiftControl);
+        //shiftControl.onClick.AddListener(ShiftControl);
     }
     void ShiftControl()
     {
@@ -30,5 +31,13 @@ public class Civilian : Human
         }
     }
 
-   
+    private void OnEnable()
+    {
+        UIManager.OnClickedShiftButton += ShiftControl;
+    }
+
+    private void OnDisable()
+    {
+        UIManager.OnClickedShiftButton -= ShiftControl;
+    }
 }

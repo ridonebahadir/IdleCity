@@ -12,7 +12,7 @@ public class Soldier : Human
         
         HumanPoints( GameManager.Instance.buildManager.soldierBuilding);
         StartCoroutine(SleepCoroutine);
-        shiftControl.onClick.AddListener(ShiftControl);
+        //shiftControl.onClick.AddListener(ShiftControl);
     }
 
     void ShiftControl()
@@ -31,5 +31,13 @@ public class Soldier : Human
             _isWork = true;
         }
     }
-   
+    private void OnEnable()
+    {
+        UIManager.OnClickedShiftButton += ShiftControl;
+    }
+
+    private void OnDisable()
+    {
+        UIManager.OnClickedShiftButton -= ShiftControl;
+    }
 }

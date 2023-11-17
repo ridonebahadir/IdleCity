@@ -14,7 +14,7 @@ public class Human : MonoBehaviour
 {
     
     //SHIFT CONTROL
-    public Button shiftControl;
+    //public Button shiftControl;
     
     
     
@@ -53,7 +53,7 @@ public class Human : MonoBehaviour
             if (_dist<1) 
             {
                 transform.GetChild(0).DOScale(Vector3.zero, 0.3f);
-                _waitTime = isWait ? new(Random.Range(5, 8)) : new(0);
+                _waitTime = isWait ? new(Random.Range(3,6)) : new(0);
                 yield return _waitTime; 
                 _countTarget++;
                 if (_countTarget>=_humanPoints.Count)  _countTarget = 1;
@@ -88,8 +88,7 @@ public class Human : MonoBehaviour
         }
        
     }
-    
-    
+
    
 }
 
