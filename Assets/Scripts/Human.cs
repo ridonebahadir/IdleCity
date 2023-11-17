@@ -14,52 +14,46 @@ public class Human : MonoBehaviour
 {
     
     //SHIFT CONTROL
-    [SerializeField] private Button shiftControl;
-    public bool _isWork = true;
+    public Button shiftControl;
     
     
-    private readonly List<Transform> _humanPoints = new List<Transform>(); 
+    
+    public List<Transform> _humanPoints = new List<Transform>(); 
     public int _countTarget;
-   
     private NavMeshAgent _agent;
     private bool _onetime; 
     private WaitForSeconds _waitTime;
-    private float dist;
-    private IEnumerator WorkCoroutine;
-    private IEnumerator SleepCoroutine;
-    
-    void Start()
+    private float _dist;
+    protected IEnumerator WorkCoroutine;
+    protected IEnumerator SleepCoroutine;
+
+    private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
-        var buildManager = GameManager.instance.buildManager.builds;
+       
+    }
+    
+
+    protected void HumanPoints(List<Transform> buildManager)
+    { 
+      
         foreach (var t in buildManager)
         {
             var newTransform = t.GetChild(Random.Range(0, t.childCount));
             _humanPoints.Add(newTransform);
         }
-        //_agent.destination = _humanPoints[0].position;
-        transform.position = _humanPoints[0].transform.position;
-        shiftControl.onClick.AddListener(ShiftControl);
-        
-        
-        SleepCoroutine = MoveToSleep();
-        WorkCoroutine = MoveToWork();
-        StartCoroutine(WorkCoroutine);
-
-       
+        //transform.position = _humanPoints[0].transform.position;
     }
-    
-   
-    IEnumerator MoveToWork()
+    protected IEnumerator MoveToWork(bool isWait)
     {
         while (true)
         {
-            dist = Vector3.Distance(_humanPoints[_countTarget].position,transform.position);
+            _dist = Vector3.Distance(_humanPoints[_countTarget].position,transform.position);
             //Arrived
-            if (dist<1) 
+            if (_dist<1) 
             {
                 transform.GetChild(0).DOScale(Vector3.zero, 0.3f);
-                _waitTime =new(Random.Range(1,10));
+                _waitTime = isWait ? new(Random.Range(5, 8)) : new(0);
                 yield return _waitTime; 
                 _countTarget++;
                 if (_countTarget>=_humanPoints.Count)  _countTarget = 1;
@@ -74,13 +68,13 @@ public class Human : MonoBehaviour
         }
        
     }
-    IEnumerator MoveToSleep()
+    protected IEnumerator MoveToSleep()
     {
         while (true)
         {
-            dist = Vector3.Distance(_humanPoints[0].position,transform.position);
+            _dist = Vector3.Distance(_humanPoints[0].position,transform.position);
             //Arrived
-            if (dist<1) 
+            if (_dist<1) 
             {
                 transform.GetChild(0).DOScale(Vector3.zero, 0.3f);
             }
@@ -94,22 +88,7 @@ public class Human : MonoBehaviour
         }
        
     }
-    void ShiftControl()
-    {
-        if (_isWork)
-        {
-                
-            StopCoroutine(WorkCoroutine);
-            StartCoroutine(SleepCoroutine);
-            _isWork = false;
-        }
-        else
-        {
-            StartCoroutine(WorkCoroutine);
-            StopCoroutine(SleepCoroutine);
-            _isWork = true;
-        }
-    }
+    
     
    
 }
