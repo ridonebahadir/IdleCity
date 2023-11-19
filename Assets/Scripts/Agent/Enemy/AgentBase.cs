@@ -54,7 +54,7 @@ namespace Agent.Enemy
                             }
                             else
                             {
-                                Debug.Log("Kışlaya Dön");
+                                Debug.Log("Kışlaya Girdi");
                             }
                         }
                         break;
@@ -92,7 +92,6 @@ namespace Agent.Enemy
             {
                 _navMeshAgent.destination = _patrolPoint.position;
                 _dist = Vector3.Distance(_patrolPoint.position,transform.position);
-                Debug.Log("dslghlj");
                 if (_dist<1)
                 {
                     MoveToTarget();

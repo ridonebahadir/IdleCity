@@ -20,7 +20,6 @@ public class Tower : MonoBehaviour
            
             if (health.healthType==HealthType.Enemy)
             {
-                Debug.Log("girdi");
                 _isFire = true;
                 StartCoroutine(Fire(health));
             }
