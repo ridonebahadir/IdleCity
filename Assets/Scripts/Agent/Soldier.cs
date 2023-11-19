@@ -1,43 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Agent.Enemy;
 
-public class Soldier : Human
+namespace Agent
 {
-    private bool _isWork = true;
-    private void Start()
+    public class Soldier : AgentBase
     {
-        SleepCoroutine = MoveToSleep();
-        WorkCoroutine = MoveToWork(false);
+        protected override Health TargetDetection()
+        {
+            if (_isWar)
+            {
+                if (gm.enemies.Count==0) return null;
+                var target = gm.GetRandomEnemies();
+                return target;
+            }
+            else
+            {
+                var target =gm.buildManager.GetRandomSoldierBuild();
+                return target;
+            }
         
-        HumanPoints( GameManager.Instance.buildManager.soldierBuilding);
-        StartCoroutine(SleepCoroutine);
-        //shiftControl.onClick.AddListener(ShiftControl);
-    }
-
-    void ShiftControl()
-    {
-        if (_isWork)
-        {
-                
-            StopCoroutine(SleepCoroutine);
-            StartCoroutine(WorkCoroutine);
-            _isWork = false;
         }
-        else
-        {
-            StartCoroutine(SleepCoroutine);
-            StopCoroutine(WorkCoroutine);
-            _isWork = true;
-        }
-    }
-    private void OnEnable()
-    {
-        UIManager.OnClickedShiftButton += ShiftControl;
-    }
 
-    private void OnDisable()
-    {
-        UIManager.OnClickedShiftButton -= ShiftControl;
+    
     }
 }

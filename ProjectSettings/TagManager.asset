@@ -9,11 +9,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Tower
   - Water
   - UI
-  - 
-  - 
+  - Bullet
+  - Soldier
   - 
   - 
   - 

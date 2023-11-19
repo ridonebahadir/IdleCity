@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Human : MonoBehaviour
+public abstract class Human : MonoBehaviour
 {
     
     //SHIFT CONTROL
@@ -26,7 +26,7 @@ public class Human : MonoBehaviour
     private float _dist;
     protected IEnumerator WorkCoroutine;
     protected IEnumerator SleepCoroutine;
-
+    private WaitForSeconds _wait = new(0.5f);
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -64,7 +64,7 @@ public class Human : MonoBehaviour
                 transform.GetChild(0).DOScale(Vector3.one, 0.3f);
             }
             _agent.destination = _humanPoints[_countTarget].position;
-            yield return new WaitForSeconds(0.5f);
+            yield return _wait;
         }
        
     }
@@ -84,12 +84,20 @@ public class Human : MonoBehaviour
                 transform.GetChild(0).DOScale(Vector3.one, 0.3f);
             }
             _agent.destination = _humanPoints[0].position;
-            yield return new WaitForSeconds(0.5f);
+            yield return _wait;
         }
        
     }
+    protected abstract void ShiftControl();
+    private void OnEnable()
+    {
+        UIManager.OnClickedShiftButton += ShiftControl;
+    }
 
-   
+    private void OnDisable()
+    {
+        UIManager.OnClickedShiftButton -= ShiftControl;
+    }
 }
 
 

@@ -15,8 +15,8 @@ MonoBehaviour:
   waterSkill: {fileID: 11400000, guid: d51f1788fa6db3346a82951c05e161ab, type: 2}
   outPutObj: {fileID: 4412908257391869718, guid: 31b462c8d76ed2e439e9c1d7bd995d53, type: 3}
   inPutObj: {fileID: 8903522026634739863, guid: d5bed377c65de2b428bace2106c52599, type: 3}
-  defaultTime: 1
-  machineSpeed: 1
-  humanCount: 1
-  earnMoneyTime: 5
+  defaultTime: 6.72
+  machineSpeed: 5.28
+  humanCount: 8.22
+  earnMoneyTime: 1.74
   earnMoneyRate: 2
