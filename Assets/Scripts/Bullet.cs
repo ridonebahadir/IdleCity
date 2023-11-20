@@ -27,7 +27,7 @@ public class Bullet : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Health health))
+        if (other.TryGetComponent(out WorkBase health))
         {
             health.TakeDamage(_damage);
         }

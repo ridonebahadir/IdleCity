@@ -1,25 +1,37 @@
 using Agent.Enemy;
+using UnityEngine;
 
 namespace Agent
 {
     public class Soldier : AgentBase
     {
-        protected override Health TargetDetection()
+        protected override Transform TargetDetection()
         {
             if (_isWar)
             {
                 if (gm.enemies.Count==0) return null;
-                var target = gm.GetRandomEnemies();
-                return target;
+                var target = gm.GetRandomHealths(gm.enemies)    ;
+                return target.transform;
             }
             else
             {
                 var target =gm.buildManager.GetRandomSoldierBuild();
-                return target;
+                return target.transform;
             }
         
         }
 
-    
+        protected override void AttackType()
+        {
+            if (_isWar)
+            {
+                StartCoroutine(Attack());
+                          
+            }
+            else
+            {
+                Debug.Log("Kışlaya Girdi");
+            }
+        }
     }
 }

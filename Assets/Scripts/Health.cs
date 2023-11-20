@@ -1,20 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
-using Agent.Enemy;
 using UnityEngine;
 
-
-
-
-
-public class Health : MonoBehaviour
+public class Health : WorkBase
 {
-    public int health;
-    public HealthType healthType;
-    
-    public bool TakeDamage(int damage)
+    public override bool DestructRiver()
     {
-        
+        throw new System.NotImplementedException();
+    }
+
+    public override bool TakeDamage(int damage)
+    {
         health -= damage;
         if (health>0)
         {
@@ -26,12 +22,5 @@ public class Health : MonoBehaviour
             return true;
         }
         return false;
-    }
-
-    private void Death()
-    { 
-        GameManager.Instance.RemoveList(healthType,this);
-       gameObject.SetActive(false);
-       gameObject.transform.SetParent(null);
     }
 }

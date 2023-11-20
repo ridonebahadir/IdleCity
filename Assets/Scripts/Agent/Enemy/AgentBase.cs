@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 using UnityEngine.Timeline;
 
 namespace Agent.Enemy
@@ -15,10 +16,10 @@ namespace Agent.Enemy
     {
         [SerializeField] private AgentType agentType;
         
-        private WaitForSeconds _wait = new(1);
+        protected WaitForSeconds _wait = new(1);
         private NavMeshAgent _navMeshAgent;
-        private float _dist;
-        public Health _targetHealth;
+        private float _dist; 
+        public WorkBase targetWorkBase;
         public Transform _patrolPoint;
         protected bool _isWar;
         protected GameManager gm;
@@ -34,46 +35,31 @@ namespace Agent.Enemy
            
             while (true)
             {
-                if (_targetHealth!=null)
+                if (targetWorkBase!=null)
                 {
-                    _navMeshAgent.destination = _targetHealth.transform.position;
-                    _dist = Vector3.Distance(_targetHealth.transform.position,transform.position);
+                    _navMeshAgent.destination = targetWorkBase.transform.position;
+                    _dist = Vector3.Distance(targetWorkBase.transform.position,transform.position);
                     if (_dist<1)
                     {
-                        if (agentType == AgentType.Enemy)
-                        {
-                            StartCoroutine(Attack());
-                        
-                        }
-                        else
-                        {
-                            if (_isWar)
-                            {
-                                StartCoroutine(Attack());
-                          
-                            }
-                            else
-                            {
-                                Debug.Log("Kışlaya Girdi");
-                            }
-                        }
-                        break;
-                   
+                        AttackType();
                     }
                 }
                 
                 yield return _wait;
             }
         }
-        IEnumerator Attack()
+
+       
+
+        protected IEnumerator Attack()
         {
             while (true)
             {
-                if (_targetHealth!=null)
+                if (targetWorkBase!=null)
                 {
-                    if ( _targetHealth.TakeDamage(10))
+                    if ( targetWorkBase.TakeDamage(10))
                     {
-
+                        targetWorkBase = null;
                         MoveToTarget();
                         break;
                     }
@@ -102,29 +88,31 @@ namespace Agent.Enemy
         }
         private void MoveToTarget()
         {
-            _targetHealth = TargetDetection();
-            if (_targetHealth==null)
+            var targetDetection = TargetDetection();
+            if (targetDetection==null)
             {
                 StopCoroutine(Attack());
-                _patrolPoint = gm.GetRandomPatrolPoints();
+                _patrolPoint = gm.GetRandomTransformPoints(gm.patrolPoints);
                 StartCoroutine(Patrol());
             }
             else
             {
+                targetWorkBase = targetDetection.GetComponent<WorkBase>();
                 StartCoroutine(Move());
             }
           
            
         }
         
-        protected abstract Health TargetDetection();
+        protected abstract Transform TargetDetection();
+        protected abstract void AttackType();
 
        
         
         
         private void ShiftControl()
         {
-           StopCoroutine(Attack());
+           //StopCoroutine(Attack());
             _isWar = !_isWar;
             MoveToTarget();
        

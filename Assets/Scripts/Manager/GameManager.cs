@@ -13,14 +13,17 @@ public class GameManager : MonoBehaviour
    public UIManager uIManager;
    
    [Header("Game List")]
-   public List<Health> enemies;
-   public List<Health> soldiers; 
+   public List<Transform> enemies;
+   public List<Transform> soldiers; 
+   public List<Transform> destroyRiverPoints;
    public List<Transform> patrolPoints;
+  
 
    [Header("Game List Parent")] 
    public Transform enemiesParent;
    public Transform soldiersParent;
-   public Transform patrolPointsParent;
+   public Transform patrolPointsParent; 
+   public Transform destroyRiverParent;
    
    private void Awake()
    {
@@ -28,28 +31,33 @@ public class GameManager : MonoBehaviour
       {
          Instance = this;
       }
-      GameListHealthAddItem(enemies,enemiesParent);
+      /*GameListHealthAddItem(enemies,enemiesParent);
       GameListHealthAddItem(soldiers,soldiersParent);
+      GameListHealthAddItem(riverPoints,riverPointsParent);*/
+      GameListTransformAddItem(enemies,enemiesParent);
+      GameListTransformAddItem(soldiers,soldiersParent);
       GameListTransformAddItem(patrolPoints,patrolPointsParent);
+      GameListTransformAddItem(destroyRiverPoints,destroyRiverParent);
+     
    }
-   public Health GetRandomEnemies()
+   public Transform GetRandomHealths(List<Transform> list)
    {
-      var a = Random.Range(0, enemies.Count);
-      return enemies[a].GetComponent<Health>();
+      var a = Random.Range(0, list.Count);
+      return list[a];
    }
-   public Health GetRandomSoldiers()
+   /*public Health GetRandomSoldiers()
    {
       var a = Random.Range(0, soldiers.Count);
       return soldiers[a].GetComponent<Health>();
-   }
+   }*/
 
-   public Transform GetRandomPatrolPoints()
+   public Transform GetRandomTransformPoints(List<Transform> list)
    {
-      var a = Random.Range(0, patrolPoints.Count);
-      return patrolPoints[a];
+      var a = Random.Range(0, list.Count);
+      return list[a];
    }
 
-   public void RemoveList(HealthType healthType,Health health)
+   public void RemoveList(HealthType healthType,Transform health)
    {
       switch (healthType)
       {
@@ -70,17 +78,11 @@ public class GameManager : MonoBehaviour
          list.Add(item);
       }
    }
-   private void GameListHealthAddItem(List<Health> list, Transform parent)
+   /*private void GameListHealthAddItem(List<Health> list, Transform parent)
    {
       foreach (Transform item in parent)
       {
          list.Add(item.GetComponent<Health>());
       }
-   }
-}
-public enum HealthType
-{
-   Home,
-   Soldier, 
-   Enemy,
+   }*/
 }

@@ -15,7 +15,7 @@ public class Tower : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Health health))
+        if (other.TryGetComponent(out WorkBase health))
         {
            
             if (health.healthType==HealthType.Enemy)
@@ -28,7 +28,7 @@ public class Tower : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out Health health))
+        if (other.TryGetComponent(out WorkBase health))
         {
             if ((health.healthType==HealthType.Enemy))
             {
@@ -40,7 +40,7 @@ public class Tower : MonoBehaviour
 
     
 
-    IEnumerator Fire(Health other)
+    IEnumerator Fire(WorkBase other)
     {
         while (_isFire && other.health>0)
         {
