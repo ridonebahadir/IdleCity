@@ -25,7 +25,7 @@ namespace Agent
         {
             if (_isWar)
             {
-                StartCoroutine(Attack());
+                StartCoroutine(Attack(10,1));
                           
             }
             else

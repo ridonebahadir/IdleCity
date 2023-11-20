@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class Health : WorkBase
 {
-    public override bool DestructRiver()
-    {
-        throw new System.NotImplementedException();
-    }
 
     public override bool TakeDamage(int damage)
     {
@@ -18,7 +14,7 @@ public class Health : WorkBase
         }
         else
         {
-            Death();
+            Death(true);
             return true;
         }
         return false;

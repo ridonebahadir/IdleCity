@@ -7,16 +7,10 @@ using UnityEngine.Timeline;
 
 namespace Agent.Enemy
 {
-    public enum AgentType
-    {
-        Enemy,
-        Player,
-    }
+   
     public abstract class AgentBase : MonoBehaviour
     {
-        [SerializeField] private AgentType agentType;
-        
-        protected WaitForSeconds _wait = new(1);
+        private readonly WaitForSeconds _wait = new(1);
         private NavMeshAgent _navMeshAgent;
         private float _dist; 
         public WorkBase targetWorkBase;
@@ -42,6 +36,7 @@ namespace Agent.Enemy
                     if (_dist<1)
                     {
                         AttackType();
+                        break;
                     }
                 }
                 
@@ -51,13 +46,14 @@ namespace Agent.Enemy
 
        
 
-        protected IEnumerator Attack()
+        protected IEnumerator Attack(int damage,int _rateTime)
         {
+            WaitForSeconds rateTime = new(_rateTime);
             while (true)
             {
                 if (targetWorkBase!=null)
                 {
-                    if ( targetWorkBase.TakeDamage(10))
+                    if ( targetWorkBase.TakeDamage(damage))
                     {
                         targetWorkBase = null;
                         MoveToTarget();
@@ -68,7 +64,7 @@ namespace Agent.Enemy
                 {
                     break;
                 }
-                yield return _wait;
+                yield return rateTime;
             }
         }
 
@@ -91,7 +87,7 @@ namespace Agent.Enemy
             var targetDetection = TargetDetection();
             if (targetDetection==null)
             {
-                StopCoroutine(Attack());
+                StopCoroutine(Attack(10,1));
                 _patrolPoint = gm.GetRandomTransformPoints(gm.patrolPoints);
                 StartCoroutine(Patrol());
             }

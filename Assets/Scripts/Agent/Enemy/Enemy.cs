@@ -22,26 +22,16 @@ namespace Agent.Enemy
 
         protected override void AttackType()
         {
-            if (targetWorkBase.healthType==HealthType.RiverPoint)
+            if (targetWorkBase.healthType==HealthType.DestroyRiverPoint)
             {
-                StartCoroutine(DestructRiver());
+                StartCoroutine(Attack(1,10));
             }
             else
             {
-                StartCoroutine(Attack());
-            }
-        }
-        IEnumerator DestructRiver()
-        {
-            while (true)
-            {
-                if (targetWorkBase.DestructRiver())
-                {
-                    
-                }
-                yield return _wait;
+                StartCoroutine(Attack(10,1));
             }
            
         }
+        
     }
 }

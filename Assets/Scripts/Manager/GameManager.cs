@@ -67,6 +67,9 @@ public class GameManager : MonoBehaviour
          case HealthType.Soldier:
             soldiers.Remove(health);
             break;
+         case HealthType.DestroyRiverPoint:
+            destroyRiverPoints.Remove(health);
+            break;
       }
      
    }

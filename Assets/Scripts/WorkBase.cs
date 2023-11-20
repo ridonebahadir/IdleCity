@@ -9,7 +9,7 @@ public enum HealthType
     Home,
     Soldier, 
     Enemy,
-    RiverPoint,
+    DestroyRiverPoint,
 }
 
 
@@ -19,13 +19,13 @@ public abstract class WorkBase : MonoBehaviour
     public HealthType healthType;
     
     
-    protected void Death()
+    protected void Death(bool isClose)
     { 
         GameManager.Instance.RemoveList(healthType,this.transform);
-       gameObject.SetActive(false);
+       gameObject.SetActive(!isClose);
        gameObject.transform.SetParent(null);
     }
     
-    public abstract bool DestructRiver();
+   
     public abstract bool TakeDamage(int damage);
 }
