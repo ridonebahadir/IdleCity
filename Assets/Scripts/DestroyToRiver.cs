@@ -15,7 +15,6 @@ public class DestroyToRiver : WorkBase
         {
             var obj = Instantiate(obstacleObj,transform.position,UnityEngine.Quaternion.identity,transform);
             var randomPosition = new Vector3(Random.Range(transform.GetChild(0).localPosition.x,transform.GetChild(1).localPosition.x), transform.GetChild(0).localPosition.y, 0);
-            Debug.Log(randomPosition);
             obj.transform.DOLocalJump(randomPosition, 5, 0, 0.5f);
 
         }

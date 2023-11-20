@@ -24,7 +24,7 @@ namespace Agent.Enemy
         {
             if (targetWorkBase.healthType==HealthType.DestroyRiverPoint)
             {
-                StartCoroutine(Attack(1,10));
+                StartCoroutine(Attack(1,5));
             }
             else
             {
