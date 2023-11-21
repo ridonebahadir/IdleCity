@@ -1,43 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
+using Agent.Enemy;
 using UnityEngine;
 
-public class Soldier : Human
+namespace Agent
 {
-    private bool _isWork = true;
-    private void Start()
+    public class Soldier : AgentBase
     {
-        SleepCoroutine = MoveToSleep();
-        WorkCoroutine = MoveToWork(false);
+        protected override Transform TargetDetection()
+        {
+            if (_isWar)
+            {
+                if (gm.enemies.Count==0) return null;
+                var target = gm.GetRandomHealths(gm.enemies)    ;
+                return target.transform;
+            }
+            else
+            {
+                var target =gm.buildManager.GetRandomSoldierBuild();
+                return target.transform;
+            }
         
-        HumanPoints( GameManager.Instance.buildManager.soldierBuilding);
-        StartCoroutine(SleepCoroutine);
-        //shiftControl.onClick.AddListener(ShiftControl);
-    }
-
-    void ShiftControl()
-    {
-        if (_isWork)
-        {
-                
-            StopCoroutine(SleepCoroutine);
-            StartCoroutine(WorkCoroutine);
-            _isWork = false;
         }
-        else
-        {
-            StartCoroutine(SleepCoroutine);
-            StopCoroutine(WorkCoroutine);
-            _isWork = true;
-        }
-    }
-    private void OnEnable()
-    {
-        UIManager.OnClickedShiftButton += ShiftControl;
-    }
 
-    private void OnDisable()
-    {
-        UIManager.OnClickedShiftButton -= ShiftControl;
+        protected override void AttackType()
+        {
+            if (_isWar)
+            {
+                StartCoroutine(Attack(10,1));
+                          
+            }
+            else
+            {
+                Debug.Log("Kışlaya Girdi");
+            }
+        }
     }
 }

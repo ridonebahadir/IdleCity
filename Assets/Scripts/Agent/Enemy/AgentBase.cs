@@ -2,32 +2,24 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 using UnityEngine.Timeline;
 
 namespace Agent.Enemy
 {
-    enum AgentState
-    {
-        Death,
-        Life,
-        Attack
-    }
-    public enum AgentType
-    {
-        Enemy,
-        Player,
-    }
+   
     public abstract class AgentBase : MonoBehaviour
     {
-        private WaitForSeconds _wait = new(1);
+        private readonly WaitForSeconds _wait = new(1);
         private NavMeshAgent _navMeshAgent;
-        private float _dist;
-        public Health _targetHealth;
-
-        private Coroutine _moveCoroutine;
-
+        private float _dist; 
+        public WorkBase targetWorkBase;
+        public Transform _patrolPoint;
+        protected bool _isWar;
+        protected GameManager gm;
         private void Start()
         {
+            gm = GameManager.Instance;
             _navMeshAgent = GetComponent<NavMeshAgent>();
             MoveToTarget();
         }
@@ -37,38 +29,98 @@ namespace Agent.Enemy
            
             while (true)
             {
-                _dist = Vector3.Distance(_targetHealth.transform.position,transform.position);
-                if (_dist<1)
+                if (targetWorkBase!=null)
                 {
-                    StartCoroutine(Attack());
-                    break;
+                    _navMeshAgent.destination = targetWorkBase.transform.position;
+                    _dist = Vector3.Distance(targetWorkBase.transform.position,transform.position);
+                    if (_dist<1)
+                    {
+                        AttackType();
+                        break;
+                    }
                 }
+                
                 yield return _wait;
             }
         }
 
-        IEnumerator Attack()
+       
+
+        protected IEnumerator Attack(int damage,int _rateTime)
         {
+            WaitForSeconds rateTime = new(_rateTime);
             while (true)
             {
-                if ( _targetHealth.TakeDamage(10))
+                if (targetWorkBase!=null)
                 {
+                    if ( targetWorkBase.TakeDamage(damage))
+                    {
+                        targetWorkBase = null;
+                        MoveToTarget();
+                        break;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+                yield return rateTime;
+            }
+        }
 
+        IEnumerator Patrol()
+        {
+            while (_isWar)
+            {
+                _navMeshAgent.destination = _patrolPoint.position;
+                _dist = Vector3.Distance(_patrolPoint.position,transform.position);
+                if (_dist<1)
+                {
                     MoveToTarget();
                     break;
                 }
-                
-               
                 yield return _wait;
             }
         }
         private void MoveToTarget()
         {
-            _targetHealth = TargetDetection();
-            _navMeshAgent.destination = _targetHealth.transform.position;
-            _moveCoroutine=StartCoroutine(Move());
+            var targetDetection = TargetDetection();
+            if (targetDetection==null)
+            {
+                StopCoroutine(Attack(10,1));
+                _patrolPoint = gm.GetRandomTransformPoints(gm.patrolPoints);
+                StartCoroutine(Patrol());
+            }
+            else
+            {
+                targetWorkBase = targetDetection.GetComponent<WorkBase>();
+                StartCoroutine(Move());
+            }
+          
+           
         }
         
-        protected abstract Health TargetDetection();
+        protected abstract Transform TargetDetection();
+        protected abstract void AttackType();
+
+       
+        
+        
+        private void ShiftControl()
+        {
+           //StopCoroutine(Attack());
+            _isWar = !_isWar;
+            MoveToTarget();
+       
+        }
+        private void OnEnable()
+        {
+            UIManager.OnClickedShiftButton += ShiftControl;
+        }
+
+        private void OnDisable()
+        {
+            UIManager.OnClickedShiftButton -= ShiftControl;
+        }
     }
 }

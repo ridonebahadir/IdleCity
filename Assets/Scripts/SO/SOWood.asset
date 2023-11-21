@@ -17,6 +17,6 @@ MonoBehaviour:
   inPutObj: {fileID: 8903522026634739863, guid: d5bed377c65de2b428bace2106c52599, type: 3}
   defaultTime: 1
   machineSpeed: 1
-  humanCount: 1
-  earnMoneyTime: 5
-  earnMoneyRate: 2
+  humanCount: 3
+  earnMoneyTime: 3
+  earnMoneyRate: 5

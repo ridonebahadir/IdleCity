@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Health : MonoBehaviour
+public class Health : WorkBase
 {
-    public int health;
-    
-    public bool TakeDamage(int damage)
+
+    public override bool TakeDamage(int damage)
     {
-        
         health -= damage;
         if (health>0)
         {
@@ -16,15 +14,9 @@ public class Health : MonoBehaviour
         }
         else
         {
-            Death();
+            Death(true);
             return true;
         }
         return false;
-    }
-
-    private void Death()
-    {
-       gameObject.SetActive(false);
-       gameObject.transform.SetParent(null);
     }
 }

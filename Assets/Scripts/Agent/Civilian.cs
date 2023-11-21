@@ -14,7 +14,8 @@ public class Civilian : Human
         StartCoroutine(WorkCoroutine);
         //shiftControl.onClick.AddListener(ShiftControl);
     }
-    void ShiftControl()
+
+    protected override void ShiftControl()
     {
         if (_isWork)
         {
@@ -30,14 +31,5 @@ public class Civilian : Human
             _isWork = true;
         }
     }
-
-    private void OnEnable()
-    {
-        UIManager.OnClickedShiftButton += ShiftControl;
-    }
-
-    private void OnDisable()
-    {
-        UIManager.OnClickedShiftButton -= ShiftControl;
-    }
+    
 }

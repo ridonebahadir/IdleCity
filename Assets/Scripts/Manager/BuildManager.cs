@@ -8,10 +8,16 @@ public class BuildManager : MonoBehaviour
      public List<Transform> civilBuilding;
      public List<Transform> soldierBuilding;
 
-     public Health RandomTransform()
+     public WorkBase GetRandomCivilianBuild()
      {
           var a = Random.Range(0, civilBuilding.Count);
           var b = Random.Range(0,civilBuilding[a].childCount);
-          return civilBuilding[a].GetChild(b).GetComponent<Health>();
+          return civilBuilding[a].GetChild(b).GetComponent<WorkBase>();
      }
+     public WorkBase GetRandomSoldierBuild()
+     {
+          var a = Random.Range(0, soldierBuilding[0].childCount);
+          return soldierBuilding[0].GetChild(a).GetComponent<WorkBase>();
+     }
+     
 }
