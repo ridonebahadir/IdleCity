@@ -12,24 +12,51 @@ public class SplineManager : MonoBehaviour
     [SerializeField] private NavMeshSurface navMeshSurface;
     
     [Header("SPLINE SETTINGS")]
-    [SerializeField] private SplineMesh splineMesh; 
-    [SerializeField] private float toSplineLenght;
-    
+    [SerializeField] private SplineMesh dynamicSplineMesh; 
+    [SerializeField] private SplineMesh staticSplineMesh; 
+   
+
+    private float _curScale = 0.3f;
     private void Start()
     {
-        splineMesh.SetClipRange(0,toSplineLenght);
-        navMeshSurface.BuildNavMesh();
+        //splineMesh.SetClipRange(0,toSplineLenght);
+        //navMeshSurface.BuildNavMesh();
+        
     }
 
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.A))
         {
-            float curSplineLenght = Mathf.Clamp(toSplineLenght + 0.03f, 0f, 1f);
-            DOTween.To(() => toSplineLenght, x => toSplineLenght = x, curSplineLenght, 0.5f)
-                .OnUpdate(() => {
-                    splineMesh.SetClipRange(0,toSplineLenght);
-                }).OnComplete(()=>navMeshSurface.BuildNavMesh());
+            _curScale += 0.4f;
+            dynamicSplineMesh.GetChannel(0).minScale = new Vector3(_curScale, 0.3f, 0);
+            TweenMove(true,0, 1);
         }
+
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            _curScale -= 0.4f;
+            dynamicSplineMesh.SetClipRange(0,1);
+            staticSplineMesh.GetChannel(0).minScale = new Vector3(_curScale, 0.3f, 0);
+            TweenMove(false,1, 0);
+            
+        }
+    }
+
+    void TweenMove(bool isIncrease,float cur,float to)
+    {
+        DOTween.To(() => cur, x => cur = x, to, 3)
+            .OnUpdate(() =>
+            {
+                dynamicSplineMesh.SetClipRange(0, cur);
+            }).OnComplete(() =>
+            {
+                dynamicSplineMesh.SetClipRange(0,0);
+                //navMeshSurface.BuildNavMesh();
+                if (isIncrease)
+                {
+                    staticSplineMesh.GetChannel(0).minScale = new Vector3(_curScale, 0.3f, 0);
+                }
+            });
     }
 }

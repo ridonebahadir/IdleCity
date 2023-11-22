@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Agent.Enemy;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -53,6 +52,7 @@ public class GameManager : MonoBehaviour
 
    public Transform GetRandomTransformPoints(List<Transform> list)
    {
+      if (list.Count == 0) return null;
       var a = Random.Range(0, list.Count);
       return list[a];
    }
