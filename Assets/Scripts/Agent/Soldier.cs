@@ -20,6 +20,7 @@ public class Soldier : AgentBase
 
     protected override void RemoveList()
     {
-        _domination._soldiers.Remove(this);
+        _domination.RemoveListSoldiers(this);
+        //_domination._soldiers.Remove(this);
     }
 }

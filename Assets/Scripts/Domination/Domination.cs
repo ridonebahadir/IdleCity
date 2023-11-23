@@ -37,18 +37,8 @@ public class Domination : MonoBehaviour
          _points = splineComputer.GetPoints();
          Calculate();
          _dominationMove=DominationMove();
-         StartCoroutine(_dominationMove);
-         StartCoroutine(StopDomination());
-
+         //StartCoroutine(_dominationMove);
     }
-
-    IEnumerator StopDomination()
-    {
-        yield return new WaitForSeconds(3);
-        _stop = true;
-    }
-
-
     [SerializeField] private bool isWin = true;
     
    
@@ -103,36 +93,7 @@ public class Domination : MonoBehaviour
        
     }
 
-     private bool _stop;
-     private void Update()
-     {
-         if (_stop)
-         {
-             ControlMove();
-         }
-        
-         if (Input.GetKeyUp(KeyCode.DownArrow))
-         {
-             SoldierMove();
-
-         }
-         if (Input.GetKeyUp(KeyCode.UpArrow))
-         {
-             EnemyMove();
-         }
-
-         if (Input.GetKeyUp(KeyCode.Space))
-         {
-             StopCoroutine(_dominationMove);
-         }
-
-         if (Input.GetKeyUp(KeyCode.P))
-         {
-             StartCoroutine(_dominationMove);
-         }
-
-       
-     }
+    
 
      private void EnemyMove()
      {
@@ -144,8 +105,9 @@ public class Domination : MonoBehaviour
 
      private void SoldierMove()
      {
-         speed = _soldiers.Count * 0.5f;
+        
          isWin = true;
+         
          StopCoroutine(_dominationMove);
          StartCoroutine(_dominationMove);
      }
@@ -166,12 +128,19 @@ public class Domination : MonoBehaviour
          
      }
 
+     private void Update()
+     {
+         if (_enemies.Count>0&&_soldiers.Count>0) StopCoroutine(_dominationMove);
+     }
+
      private void OnTriggerEnter(Collider other)
      {
          if (other.TryGetComponent(out Enemy enemy))
          {
             
              if (!_enemies.Contains(enemy))  _enemies.Add(enemy);
+             speed = _enemies.Count * 0.5f;
+             if (_enemies.Count==1) EnemyMove();
              if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
              AttackEnemy(); 
              AttackSoldier();
@@ -179,14 +148,31 @@ public class Domination : MonoBehaviour
          }
          if (other.TryGetComponent(out Soldier soldier))
          {
+            
              if (!_soldiers.Contains(soldier))_soldiers.Add(soldier);
+             speed = _soldiers.Count * 0.5f;
+             if (_soldiers.Count==1) SoldierMove();
              if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
              AttackEnemy(); 
              AttackSoldier();
 
          }
      }
-    
+
+     private void OnTriggerExit(Collider other)
+     {
+         if (other.TryGetComponent(out Enemy enemy))
+         {
+             if (_enemies.Contains(enemy)) RemoveListEnemy(enemy);
+            
+         }
+         if (other.TryGetComponent(out Soldier soldier))
+         {
+             if (_soldiers.Contains(soldier)) RemoveListSoldiers(soldier);
+            
+         }
+     }
+
      public void AttackEnemy()
      {
          for (int i = 0; i < _enemies.Count; i++)
@@ -204,16 +190,34 @@ public class Domination : MonoBehaviour
          
      }
      
-     private void ControlMove()
+     void ControlMove()
      {
-         
-         if (_enemies.Count == 0) SoldierMove();
-         if (_soldiers.Count==0) EnemyMove();
-         if (_enemies.Count > 0 && _soldiers.Count > 0)   StopCoroutine(_dominationMove);
         
+        
+         // while (true)
+         // {
+         //     if (_enemies.Count == 0) SoldierMove();
+         //     if (_soldiers.Count==0) EnemyMove();
+         //    
+         //     
+         //     yield return _wait;
+         // }
+
+        
+
+
      }
 
-
+     public void RemoveListEnemy(AgentBase agentBase)
+     {
+         _enemies.Remove(agentBase);
+         if (_enemies.Count==0) SoldierMove();
+     }
+     public void RemoveListSoldiers(AgentBase agentBase)
+     {
+         _soldiers.Remove(agentBase);
+         if (_soldiers.Count==0) EnemyMove();
+     }
      public Transform CloseAgentEnemy(Transform who)
      {
           return _enemies.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;

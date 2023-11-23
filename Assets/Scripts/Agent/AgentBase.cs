@@ -16,7 +16,7 @@ public abstract class AgentBase : MonoBehaviour
     public AgentBase _agentBase;
     
     
-    private WaitForSeconds _wait = new(1);
+    private WaitForSeconds _wait = new(0.25f);
     [SerializeField] private float _dist;
     private void Start()
     {
@@ -39,7 +39,7 @@ public abstract class AgentBase : MonoBehaviour
             {
                 if (_agentBase!=null)
                 {
-                    if (_agentBase.TakeDamage(10))
+                    if (_agentBase.TakeDamage(5))
                     {
                         DetectTarget();
                     }
@@ -83,6 +83,7 @@ public abstract class AgentBase : MonoBehaviour
 
     private void Death()
     {
+        
         RemoveList();
        gameObject.SetActive(false);
     }

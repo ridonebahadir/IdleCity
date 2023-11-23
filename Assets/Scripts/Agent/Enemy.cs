@@ -19,6 +19,6 @@ public class Enemy : AgentBase
 
     protected override void RemoveList()
     {
-        _domination._enemies.Remove(this);
+        _domination.RemoveListEnemy(this);
     }
 }
