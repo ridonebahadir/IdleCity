@@ -88,15 +88,15 @@ public abstract class Human : MonoBehaviour
         }
        
     }
-    protected abstract void ShiftControl();
+    protected abstract void EnemySpawnControl();
     private void OnEnable()
     {
-        UIManager.OnClickedShiftButton += ShiftControl;
+        UIManager.OnClickedEnemySpawnButton += EnemySpawnControl;
     }
 
     private void OnDisable()
     {
-        UIManager.OnClickedShiftButton -= ShiftControl;
+        UIManager.OnClickedEnemySpawnButton -= EnemySpawnControl;
     }
 }
 

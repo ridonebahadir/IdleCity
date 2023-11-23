@@ -20,7 +20,7 @@ public abstract class WorkBase : MonoBehaviour
     
     protected void Death(bool isClose)
     { 
-        GameManager.Instance.RemoveList(healthType,this.transform);
+        //GameManager.Instance.RemoveList(healthType,this.transform);
        gameObject.SetActive(!isClose);
        gameObject.transform.SetParent(null);
     }

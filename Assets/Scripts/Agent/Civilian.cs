@@ -15,7 +15,7 @@ public class Civilian : Human
         //shiftControl.onClick.AddListener(ShiftControl);
     }
 
-    protected override void ShiftControl()
+    protected override void EnemySpawnControl()
     {
         if (_isWork)
         {
