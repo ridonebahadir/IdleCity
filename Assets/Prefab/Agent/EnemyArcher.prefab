@@ -83,13 +83,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8e78f4c60113754facbac405d49587f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentType: 0
-  health: 10
-  attackDistance: 8
-  navMeshAgent: {fileID: 6449831550102716620}
+  soAgent: {fileID: 11400000, guid: c409dd69cb0f12f4f857a84145db3cb6, type: 2}
   _target: {fileID: 0}
-  _agentBase: {fileID: 0}
-  isInside: 0
   _dist: 0
   arrowObj: {fileID: 7949706603488123534, guid: 1108022a0924868458e03b7f82f321af, type: 3}
 --- !u!1 &6449831550120285007
@@ -153,7 +148,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3d66bb8c37420b64b8224c92b317a368, type: 2}
+  - {fileID: 2100000, guid: f3fedca8dc373cb4394912ba22be8042, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

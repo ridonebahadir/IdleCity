@@ -9,18 +9,16 @@ namespace Domination
     public class Domination : MonoBehaviour
     {
         [SerializeField] private Transform sphere;
-    
         [SerializeField] private SplinePositioner splinePositioner;
         [SerializeField] private SplineComputer splineComputer;
-    
         [SerializeField] private float speed;
         [SerializeField] private float riverWidth;
-
-        [SerializeField] private List<AgentBase> _enemies = new List<AgentBase>();
-        [SerializeField] private  List<AgentBase> _soldiers = new List<AgentBase>();
-        public float _currentDistance;
-        private float _sizeSpeed;
-        [SerializeField] private int _turn;
+        public List<AgentBase> _enemies = new List<AgentBase>();
+        public List<AgentBase> _soldiers = new List<AgentBase>();
+        
+        private float _currentDistance;
+        private float _sizeSpeed; 
+        private int _turn;
         private float _dist;
         private float _size;
         private float _goneRoad;
@@ -177,7 +175,7 @@ namespace Domination
         private void Register(AgentBase agentBase)
         {
             agentBase.isInside = true;
-            switch (agentBase.agentType)
+            switch (agentBase.soAgent.agentType)
             {
                 case AgentType.Enemy:
                 {
@@ -185,7 +183,7 @@ namespace Domination
                     if (!_enemies.Contains(agentBase))
                     {
                         _enemies.Add(agentBase);
-                        if (!_isWin)  speed = _enemies.Count * 0.5f;
+                        if (!_isWin) speed = _enemies.Count * 0.5f;
                     }
                     if (_enemies.Count==1) EnemyMove();
                     if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
@@ -199,7 +197,7 @@ namespace Domination
                     if (!_soldiers.Contains(agentBase))
                     {
                         _soldiers.Add(agentBase);
-                        if (_isWin)  speed = _soldiers.Count * 0.5f;
+                        if (_isWin)  speed = _soldiers.Count*0.5f;
                     }
                     if (_soldiers.Count==1) SoldierMove();
                     if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
@@ -212,7 +210,7 @@ namespace Domination
 
         private void UnRegister(AgentBase agentBase)
         {
-            switch (agentBase.agentType)
+            switch (agentBase.soAgent.agentType)
             {
                 case AgentType.Enemy:
                     if (_enemies.Contains(agentBase)) RemoveList(agentBase,AgentType.Enemy);
@@ -239,39 +237,7 @@ namespace Domination
             }
          
         }
-     
-        public void DetectTarget(AgentBase agentBase)
-        {
-            switch (agentBase.agentType)
-            {
-                case AgentType.Enemy:
-                {
-                    if (_soldiers.Count>0 && agentBase.isInside)
-                    {
-                        agentBase.Attack(CloseAgentSoldier(transform));
-                    }
-                    else 
-                    {
-                        agentBase._target = GameManager.Instance.dominationArea.transform;
-                    }
-                    break;
-                }
-                case AgentType.Soldier:
-                {
-                    if (_enemies.Count>0 && agentBase.isInside)
-                    {
-                        agentBase.Attack(CloseAgentEnemy(transform));
-                    }
-                    else 
-                    {
-                        agentBase._target = GameManager.Instance.dominationArea.transform;
-                    }
-
-                    break;
-                }
-            }
-        }
-     
+        
         public void RemoveList(AgentBase agentBase,AgentType agentType)
         {
             agentBase.isInside = false;
@@ -292,7 +258,7 @@ namespace Domination
                     _soldiers.Remove(agentBase);
                     if (_soldiers.Count == 0)
                     {
-                        speed = _enemies.Count * 0.5f;
+                        speed = _enemies.Count*0.5f;
                         EnemyMove();
                     }
                     break;
@@ -300,16 +266,16 @@ namespace Domination
             }
         }
 
-        private Transform CloseAgentEnemy(Transform who)
+        public Transform CloseAgentEnemy(Transform who)
         {
             return _enemies.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
         }
 
-        private Transform CloseAgentSoldier(Transform who)
+        public Transform CloseAgentSoldier(Transform who)
         {
             return _soldiers.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
         }
-
-        
+        float _a = 0;
+       
     }
 }

@@ -3583,7 +3583,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 33608f51ee611c64abfce5cb6bfdd40a, type: 2}
+  - {fileID: 2100000, guid: 50facaccd1807554cb7e6c58eaef4349, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3688,13 +3688,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6461a5bb98c7acf4591cfcd9f8836e98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentType: 1
-  health: 10
-  attackDistance: 8
-  navMeshAgent: {fileID: 5077695223906588941}
+  soAgent: {fileID: 11400000, guid: 519984f1142bca14fbf09d30e7d8add2, type: 2}
   _target: {fileID: 0}
-  _agentBase: {fileID: 0}
-  isInside: 0
   _dist: 0
   arrowObj: {fileID: 7949706603488123534, guid: fc4e6898850147f488bebf7a996b4c64, type: 3}
 --- !u!1 &5077695224279327193

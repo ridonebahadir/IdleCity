@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 public enum AgentType
 {
@@ -11,28 +10,48 @@ public enum AgentType
 }
 public abstract class AgentBase : MonoBehaviour
 {
-    public AgentType agentType;
-    [SerializeField] private int health;
-    public float attackDistance;
+    public SOAgent soAgent;
     
-    public NavMeshAgent navMeshAgent;
+    private AgentType _agentType;
+    private float _diggSpeed;
+    protected float _attackDistance;
+    private int _health;
+    private int _damage;
+    private float cost;
+    
+    protected NavMeshAgent navMeshAgent;
 
     private Domination.Domination _domination;
     private GameManager _gameManager;
     public Transform _target;
-    public AgentBase _agentBase;
-
-    public bool isInside;
+    
+    protected AgentBase _agentBase;
+    internal bool isInside;
     protected WaitForSeconds _wait = new(0.5f);
     public float _dist;
+    public float DiggSpeed => _diggSpeed;
+
     private void Start()
     {
+        navMeshAgent = GetComponent<NavMeshAgent>();
         _gameManager=GameManager.Instance;
         _target = _gameManager.dominationArea.transform;
         _domination = _gameManager.dominationArea;
+        InıtAgent();
         StartCoroutine(MoveDominationArea());
+       
     }
 
+    private void InıtAgent()
+    {
+        _agentType = soAgent.agentType;
+        navMeshAgent.speed = soAgent.speed;
+        _health = soAgent.health;
+        _damage = soAgent.damage;
+        _diggSpeed = soAgent.diggSpeed;
+        _attackDistance = soAgent.attackDistance;
+
+    }
     protected virtual IEnumerator MoveDominationArea()
     {
         while (true)
@@ -40,7 +59,7 @@ public abstract class AgentBase : MonoBehaviour
             _dist = Vector3.Distance(transform.position, _target.position);
            
             
-            if (_dist<attackDistance)
+            if (_dist<_attackDistance)
             {
                 AttackType();
 
@@ -61,12 +80,39 @@ public abstract class AgentBase : MonoBehaviour
     }
     protected void DetectTarget()
     {
-        _domination.DetectTarget(this); 
+        switch (_agentType)
+        {
+            case AgentType.Enemy:
+            {
+                if (_domination._soldiers.Count>0 && isInside)
+                {
+                    Attack(_domination.CloseAgentSoldier(transform));
+                }
+                else 
+                {
+                    _target = GameManager.Instance.dominationArea.transform;
+                }
+                break;
+            }
+            case AgentType.Soldier:
+            {
+                if (_domination._enemies.Count>0 && isInside)
+                {
+                    Attack(_domination.CloseAgentEnemy(transform));
+                }
+                else 
+                {
+                    _target = GameManager.Instance.dominationArea.transform;
+                }
+
+                break;
+            }
+        }
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage()
     {
-        health -= damage;
-        if (health>0)
+        _health -= _damage;
+        if (_health>0)
         {
             
         }
@@ -87,11 +133,11 @@ public abstract class AgentBase : MonoBehaviour
 
     void RemoveList()
     {
-        _gameManager.RemoveList(this,agentType);
-        _domination.RemoveList(this,agentType);
+        _gameManager.RemoveList(this,_agentType);
+        _domination.RemoveList(this,_agentType);
     }
+
     
-    
-    
+ 
    
 }

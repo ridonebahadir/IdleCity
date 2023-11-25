@@ -8,7 +8,7 @@ public class Enemy : AgentBase
     {
         if (_agentBase!=null)
         {
-            _agentBase.TakeDamage(5);  
+            _agentBase.TakeDamage();  
             DetectTarget();
             
         }

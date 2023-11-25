@@ -13,12 +13,12 @@ public class EnemyArcher : AgentBase
         var arrow = Instantiate(arrowObj,transform.position,UnityEngine.Quaternion.identity,transform);
         arrow.gameObject.SetActive(true);
         arrow.transform.SetParent(_target);
-        arrow.transform.DOLocalJump(Vector3.zero, 3, 0, 0.5f).OnComplete(() =>
+        arrow.transform.DOLocalJump(Vector3.zero, 6, 0, 0.5f).OnComplete(() =>
         {
             arrow.gameObject.SetActive(false);
             arrow.transform.SetParent(transform);
             arrow.transform.localPosition = Vector3.zero;
-            _agentBase.TakeDamage(2);
+            _agentBase.TakeDamage();
             _agentBase = null;
             DetectTarget();
             
@@ -31,7 +31,7 @@ public class EnemyArcher : AgentBase
         {
             _dist = Vector3.Distance(transform.position, _target.position);
             
-            if (_dist <attackDistance && _agentBase!=null)
+            if (_dist <_attackDistance && _agentBase!=null)
             {
                 Flee(_target.position);
                 AttackType();

@@ -102,12 +102,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41a0a0c9d1be88d4c9e0011d3a8825dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentType: 1
-  health: 10
-  attackDistance: 1.5
-  navMeshAgent: {fileID: 1290499214970128170}
+  soAgent: {fileID: 11400000, guid: 93b74c864f5ab44439c02ba3303ae1d0, type: 2}
   _target: {fileID: 0}
-  _agentBase: {fileID: 0}
   _dist: 0
 --- !u!136 &1290499214970128173
 CapsuleCollider:
@@ -184,7 +180,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: edac0fa016507414e9c5fbf53494d11e, type: 2}
+  - {fileID: 2100000, guid: f89d7512c1813d644910f62c96920783, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
