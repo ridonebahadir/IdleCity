@@ -22,8 +22,8 @@ public abstract class AgentBase : MonoBehaviour
     protected GameManager _gameManager;
     public Transform _target;
     public AgentBase _agentBase;
-    
-    
+
+    public bool isInside;
     protected WaitForSeconds _wait = new(0.5f);
     public float _dist;
     private void Start()
@@ -68,7 +68,7 @@ public abstract class AgentBase : MonoBehaviour
         _agentBase = target.transform.GetComponent<AgentBase>();
     }
 
-    public bool TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         health -= damage;
         if (health>0)
@@ -78,9 +78,9 @@ public abstract class AgentBase : MonoBehaviour
         else
         {
             Death();
-            return true;
+           
         }
-        return false;
+       
     }
 
     private void Death()

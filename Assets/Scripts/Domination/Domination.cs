@@ -147,7 +147,7 @@ public class Domination : MonoBehaviour
      {
          if (other.TryGetComponent(out Enemy enemy))
          {
-            
+             enemy.isInside = true;
              if (!_enemies.Contains(enemy))
              {
                  _enemies.Add(enemy);
@@ -162,7 +162,7 @@ public class Domination : MonoBehaviour
          }
          if (other.TryGetComponent(out Soldier soldier))
          {
-            
+             soldier.isInside = true;
              if (!_soldiers.Contains(soldier))
              {
                  _soldiers.Add(soldier);
@@ -188,6 +188,7 @@ public class Domination : MonoBehaviour
 
      private void Register(EnemyArcher enemyArcher)
      {
+         enemyArcher.isInside = true;
          if (_enemies.Contains(enemyArcher)) return;
          _enemies.Add(enemyArcher);
          speed = _enemies.Count * 0.5f;
@@ -233,18 +234,22 @@ public class Domination : MonoBehaviour
      
      public void RemoveList(AgentBase agentBase,AgentType agentType)
      {
-         if (agentType==AgentType.Enemy|| agentType==AgentType.EnemyArcher)
+         agentBase.isInside = false;
+         switch (agentType)
          {
-             _enemies.Remove(agentBase);
-             if (_enemies.Count==0) SoldierMove();
+             case AgentType.Enemy or AgentType.EnemyArcher:
+             {
+                 _enemies.Remove(agentBase);
+                 if (_enemies.Count==0) SoldierMove();
+                 break;
+             }
+             case AgentType.Soldier:
+             {
+                 _soldiers.Remove(agentBase);
+                 if (_soldiers.Count==0) EnemyMove();
+                 break;
+             }
          }
-
-         if (agentType==AgentType.Soldier)
-         {
-             _soldiers.Remove(agentBase); 
-             if (_soldiers.Count==0) EnemyMove();
-         }
-         
      }
      // public void RemoveListSoldiers(AgentBase agentBase)
      // {

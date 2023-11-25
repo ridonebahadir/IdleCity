@@ -19,6 +19,7 @@ public class EnemyArcher : AgentBase
             arrow.transform.SetParent(transform);
             arrow.transform.localPosition = Vector3.zero;
             _agentBase.TakeDamage(2);
+            _agentBase = null;
             DetectTarget();
             
         });
@@ -59,13 +60,13 @@ public class EnemyArcher : AgentBase
     
     void DetectTarget()
     {
-        if (_domination._soldiers.Count>0)
+        if (_domination._soldiers.Count>0&& isInside)
         {
             Attack(_gameManager.CloseAgentSoldier(transform));
         }
         else
         {
-            _target = GameManager.Instance.dominationArea.transform;
+            _target = _gameManager.dominationArea.transform;
         }
     }
 

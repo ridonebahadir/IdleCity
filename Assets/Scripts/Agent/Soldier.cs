@@ -8,10 +8,9 @@ public class Soldier : AgentBase
     {
         if (_agentBase!=null)
         {
-            if (_agentBase.TakeDamage(5))
-            {
-                DetectTarget();
-            }
+            _agentBase.TakeDamage(5);
+            DetectTarget();
+            
         }
         else
         {
@@ -22,7 +21,7 @@ public class Soldier : AgentBase
    void DetectTarget()
     {
        
-        if (_domination._enemies.Count>0)
+        if (_domination._enemies.Count>0 && isInside)
         {
            Attack(_gameManager.CloseAgentEnemy(transform));
          
