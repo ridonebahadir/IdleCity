@@ -4,58 +4,61 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+public enum AgentType
+{
+    Enemy,
+    Soldier,
+    EnemyArcher
+}
 public abstract class AgentBase : MonoBehaviour
 {
+    public AgentType agentType;
     [SerializeField] private int health;
+    public float attackDistance;
     
-    [SerializeField] private NavMeshAgent navMeshAgent;
+    public NavMeshAgent navMeshAgent;
 
     protected Domination _domination;
-    //private GameManager _gameManager;
+    protected GameManager _gameManager;
     public Transform _target;
     public AgentBase _agentBase;
     
     
-    private WaitForSeconds _wait = new(0.25f);
-    [SerializeField] private float _dist;
+    protected WaitForSeconds _wait = new(0.5f);
+    public float _dist;
     private void Start()
     {
-        _target = GameManager.Instance.dominationArea.transform;
-        _domination = GameManager.Instance.dominationArea;
+        _gameManager=GameManager.Instance;
+        _target = _gameManager.dominationArea.transform;
+        _domination = _gameManager.dominationArea;
         StartCoroutine(MoveDominationArea());
         
         //_gameManager = GameManager.Instance;
 
     }
 
-    IEnumerator MoveDominationArea()
+    protected virtual IEnumerator MoveDominationArea()
     {
         while (true)
         {
-            
-            navMeshAgent.destination = _target.position;
             _dist = Vector3.Distance(transform.position, _target.position);
-            if (_dist<1.5f)
+           
+            
+            if (_dist<attackDistance)
             {
-                if (_agentBase!=null)
-                {
-                    if (_agentBase.TakeDamage(5))
-                    {
-                        DetectTarget();
-                    }
-                }
-                else
-                {
-                    
-                }
-                
+                AttackType();
+
+            }
+            else
+            {
+                navMeshAgent.destination = _target.position;
             }
             yield return _wait;
         }
     }
 
-    protected abstract void DetectTarget();
-    protected abstract void RemoveList();
+    protected abstract void AttackType();
+    
     
 
 
@@ -63,10 +66,9 @@ public abstract class AgentBase : MonoBehaviour
     {
         _target = target;
         _agentBase = target.transform.GetComponent<AgentBase>();
-
     }
 
-    bool TakeDamage(int damage)
+    public bool TakeDamage(int damage)
     {
         health -= damage;
         if (health>0)
@@ -87,4 +89,12 @@ public abstract class AgentBase : MonoBehaviour
         RemoveList();
        gameObject.SetActive(false);
     }
+
+    void RemoveList()
+    {
+        _gameManager.RemoveList(this,agentType);
+        _domination.RemoveList(this,agentType);
+    }
+    
+    
 }

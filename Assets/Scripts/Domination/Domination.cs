@@ -16,12 +16,12 @@ public class Domination : MonoBehaviour
     [SerializeField] private SplinePositioner splinePositioner;
     [SerializeField] private SplineComputer splineComputer;
     
-    [SerializeField] private float speed = 6;
+    [SerializeField] private float speed;
     [SerializeField] private float riverWidth;
 
     public List<AgentBase> _enemies;
     public List<AgentBase> _soldiers;
-    
+    private GameManager _gameManager;
     private float _currentDistance;
     private float _sizeSpeed;
     private int _turn = 0;
@@ -31,13 +31,14 @@ public class Domination : MonoBehaviour
     private WaitForSeconds _wait = new(0.01f);
     private SplinePoint[] _points;
     private IEnumerator _dominationMove;
-
+  
     private void Start()
     {
+        _gameManager = GameManager.Instance;
          _points = splineComputer.GetPoints();
          Calculate();
          _dominationMove=DominationMove();
-         //StartCoroutine(_dominationMove);
+        
     }
     [SerializeField] private bool isWin = true;
     
@@ -92,9 +93,6 @@ public class Domination : MonoBehaviour
         }
        
     }
-
-    
-
      private void EnemyMove()
      {
          speed = _enemies.Count * 0.5f;
@@ -105,9 +103,8 @@ public class Domination : MonoBehaviour
 
      private void SoldierMove()
      {
-        
+         speed = _soldiers.Count * 0.5f;
          isWin = true;
-         
          StopCoroutine(_dominationMove);
          StartCoroutine(_dominationMove);
      }
@@ -130,100 +127,129 @@ public class Domination : MonoBehaviour
 
      private void Update()
      {
-         if (_enemies.Count>0&&_soldiers.Count>0) StopCoroutine(_dominationMove);
+         if (_enemies.Count > 0 && _soldiers.Count > 0)
+         {
+             StopCoroutine(_dominationMove);
+            
+         }
+
+         if (_enemies.Count == 0 && _soldiers.Count == 0)
+         {
+             StopCoroutine(_dominationMove);
+            
+         }
+         
      }
 
+     private bool _isWar;
+    
      private void OnTriggerEnter(Collider other)
      {
          if (other.TryGetComponent(out Enemy enemy))
          {
             
-             if (!_enemies.Contains(enemy))  _enemies.Add(enemy);
-             speed = _enemies.Count * 0.5f;
+             if (!_enemies.Contains(enemy))
+             {
+                 _enemies.Add(enemy);
+                 if (!isWin)  speed = _enemies.Count * 0.5f;
+             }
              if (_enemies.Count==1) EnemyMove();
              if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
-             AttackEnemy(); 
-             AttackSoldier();
+                 AttackEnemy(); 
+                 AttackSoldier();
+           
 
          }
          if (other.TryGetComponent(out Soldier soldier))
          {
             
-             if (!_soldiers.Contains(soldier))_soldiers.Add(soldier);
-             speed = _soldiers.Count * 0.5f;
+             if (!_soldiers.Contains(soldier))
+             {
+                 _soldiers.Add(soldier);
+                 if (isWin)  speed = _soldiers.Count * 0.5f;
+             }
              if (_soldiers.Count==1) SoldierMove();
              if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
              AttackEnemy(); 
              AttackSoldier();
+                 
+             
+             
 
          }
+         if (other.TryGetComponent(out EnemyArcher enemyArcher))
+         {
+             Register(enemyArcher);
+             //if (_enemies.Count==1) EnemyMove();
+
+         }
+         
      }
 
+     private void Register(EnemyArcher enemyArcher)
+     {
+         if (_enemies.Contains(enemyArcher)) return;
+         _enemies.Add(enemyArcher);
+         speed = _enemies.Count * 0.5f;
+         if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
+         AttackEnemy(); 
+         AttackSoldier();
+     }
      private void OnTriggerExit(Collider other)
      {
          if (other.TryGetComponent(out Enemy enemy))
          {
-             if (_enemies.Contains(enemy)) RemoveListEnemy(enemy);
+             if (_enemies.Contains(enemy)) RemoveList(enemy,AgentType.Enemy);
             
          }
          if (other.TryGetComponent(out Soldier soldier))
          {
-             if (_soldiers.Contains(soldier)) RemoveListSoldiers(soldier);
+             if (_soldiers.Contains(soldier)) RemoveList(soldier,AgentType.Soldier);
+            
+         }
+         if (other.TryGetComponent(out EnemyArcher enemyArcher))
+         {
+             if (_enemies.Contains(enemyArcher)) RemoveList(enemyArcher,AgentType.EnemyArcher);
             
          }
      }
 
-     public void AttackEnemy()
+     private void AttackEnemy()
      {
          for (int i = 0; i < _enemies.Count; i++)
          {
-             _enemies[i].Attack(_soldiers[0].transform);
+             _enemies[i].Attack(_gameManager.CloseAgentSoldier(transform));
          }
      }
-     public void AttackSoldier()
+     private void AttackSoldier()
      {
          
          for (int i = 0; i < _soldiers.Count; i++)
          {
-             _soldiers[i].Attack(_enemies[0].transform);
+             _soldiers[i].Attack(_gameManager.CloseAgentEnemy(transform));
          }
          
      }
      
-     void ControlMove()
+     public void RemoveList(AgentBase agentBase,AgentType agentType)
      {
-        
-        
-         // while (true)
-         // {
-         //     if (_enemies.Count == 0) SoldierMove();
-         //     if (_soldiers.Count==0) EnemyMove();
-         //    
-         //     
-         //     yield return _wait;
-         // }
+         if (agentType==AgentType.Enemy|| agentType==AgentType.EnemyArcher)
+         {
+             _enemies.Remove(agentBase);
+             if (_enemies.Count==0) SoldierMove();
+         }
 
-        
-
-
+         if (agentType==AgentType.Soldier)
+         {
+             _soldiers.Remove(agentBase); 
+             if (_soldiers.Count==0) EnemyMove();
+         }
+         
      }
-
-     public void RemoveListEnemy(AgentBase agentBase)
-     {
-         _enemies.Remove(agentBase);
-         if (_enemies.Count==0) SoldierMove();
-     }
-     public void RemoveListSoldiers(AgentBase agentBase)
-     {
-         _soldiers.Remove(agentBase);
-         if (_soldiers.Count==0) EnemyMove();
-     }
-     public Transform CloseAgentEnemy(Transform who)
-     {
-          return _enemies.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
-     }
-     public Transform CloseAgentSoldier(Transform who)
-     {
-         return _soldiers.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
-     }
+     // public void RemoveListSoldiers(AgentBase agentBase)
+     // {
+     //     _soldiers.Remove(agentBase);
+     //     if (_soldiers.Count==0) EnemyMove();
+     // }
+     
 }

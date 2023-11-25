@@ -4,13 +4,28 @@ using UnityEngine;
 
 public class Soldier : AgentBase
 {
-    protected override void DetectTarget()
+    protected override void AttackType()
+    {
+        if (_agentBase!=null)
+        {
+            if (_agentBase.TakeDamage(5))
+            {
+                DetectTarget();
+            }
+        }
+        else
+        {
+                    
+        }
+    }
+
+   void DetectTarget()
     {
        
         if (_domination._enemies.Count>0)
         {
-           Attack(_domination.CloseAgentEnemy(transform));
-            //Attack(_domination._enemies[0].transform);
+           Attack(_gameManager.CloseAgentEnemy(transform));
+         
         }
         else
         {
@@ -18,9 +33,5 @@ public class Soldier : AgentBase
         }
     }
 
-    protected override void RemoveList()
-    {
-        _domination.RemoveListSoldiers(this);
-        //_domination._soldiers.Remove(this);
-    }
+   
 }
