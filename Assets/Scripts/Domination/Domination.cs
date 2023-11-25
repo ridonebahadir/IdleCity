@@ -183,7 +183,7 @@ namespace Domination
                     if (!_enemies.Contains(agentBase))
                     {
                         _enemies.Add(agentBase);
-                        if (!_isWin) speed = _enemies.Count * 0.5f;
+                        if (!_isWin) speed = TotalDiggerSpeed(_enemies);
                     }
                     if (_enemies.Count==1) EnemyMove();
                     if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
@@ -197,7 +197,7 @@ namespace Domination
                     if (!_soldiers.Contains(agentBase))
                     {
                         _soldiers.Add(agentBase);
-                        if (_isWin)  speed = _soldiers.Count*0.5f;
+                        if (_isWin)  speed = TotalDiggerSpeed(_soldiers);
                     }
                     if (_soldiers.Count==1) SoldierMove();
                     if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
@@ -248,7 +248,7 @@ namespace Domination
                     _enemies.Remove(agentBase);
                     if (_enemies.Count == 0)
                     {
-                        speed = _soldiers.Count * 0.5f;
+                        speed = TotalDiggerSpeed(_soldiers);
                         SoldierMove();
                     }
                     break;
@@ -258,7 +258,7 @@ namespace Domination
                     _soldiers.Remove(agentBase);
                     if (_soldiers.Count == 0)
                     {
-                        speed = _enemies.Count*0.5f;
+                        speed = TotalDiggerSpeed(_enemies);
                         EnemyMove();
                     }
                     break;
@@ -275,7 +275,17 @@ namespace Domination
         {
             return _soldiers.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
         }
-        float _a = 0;
+
+        float TotalDiggerSpeed(List<AgentBase> agentBases)
+        {
+            float a = 0;
+            foreach (var item in agentBases)
+            {
+                a += item.DiggSpeed;
+            }
+
+            return a;
+        }
        
     }
 }

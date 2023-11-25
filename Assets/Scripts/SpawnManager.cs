@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject soldier;
     [SerializeField] private GameObject enemyArcher;
     [SerializeField] private GameObject soldierArcher;
+    [SerializeField] private GameObject enemyDigger;
+    [SerializeField] private GameObject soldierDigger;
 
     [SerializeField] private Transform spawnPointEnemy;
     [SerializeField] private Transform spawnPointSoldier;
@@ -22,6 +25,8 @@ public class SpawnManager : MonoBehaviour
         _gameManager.uIManager.spawnSoldier.onClick.AddListener(SpawnSoldier);
         _gameManager.uIManager.spawnEnemyArcher.onClick.AddListener(SpawnEnemyArcher);
         _gameManager.uIManager.spawnSoldierArcher.onClick.AddListener(SpawnSoldierArcher);
+        _gameManager.uIManager.spawnSoldierDigger.onClick.AddListener(SpawnSoldierDigger);
+        _gameManager.uIManager.spawnEnemyDigger.onClick.AddListener(SpawnEnemyDigger);
     }
 
     private void SpawnSoldier()
@@ -46,6 +51,16 @@ public class SpawnManager : MonoBehaviour
         var obj= Instantiate(soldierArcher, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
         _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
     }
+    private void SpawnEnemyDigger()
+    {
+        var obj= Instantiate(enemyDigger, spawnPointEnemy.position,Quaternion.identity,spawnPointEnemy);
+        _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
+    }
+    private void SpawnSoldierDigger()
+    {
+        var obj= Instantiate(soldierDigger, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
+        _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
+    }
     
     private void OnEnable()
     {
@@ -53,6 +68,8 @@ public class SpawnManager : MonoBehaviour
         UIManager.OnClickedSoldierSpawnButton += SpawnSoldier;
         UIManager.OnClickedEnemyArcherSpawnButton += SpawnEnemyArcher;
         UIManager.OnClickedSoldierArcherSpawnButton += SpawnSoldierArcher;
+        UIManager.OnClickedSoldierDiggerSpawnButton += SpawnSoldierDigger;
+        UIManager.OnClickedEnemyDiggerSpawnButton += SpawnEnemyDigger;
     }
 
     private void OnDisable()
@@ -61,5 +78,7 @@ public class SpawnManager : MonoBehaviour
         UIManager.OnClickedSoldierSpawnButton -= SpawnSoldier;
         UIManager.OnClickedEnemyArcherSpawnButton -= SpawnEnemyArcher;
         UIManager.OnClickedSoldierArcherSpawnButton -= SpawnSoldierArcher;
+        UIManager.OnClickedSoldierDiggerSpawnButton -= SpawnSoldierDigger;
+        UIManager.OnClickedEnemyDiggerSpawnButton -= SpawnEnemyDigger;
     }
 }
