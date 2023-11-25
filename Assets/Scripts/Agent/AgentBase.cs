@@ -8,7 +8,6 @@ public enum AgentType
 {
     Enemy,
     Soldier,
-    EnemyArcher
 }
 public abstract class AgentBase : MonoBehaviour
 {
@@ -18,8 +17,8 @@ public abstract class AgentBase : MonoBehaviour
     
     public NavMeshAgent navMeshAgent;
 
-    protected Domination _domination;
-    protected GameManager _gameManager;
+    private Domination _domination;
+    private GameManager _gameManager;
     public Transform _target;
     public AgentBase _agentBase;
 
@@ -32,9 +31,6 @@ public abstract class AgentBase : MonoBehaviour
         _target = _gameManager.dominationArea.transform;
         _domination = _gameManager.dominationArea;
         StartCoroutine(MoveDominationArea());
-        
-        //_gameManager = GameManager.Instance;
-
     }
 
     protected virtual IEnumerator MoveDominationArea()
@@ -58,16 +54,45 @@ public abstract class AgentBase : MonoBehaviour
     }
 
     protected abstract void AttackType();
-    
-    
-
-
     public void Attack(Transform target)
     {
         _target = target;
         _agentBase = target.transform.GetComponent<AgentBase>();
     }
+    protected void DetectTarget()
+    {
+        switch (agentType)
+        {
+            case AgentType.Enemy:
+            {
+                if (_domination._soldiers.Count>0 && isInside)
+                {
+                    Attack(_domination.CloseAgentSoldier(transform));
+                }
+                else 
+                {
+                    _target = GameManager.Instance.dominationArea.transform;
+                }
+                break;
+            }
+            case AgentType.Soldier:
+            {
+                if (_domination._enemies.Count>0 && isInside)
+                {
+                    Attack(_domination.CloseAgentEnemy(transform));
+                }
+                else 
+                {
+                    _target = GameManager.Instance.dominationArea.transform;
+                }
 
+                break;
+            }
+        }
+
+      
+       
+    }
     public void TakeDamage(int damage)
     {
         health -= damage;
@@ -97,4 +122,6 @@ public abstract class AgentBase : MonoBehaviour
     }
     
     
+    
+   
 }

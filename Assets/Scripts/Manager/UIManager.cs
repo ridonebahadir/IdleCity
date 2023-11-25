@@ -9,10 +9,12 @@ public class UIManager : MonoBehaviour
     public static event ClickAction OnClickedEnemySpawnButton;
     public static event ClickAction OnClickedSoldierSpawnButton;
     public static event ClickAction OnClickedEnemyArcherSpawnButton;
+    public static event ClickAction OnClickedSoldierArcherSpawnButton;
 
     public Button spawnEnemy;
     public Button spawnSoldier;
     public Button spawnEnemyArcher;
+    public Button spawnSoldierArcher;
 
    public void OnOnClickedSpawnEnemyButton()
     {
@@ -25,5 +27,9 @@ public class UIManager : MonoBehaviour
    public void OnOnClickedSpawnEnemyArcherButton()
    {
        OnClickedEnemyArcherSpawnButton?.Invoke();
+   }
+   public void OnOnClickedSpawnSoldierArcherButton()
+   {
+       OnClickedSoldierArcherSpawnButton?.Invoke();
    }
 }

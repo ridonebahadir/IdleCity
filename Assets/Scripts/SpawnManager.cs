@@ -8,6 +8,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject enemy;
     [SerializeField] private GameObject soldier;
     [SerializeField] private GameObject enemyArcher;
+    [SerializeField] private GameObject soldierArcher;
 
     [SerializeField] private Transform spawnPointEnemy;
     [SerializeField] private Transform spawnPointSoldier;
@@ -20,6 +21,7 @@ public class SpawnManager : MonoBehaviour
         _gameManager.uIManager.spawnEnemy.onClick.AddListener(SpawnEnemy);
         _gameManager.uIManager.spawnSoldier.onClick.AddListener(SpawnSoldier);
         _gameManager.uIManager.spawnEnemyArcher.onClick.AddListener(SpawnEnemyArcher);
+        _gameManager.uIManager.spawnSoldierArcher.onClick.AddListener(SpawnSoldierArcher);
     }
 
     private void SpawnSoldier()
@@ -39,12 +41,18 @@ public class SpawnManager : MonoBehaviour
         var obj= Instantiate(enemyArcher, spawnPointEnemy.position,Quaternion.identity,spawnPointEnemy);
         _gameManager.enemies.Add(obj.GetComponent<AgentBase>());
     }
+    private void SpawnSoldierArcher()
+    {
+        var obj= Instantiate(soldierArcher, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
+        _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
+    }
     
     private void OnEnable()
     {
         UIManager.OnClickedEnemySpawnButton += SpawnEnemy;
         UIManager.OnClickedSoldierSpawnButton += SpawnSoldier;
         UIManager.OnClickedEnemyArcherSpawnButton += SpawnEnemyArcher;
+        UIManager.OnClickedSoldierArcherSpawnButton += SpawnSoldierArcher;
     }
 
     private void OnDisable()
@@ -52,5 +60,6 @@ public class SpawnManager : MonoBehaviour
         UIManager.OnClickedEnemySpawnButton -= SpawnEnemy;
         UIManager.OnClickedSoldierSpawnButton -= SpawnSoldier;
         UIManager.OnClickedEnemyArcherSpawnButton -= SpawnEnemyArcher;
+        UIManager.OnClickedSoldierArcherSpawnButton -= SpawnSoldierArcher;
     }
 }

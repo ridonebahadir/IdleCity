@@ -26,18 +26,18 @@ public class GameManager : MonoBehaviour
    }
    
    
-   public Transform CloseAgentEnemy(Transform who)
-   {
-      return enemies.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
-   }
-   public Transform CloseAgentSoldier(Transform who)
-   {
-      return soldiers.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
-   }
+   // public Transform CloseAgentEnemy(Transform who)
+   // {
+   //    return enemies.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
+   // }
+   // public Transform CloseAgentSoldier(Transform who)
+   // {
+   //    return soldiers.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
+   // }
 
    public void RemoveList(AgentBase agentBase,AgentType agentType)
    {
-      if (agentType==AgentType.Enemy|| agentType==AgentType.EnemyArcher)
+      if (agentType==AgentType.Enemy)
       {
          enemies.Remove(agentBase);
       }
@@ -47,10 +47,5 @@ public class GameManager : MonoBehaviour
          soldiers.Remove(agentBase);
       }
    }
-   // public void RemoveListSoldiers(AgentBase agentBase)
-   // {
-   //    soldiers.Remove(agentBase);
-   //    
-   // }
-   //
+   
 }

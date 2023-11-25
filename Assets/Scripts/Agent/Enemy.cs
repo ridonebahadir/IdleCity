@@ -18,17 +18,7 @@ public class Enemy : AgentBase
         }
     }
 
-     void DetectTarget()
-    {
-        if (_domination._soldiers.Count>0&& isInside)
-        {
-            Attack(_gameManager.CloseAgentSoldier(transform));
-        }
-        else
-        {
-            _target = GameManager.Instance.dominationArea.transform;
-        }
-    }
+    
 
     
 }

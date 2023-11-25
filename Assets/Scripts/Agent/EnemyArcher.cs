@@ -46,29 +46,19 @@ public class EnemyArcher : AgentBase
     }
 
 
-     void Flee(Vector3 location)
+    private void Flee(Vector3 location)
      {
          Vector3 fleeVector = location - transform.position;
          navMeshAgent.SetDestination(transform.position - fleeVector);
      }
 
-     void Seek(Vector3 location)
+    private void Seek(Vector3 location)
      {
          navMeshAgent.SetDestination(location);
      }
         
     
-    void DetectTarget()
-    {
-        if (_domination._soldiers.Count>0&& isInside)
-        {
-            Attack(_gameManager.CloseAgentSoldier(transform));
-        }
-        else
-        {
-            _target = _gameManager.dominationArea.transform;
-        }
-    }
+    
 
   
 }

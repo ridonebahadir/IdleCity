@@ -6,6 +6,7 @@ using DG.Tweening;
 using Dreamteck.Splines;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
@@ -145,56 +146,44 @@ public class Domination : MonoBehaviour
     
      private void OnTriggerEnter(Collider other)
      {
-         if (other.TryGetComponent(out Enemy enemy))
+         if (other.TryGetComponent(out AgentBase agentBase))
          {
-             enemy.isInside = true;
-             if (!_enemies.Contains(enemy))
-             {
-                 _enemies.Add(enemy);
-                 if (!isWin)  speed = _enemies.Count * 0.5f;
-             }
-             if (_enemies.Count==1) EnemyMove();
-             if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
-                 AttackEnemy(); 
-                 AttackSoldier();
-           
-
+             Register(agentBase);
          }
-         if (other.TryGetComponent(out Soldier soldier))
-         {
-             soldier.isInside = true;
-             if (!_soldiers.Contains(soldier))
-             {
-                 _soldiers.Add(soldier);
-                 if (isWin)  speed = _soldiers.Count * 0.5f;
-             }
-             if (_soldiers.Count==1) SoldierMove();
-             if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
-             AttackEnemy(); 
-             AttackSoldier();
-                 
-             
-             
-
-         }
-         if (other.TryGetComponent(out EnemyArcher enemyArcher))
-         {
-             Register(enemyArcher);
-             //if (_enemies.Count==1) EnemyMove();
-
-         }
-         
      }
 
-     private void Register(EnemyArcher enemyArcher)
+     private void Register(AgentBase agentBase)
      {
-         enemyArcher.isInside = true;
-         if (_enemies.Contains(enemyArcher)) return;
-         _enemies.Add(enemyArcher);
-         speed = _enemies.Count * 0.5f;
-         if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
-         AttackEnemy(); 
-         AttackSoldier();
+         agentBase.isInside = true;
+         switch (agentBase.agentType)
+         {
+             case AgentType.Enemy:
+             {
+                 if (!_enemies.Contains(agentBase))
+                 {
+                     _enemies.Add(agentBase);
+                     if (!isWin)  speed = _soldiers.Count * 0.5f;
+                 }
+                 if (_enemies.Count==1) EnemyMove();
+                 if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
+                 AttackEnemy(); 
+                 AttackSoldier();
+                 break;
+             }
+             case AgentType.Soldier:
+             {
+                 if (!_soldiers.Contains(agentBase))
+                 {
+                     _soldiers.Add(agentBase);
+                     if (isWin)  speed = _soldiers.Count * 0.5f;
+                 }
+                 if (_soldiers.Count==1) SoldierMove();
+                 if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
+                 AttackEnemy(); 
+                 AttackSoldier();
+                 break;
+             }
+         }
      }
      private void OnTriggerExit(Collider other)
      {
@@ -210,7 +199,7 @@ public class Domination : MonoBehaviour
          }
          if (other.TryGetComponent(out EnemyArcher enemyArcher))
          {
-             if (_enemies.Contains(enemyArcher)) RemoveList(enemyArcher,AgentType.EnemyArcher);
+             if (_enemies.Contains(enemyArcher)) RemoveList(enemyArcher,AgentType.Enemy);
             
          }
      }
@@ -219,7 +208,7 @@ public class Domination : MonoBehaviour
      {
          for (int i = 0; i < _enemies.Count; i++)
          {
-             _enemies[i].Attack(_gameManager.CloseAgentSoldier(transform));
+             _enemies[i].Attack(CloseAgentSoldier(transform));
          }
      }
      private void AttackSoldier()
@@ -227,7 +216,7 @@ public class Domination : MonoBehaviour
          
          for (int i = 0; i < _soldiers.Count; i++)
          {
-             _soldiers[i].Attack(_gameManager.CloseAgentEnemy(transform));
+             _soldiers[i].Attack(CloseAgentEnemy(transform));
          }
          
      }
@@ -237,7 +226,7 @@ public class Domination : MonoBehaviour
          agentBase.isInside = false;
          switch (agentType)
          {
-             case AgentType.Enemy or AgentType.EnemyArcher:
+             case AgentType.Enemy:
              {
                  _enemies.Remove(agentBase);
                  if (_enemies.Count==0) SoldierMove();
@@ -251,10 +240,14 @@ public class Domination : MonoBehaviour
              }
          }
      }
-     // public void RemoveListSoldiers(AgentBase agentBase)
-     // {
-     //     _soldiers.Remove(agentBase);
-     //     if (_soldiers.Count==0) EnemyMove();
-     // }
+     
+     public Transform CloseAgentEnemy(Transform who)
+     {
+         return _enemies.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
+     }
+     public Transform CloseAgentSoldier(Transform who)
+     {
+        return _soldiers.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
+     }
      
 }
