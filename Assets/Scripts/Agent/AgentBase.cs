@@ -17,7 +17,7 @@ public abstract class AgentBase : MonoBehaviour
     
     public NavMeshAgent navMeshAgent;
 
-    private Domination _domination;
+    private Domination.Domination _domination;
     private GameManager _gameManager;
     public Transform _target;
     public AgentBase _agentBase;
@@ -61,37 +61,7 @@ public abstract class AgentBase : MonoBehaviour
     }
     protected void DetectTarget()
     {
-        switch (agentType)
-        {
-            case AgentType.Enemy:
-            {
-                if (_domination._soldiers.Count>0 && isInside)
-                {
-                    Attack(_domination.CloseAgentSoldier(transform));
-                }
-                else 
-                {
-                    _target = GameManager.Instance.dominationArea.transform;
-                }
-                break;
-            }
-            case AgentType.Soldier:
-            {
-                if (_domination._enemies.Count>0 && isInside)
-                {
-                    Attack(_domination.CloseAgentEnemy(transform));
-                }
-                else 
-                {
-                    _target = GameManager.Instance.dominationArea.transform;
-                }
-
-                break;
-            }
-        }
-
-      
-       
+        _domination.DetectTarget(this); 
     }
     public void TakeDamage(int damage)
     {

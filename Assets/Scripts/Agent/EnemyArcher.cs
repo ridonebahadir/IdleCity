@@ -13,7 +13,7 @@ public class EnemyArcher : AgentBase
         var arrow = Instantiate(arrowObj,transform.position,UnityEngine.Quaternion.identity,transform);
         arrow.gameObject.SetActive(true);
         arrow.transform.SetParent(_target);
-        arrow.transform.DOLocalJump(Vector3.zero, 2, 0, 0.5f).OnComplete(() =>
+        arrow.transform.DOLocalJump(Vector3.zero, 3, 0, 0.5f).OnComplete(() =>
         {
             arrow.gameObject.SetActive(false);
             arrow.transform.SetParent(transform);

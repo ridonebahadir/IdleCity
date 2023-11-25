@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
 
    public List<AgentBase> enemies;
    public List<AgentBase> soldiers;
-   public Domination dominationArea;
+   public Domination.Domination dominationArea;
    private void Awake()
    {
       if(Instance == null)
