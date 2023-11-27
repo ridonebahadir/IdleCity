@@ -88,16 +88,7 @@ public abstract class Human : MonoBehaviour
         }
        
     }
-    protected abstract void EnemySpawnControl();
-    private void OnEnable()
-    {
-        UIManager.OnClickedEnemySpawnButton += EnemySpawnControl;
-    }
-
-    private void OnDisable()
-    {
-        UIManager.OnClickedEnemySpawnButton -= EnemySpawnControl;
-    }
+    
 }
 
 

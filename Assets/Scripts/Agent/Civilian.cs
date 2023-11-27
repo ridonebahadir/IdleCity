@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Civilian : Human
 {
-    private bool _isWork = true;
+    //private bool _isWork = true;
     private void Start()
     {
         SleepCoroutine = MoveToSleep();
@@ -15,21 +15,21 @@ public class Civilian : Human
         //shiftControl.onClick.AddListener(ShiftControl);
     }
 
-    protected override void EnemySpawnControl()
-    {
-        if (_isWork)
-        {
-                
-            StopCoroutine(WorkCoroutine);
-            StartCoroutine(SleepCoroutine);
-            _isWork = false;
-        }
-        else
-        {
-            StartCoroutine(WorkCoroutine);
-            StopCoroutine(SleepCoroutine);
-            _isWork = true;
-        }
-    }
+    // protected override void EnemySpawnControl()
+    // {
+    //     if (_isWork)
+    //     {
+    //             
+    //         StopCoroutine(WorkCoroutine);
+    //         StartCoroutine(SleepCoroutine);
+    //         _isWork = false;
+    //     }
+    //     else
+    //     {
+    //         StartCoroutine(WorkCoroutine);
+    //         StopCoroutine(SleepCoroutine);
+    //         _isWork = true;
+    //     }
+    // }
     
 }

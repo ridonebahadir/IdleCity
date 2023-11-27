@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemySpawn : MonoBehaviour
 {
@@ -18,6 +20,12 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField] private int spawnEnemyArcherTime;
     [SerializeField] private int spawnEnemyDiggerTime;
 
+    [Space(10)]
+    [Header("SPAWN TIME")]
+    [SerializeField] private Image enemyImage;
+    [SerializeField] private Image enemyArcherImage;
+    [SerializeField] private Image enemyDiggerImage;
+
     
     private void Start()
     {
@@ -28,29 +36,34 @@ public class EnemySpawn : MonoBehaviour
     private IEnumerator SpawnOrder()
     {
         yield return new WaitForSeconds(10);
-        StartCoroutine(SpawnEnemyRoutine(1,spawnEnemyTime));
+        StartCoroutine(SpawnEnemyRoutine(1,spawnEnemyTime,enemyImage));
         yield return new WaitForSeconds(spawnEnemyTime);
-        StartCoroutine(SpawnEnemyRoutine(2,spawnEnemyArcherTime));
+        StartCoroutine(SpawnEnemyRoutine(2,spawnEnemyArcherTime,enemyArcherImage));
         yield return new WaitForSeconds(spawnEnemyArcherTime);
-        StartCoroutine(SpawnEnemyRoutine(3,spawnEnemyDiggerTime));
+        StartCoroutine(SpawnEnemyRoutine(3,spawnEnemyDiggerTime,enemyDiggerImage));
     }
-    private IEnumerator SpawnEnemyRoutine(int turn,int time)
+    private IEnumerator SpawnEnemyRoutine(int turn,int time,Image image)
     {
         WaitForSeconds waitForSeconds = new(time);
         while (true)
         {
-            switch (turn)
+            image.DOFillAmount(0, time).OnComplete(()=>
             {
-                case 1 :
-                    SpawnEnemy();
-                    break;
-                case 2:
-                    SpawnEnemyArcher();
-                    break;
-                case 3:
-                    SpawnEnemyDigger();
-                    break;
-            }
+                switch (turn)
+                {
+                    case 1 :
+                        SpawnEnemy();
+                        break;
+                    case 2:
+                        SpawnEnemyArcher();
+                        break;
+                    case 3:
+                        SpawnEnemyDigger();
+                        break;
+                }
+                image.fillAmount = 1;
+            });
+            
             yield return waitForSeconds;
         }
     }

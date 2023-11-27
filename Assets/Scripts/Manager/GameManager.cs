@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -20,8 +21,19 @@ public class GameManager : MonoBehaviour
    [Header("REWARD")]
    [SerializeField] private int goldCount;
    [SerializeField] private int goldRate;
-
    
+   [Space(10)]
+   [Header("SOAGENT")]
+   public SOAgent soldierSO;
+   public SOAgent soldierArcherSO;
+   public SOAgent soldierDiggerSO;
+   
+   
+   private int _soldierCost;
+   private int _soldierArcherCost;
+   private int _soldierDiggerCost;
+   
+  
    private void Awake()
    {
       SetText();
@@ -32,7 +44,29 @@ public class GameManager : MonoBehaviour
 
       StartCoroutine(GoldSystem());
    }
-   
+
+   private void Start()
+   {
+      _soldierCost = soldierSO.cost;
+      _soldierArcherCost = soldierArcherSO.cost;
+      _soldierDiggerCost = soldierDiggerSO.cost;
+
+      uIManager.soldierCostText.text = _soldierCost+"G";
+      uIManager.soldierArcherCostText.text = _soldierArcherCost+"G";
+      uIManager.soldierDiggerCostText.text = _soldierDiggerCost+"G";
+   }
+
+   private void Update()
+   {
+      ControlGold(_soldierCost,uIManager.spawnSoldier);
+      ControlGold(_soldierArcherCost,uIManager.spawnSoldierArcher);
+      ControlGold(_soldierDiggerCost,uIManager.spawnSoldierDigger);
+   }
+
+   private void ControlGold(int cost,Button button)
+   {
+      button.interactable = goldCount >= cost;
+   }
    public void RemoveList(AgentBase agentBase,AgentType agentType)
    {
       if (agentType==AgentType.Enemy)
@@ -73,4 +107,5 @@ public class GameManager : MonoBehaviour
       goldCount += value;
       SetText();
    }
+   public int GetGold => goldCount;
 }

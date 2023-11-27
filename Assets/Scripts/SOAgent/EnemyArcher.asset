@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyArcher
   m_EditorClassIdentifier: 
   agentType: 0
-  speed: 8
+  speed: 5
   diggSpeed: 0.2
   attackRate: 0
   health: 5
