@@ -4,25 +4,27 @@ using System.Linq;
 using Dreamteck.Splines;
 using UnityEngine;
 
+
 namespace Domination
 {
     public class Domination : MonoBehaviour
     {
         [SerializeField] private Transform sphere;
-        [SerializeField] private SplinePositioner splinePositioner;
+        //[SerializeField] private SplinePositioner splinePositioner;
+        [SerializeField] private SplineFollower splineFollower;
         [SerializeField] private SplineComputer splineComputer;
         [SerializeField] private float speed;
-        [SerializeField] private float riverWidth;
-        public List<AgentBase> _enemies = new List<AgentBase>();
-        public List<AgentBase> _soldiers = new List<AgentBase>();
+        [SerializeField] private float riverWidth; 
+        public List<AgentBase> enemies = new List<AgentBase>(); 
+        public List<AgentBase> soldiers = new List<AgentBase>();
         
-        private float _currentDistance;
-        private float _sizeSpeed; 
+        //private float _currentDistance;
+        private float _sizeSpeed;
         private int _turn;
         private float _dist;
         private float _size;
         private float _goneRoad;
-        private WaitForSeconds _wait = new(0.01f);
+        private readonly WaitForSeconds _wait = new(0.01f);
         private SplinePoint[] _points;
         private IEnumerator _dominationMove;
         private bool _isWin = true;
@@ -44,8 +46,9 @@ namespace Domination
             while (!_start)
             {
 
-                if (_turn == 2)
+                if (_turn == 3)
                 {
+                    speed = 0;
                     StopCoroutine(_dominationMove);
                     _start = true;
                     
@@ -60,14 +63,15 @@ namespace Domination
             {
                 if (_isWin)
                 {
-                    _currentDistance += Time.deltaTime*speed;
+                    //_currentDistance += Time.deltaTime*speed;
+                    splineFollower.followSpeed = speed;
                     _goneRoad += Time.deltaTime*speed;
                     if (_size<=riverWidth) _size += Time.deltaTime * _sizeSpeed; 
                     if (_goneRoad>=_dist)
                     {
                         _size = 0.1f;
                         _goneRoad = 0;
-                        if (_turn == _points.Length - 2)
+                        if (_turn == _points.Length - 3)
                         {
                             Debug.Log("WIN");
                             GameManager.Instance.uIManager.WinPanelOpen();
@@ -79,13 +83,14 @@ namespace Domination
                 }
                 else
                 {
-                    _currentDistance -= Time.deltaTime*speed;
+                    //_currentDistance -= Time.deltaTime*speed;
+                    splineFollower.followSpeed = -speed;
                     _goneRoad -= Time.deltaTime*speed;
                     if (_size>=0.1f) _size -= (Time.deltaTime * _sizeSpeed);
           
                     if (_goneRoad<=0)
                     {
-                        if (_turn == 0)
+                        if (_turn == 1)
                         {
                             Debug.Log("LOSE");
                             GameManager.Instance.uIManager.FailPanelOpen();
@@ -99,7 +104,7 @@ namespace Domination
 
                     }
                 }
-                splinePositioner.SetDistance(_currentDistance); 
+                //splinePositioner.SetDistance(_currentDistance); 
                 splineComputer.SetPointSize(_turn,_size);
                 yield return _wait;
             }
@@ -140,16 +145,18 @@ namespace Domination
         private void Update()
         {
             if (!_start) return;
-            if (_enemies.Count > 0 && _soldiers.Count > 0)
+            if (enemies.Count > 0 && soldiers.Count > 0)
             {
+                splineFollower.followSpeed = 0;
                 StopCoroutine(_dominationMove);
-            
+               
             }
 
-            if (_enemies.Count == 0 && _soldiers.Count == 0)
+            if (enemies.Count == 0 && soldiers.Count == 0)
             {
+                splineFollower.followSpeed = 0;
                 StopCoroutine(_dominationMove);
-            
+                
             }
 
 
@@ -180,13 +187,13 @@ namespace Domination
                 case AgentType.Enemy:
                 {
                     _isWin = false;
-                    if (!_enemies.Contains(agentBase))
+                    if (!enemies.Contains(agentBase))
                     {
-                        _enemies.Add(agentBase);
-                        if (!_isWin) speed = TotalDiggerSpeed(_enemies);
+                        enemies.Add(agentBase);
+                        if (!_isWin) speed = TotalDiggerSpeed(enemies);
                     }
-                    if (_enemies.Count==1) EnemyMove();
-                    if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
+                    if (enemies.Count==1) EnemyMove();
+                    if (enemies.Count <= 0 || soldiers.Count <= 0) return;
                     AttackEnemy(); 
                     AttackSoldier();
                     break;
@@ -194,13 +201,13 @@ namespace Domination
                 case AgentType.Soldier:
                 {
                     _isWin = true;
-                    if (!_soldiers.Contains(agentBase))
+                    if (!soldiers.Contains(agentBase))
                     {
-                        _soldiers.Add(agentBase);
-                        if (_isWin)  speed = TotalDiggerSpeed(_soldiers);
+                        soldiers.Add(agentBase);
+                        if (_isWin)  speed = TotalDiggerSpeed(soldiers);
                     }
-                    if (_soldiers.Count==1) SoldierMove();
-                    if (_enemies.Count <= 0 || _soldiers.Count <= 0) return;
+                    if (soldiers.Count==1) SoldierMove();
+                    if (enemies.Count <= 0 || soldiers.Count <= 0) return;
                     AttackEnemy(); 
                     AttackSoldier();
                     break;
@@ -213,27 +220,27 @@ namespace Domination
             switch (agentBase.soAgent.agentType)
             {
                 case AgentType.Enemy:
-                    if (_enemies.Contains(agentBase)) RemoveList(agentBase,AgentType.Enemy);
+                    if (enemies.Contains(agentBase)) RemoveList(agentBase,AgentType.Enemy);
                     break;
                 case AgentType.Soldier:
-                    if (_soldiers.Contains(agentBase)) RemoveList(agentBase,AgentType.Soldier);
+                    if (soldiers.Contains(agentBase)) RemoveList(agentBase,AgentType.Soldier);
                     break;
             }
         }
 
         private void AttackEnemy()
         {
-            for (int i = 0; i < _enemies.Count; i++)
+            for (int i = 0; i < enemies.Count; i++)
             {
-                _enemies[i].Attack(CloseAgentSoldier(transform));
+                enemies[i].Attack(CloseAgentSoldier(transform));
             }
         }
         private void AttackSoldier()
         {
          
-            for (int i = 0; i < _soldiers.Count; i++)
+            for (int i = 0; i < soldiers.Count; i++)
             {
-                _soldiers[i].Attack(CloseAgentEnemy(transform));
+                soldiers[i].Attack(CloseAgentEnemy(transform));
             }
          
         }
@@ -245,20 +252,20 @@ namespace Domination
             {
                 case AgentType.Enemy:
                 {
-                    _enemies.Remove(agentBase);
-                    if (_enemies.Count == 0)
+                    enemies.Remove(agentBase);
+                    if (enemies.Count == 0)
                     {
-                        speed = TotalDiggerSpeed(_soldiers);
+                        speed = TotalDiggerSpeed(soldiers);
                         SoldierMove();
                     }
                     break;
                 }
                 case AgentType.Soldier:
                 {
-                    _soldiers.Remove(agentBase);
-                    if (_soldiers.Count == 0)
+                    soldiers.Remove(agentBase);
+                    if (soldiers.Count == 0)
                     {
-                        speed = TotalDiggerSpeed(_enemies);
+                        speed = TotalDiggerSpeed(enemies);
                         EnemyMove();
                     }
                     break;
@@ -268,12 +275,12 @@ namespace Domination
 
         public Transform CloseAgentEnemy(Transform who)
         {
-            return _enemies.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
+            return enemies.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
         }
 
         public Transform CloseAgentSoldier(Transform who)
         {
-            return _soldiers.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
+            return soldiers.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
         }
 
         float TotalDiggerSpeed(List<AgentBase> agentBases)

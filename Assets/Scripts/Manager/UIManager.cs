@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -25,7 +25,14 @@ public class UIManager : MonoBehaviour
     [Header("PANELS")] 
     public GameObject winPanel;
     public GameObject failPanel;
+    
+    [Space(10)]
+    [Header("PANELS")]
+    public TextMeshProUGUI goldTextCount;
+    public TextMeshProUGUI timeText;
+    
 
+    
     public void WinPanelOpen()
     {
         winPanel.SetActive(true);

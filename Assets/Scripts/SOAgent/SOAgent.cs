@@ -15,4 +15,5 @@ public class SOAgent : ScriptableObject
     public int damage; 
     public float attackDistance;
     public float cost;
+    public int reward;
 }

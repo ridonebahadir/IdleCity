@@ -84,7 +84,7 @@ public abstract class AgentBase : MonoBehaviour
         {
             case AgentType.Enemy:
             {
-                if (_domination._soldiers.Count>0 && isInside)
+                if (_domination.soldiers.Count>0 && isInside)
                 {
                     Attack(_domination.CloseAgentSoldier(transform));
                 }
@@ -96,7 +96,7 @@ public abstract class AgentBase : MonoBehaviour
             }
             case AgentType.Soldier:
             {
-                if (_domination._enemies.Count>0 && isInside)
+                if (_domination.enemies.Count>0 && isInside)
                 {
                     Attack(_domination.CloseAgentEnemy(transform));
                 }
@@ -126,15 +126,20 @@ public abstract class AgentBase : MonoBehaviour
 
     private void Death()
     {
-        
+        if (_agentType==AgentType.Enemy)  GetReward();
         RemoveList();
-       gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     void RemoveList()
     {
         _gameManager.RemoveList(this,_agentType);
         _domination.RemoveList(this,_agentType);
+    }
+
+    void GetReward()
+    {
+        _gameManager.GetReward(soAgent.reward);
     }
 
     
