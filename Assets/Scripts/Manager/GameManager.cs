@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -19,8 +20,8 @@ public class GameManager : MonoBehaviour
    
    [Space(10)]
    [Header("REWARD")]
-   [SerializeField] private int goldCount;
-   [SerializeField] private int goldRate;
+   [SerializeField] private float goldCount;
+   [SerializeField] private float goldRate;
    
    [Space(10)]
    [Header("SOAGENT")]
@@ -54,19 +55,60 @@ public class GameManager : MonoBehaviour
       uIManager.soldierCostText.text = _soldierCost+"G";
       uIManager.soldierArcherCostText.text = _soldierArcherCost+"G";
       uIManager.soldierDiggerCostText.text = _soldierDiggerCost+"G";
+
+      StartCoroutine(ControlGold(_soldierCost,uIManager.spawnSoldier,uIManager.soldierImage));
+      StartCoroutine(ControlGold(_soldierArcherCost,uIManager.spawnSoldierArcher,uIManager.soldierArcherImage));
+      StartCoroutine(ControlGold(_soldierDiggerCost,uIManager.spawnSoldierDigger,uIManager.soldierDiggerImage));
    }
 
+   IEnumerator ControlGold(int cost,Button button,Image image)
+   {
+      WaitForSeconds waitForSeconds = new(1);
+      while (true)
+      {
+         if (goldCount<cost)
+         {
+            button.interactable = false;
+            var value =(goldCount/cost);
+            image.DOFillAmount(value, 0.5f);
+            //image.fillAmount = value;
+         }
+         else
+         {
+            image.DOFillAmount(1, 0.5f).OnComplete(() =>
+            {
+               button.interactable = true;
+            });
+            
+         }
+
+         yield return waitForSeconds;
+      }
+   }
    private void Update()
    {
-      ControlGold(_soldierCost,uIManager.spawnSoldier);
-      ControlGold(_soldierArcherCost,uIManager.spawnSoldierArcher);
-      ControlGold(_soldierDiggerCost,uIManager.spawnSoldierDigger);
+      // ControlGold(_soldierCost,uIManager.spawnSoldier,uIManager.soldierImage);
+      // ControlGold(_soldierArcherCost,uIManager.spawnSoldierArcher,uIManager.soldierArcherImage);
+      // ControlGold(_soldierDiggerCost,uIManager.spawnSoldierDigger,uIManager.soldierDiggerImage);
+      
    }
 
-   private void ControlGold(int cost,Button button)
-   {
-      button.interactable = goldCount >= cost;
-   }
+   // private void ControlGold(int cost,Button button,Image image)
+   // {
+   //    if (goldCount<cost)
+   //    {
+   //       button.interactable = false;
+   //       var value =(goldCount /cost);
+   //       image.fillAmount = value;
+   //    }
+   //    else
+   //    {
+   //       image.fillAmount = 1;
+   //       button.interactable = true;
+   //    }
+   // }
+
+   
    public void RemoveList(AgentBase agentBase,AgentType agentType)
    {
       if (agentType==AgentType.Enemy)
@@ -107,5 +149,5 @@ public class GameManager : MonoBehaviour
       goldCount += value;
       SetText();
    }
-   public int GetGold => goldCount;
+   public float GetGold => goldCount;
 }

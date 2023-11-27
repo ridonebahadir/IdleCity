@@ -30,11 +30,16 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI timeText;
     
     [Space(10)]
-    [Header("COSTTEXT")]
+    [Header("COST TEXT")]
     public TextMeshProUGUI soldierCostText;
     public TextMeshProUGUI soldierArcherCostText;
     public TextMeshProUGUI soldierDiggerCostText;
    
+    [Space(10)]
+    [Header("TILE")]
+    public Image soldierImage;
+    public Image soldierArcherImage;
+    public Image soldierDiggerImage;
     
     public void WinPanelOpen()
     {
@@ -53,16 +58,22 @@ public class UIManager : MonoBehaviour
  
    private void OnOnClickedSpawnSoldierButton()
    {
+       soldierImage.fillAmount = 0;
        OnClickedSoldierSpawnButton?.Invoke();
+      
    }
   
    public void OnOnClickedSpawnSoldierArcherButton()
    {
+       soldierArcherImage.fillAmount = 0;
        OnClickedSoldierArcherSpawnButton?.Invoke();
+       
    }
    
    private void OnOnClickedSoldierDiggerSpawnButton()
    {
+       soldierDiggerImage.fillAmount = 0;
        OnClickedSoldierDiggerSpawnButton?.Invoke();
+       
    }
 }
