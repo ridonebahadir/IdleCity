@@ -16,9 +16,7 @@ public class UIManager : MonoBehaviour
     public static event ClickAction OnClickedSoldierDiggerSpawnButton;
     
     
-    public Button spawnSoldier;
-    public Button spawnSoldierArcher;
-    public Button spawnSoldierDigger;
+    
 
     [Header("PANELS")] 
     public GameObject winPanel;
@@ -29,17 +27,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI goldTextCount;
     public TextMeshProUGUI timeText;
     
-    [Space(10)]
-    [Header("COST TEXT")]
-    public TextMeshProUGUI soldierCostText;
-    public TextMeshProUGUI soldierArcherCostText;
-    public TextMeshProUGUI soldierDiggerCostText;
-   
-    [Space(10)]
-    [Header("TILE")]
-    public Image soldierImage;
-    public Image soldierArcherImage;
-    public Image soldierDiggerImage;
+    
     
     public void WinPanelOpen()
     {
@@ -58,21 +46,20 @@ public class UIManager : MonoBehaviour
  
    private void OnOnClickedSpawnSoldierButton()
    {
-       soldierImage.fillAmount = 0;
        OnClickedSoldierSpawnButton?.Invoke();
       
    }
   
    public void OnOnClickedSpawnSoldierArcherButton()
    {
-       soldierArcherImage.fillAmount = 0;
+       
        OnClickedSoldierArcherSpawnButton?.Invoke();
        
    }
    
    private void OnOnClickedSoldierDiggerSpawnButton()
    {
-       soldierDiggerImage.fillAmount = 0;
+       
        OnClickedSoldierDiggerSpawnButton?.Invoke();
        
    }
