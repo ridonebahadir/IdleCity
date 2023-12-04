@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630af42716ff99c429aa9c360bfd511c, type: 3}
+  m_Name: SOSkillSettings
+  m_EditorClassIdentifier: 
+  freezeWaterActiveTime: 5
+  freezeWaterCoolTime: 60
+  healPercent: 25
+  healCoolTime: 90
+  slowPercent: 50
+  slowActiveTime: 3
+  slowCoolTime: 90
+  attackPercent: 30
+  attackActiveTime: 10
+  attackCoolTime: 90
+  dealDamagePercent: 20
+  dealDamageCoolTime: 120
+  increaseGolPercent: 100
+  increaseGoldActiveTime: 10
+  increaseGoldCoolTime: 90
