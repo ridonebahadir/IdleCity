@@ -31,9 +31,6 @@ public class GameManager : MonoBehaviour
       {
          Instance = this;
       }
-
-      //StartCoroutine(GoldSystem());
-
    }
    public void RemoveList(AgentBase agentBase,AgentType agentType)
    {
@@ -52,23 +49,6 @@ public class GameManager : MonoBehaviour
    {
       SetText();
       goldCount += goldRate * Time.deltaTime;
-   }
-
-   private IEnumerator GoldSystem()
-   {
-      
-      while (true)
-      {
-         for (int i = 0; i < goldRate; i++)
-         {
-            goldCount++;
-            SetText();
-           //WaitForSeconds waitForSeconds = new(1/goldRate);
-            yield return new WaitForSeconds(1/goldRate);
-         }
-        
-         //yield return waitForSeconds;
-      }
    }
    public void SetGoldRate(float a)
    {
