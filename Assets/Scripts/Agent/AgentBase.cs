@@ -15,8 +15,9 @@ public abstract class AgentBase : MonoBehaviour
     private AgentType _agentType;
     private float _diggSpeed;
     protected float _attackDistance;
-    private int _health;
-    private int _damage;
+    [SerializeField]  private float _health;
+    [SerializeField]  private float _speed;
+    [SerializeField]  protected float _damage;
     private float cost;
     
     protected NavMeshAgent navMeshAgent;
@@ -37,6 +38,8 @@ public abstract class AgentBase : MonoBehaviour
         _gameManager=GameManager.Instance;
         _target = _gameManager.dominationArea.transform;
         _domination = _gameManager.dominationArea;
+        
+        SetPercentSpeed(100);
         InıtAgent();
         StartCoroutine(MoveDominationArea());
        
@@ -45,7 +48,7 @@ public abstract class AgentBase : MonoBehaviour
     private void InıtAgent()
     {
         _agentType = soAgent.agentType;
-        navMeshAgent.speed = soAgent.speed;
+        _speed = soAgent.speed;
         _health = soAgent.health;
         _damage = soAgent.damage;
         _diggSpeed = soAgent.diggSpeed;
@@ -109,9 +112,10 @@ public abstract class AgentBase : MonoBehaviour
             }
         }
     }
-    public void TakeDamage()
+    
+    public void TakeDamage(float damage)
     {
-        _health -= _damage;
+        _health -= damage;
         if (_health>0)
         {
             
@@ -142,7 +146,29 @@ public abstract class AgentBase : MonoBehaviour
         _gameManager.GetReward(soAgent.reward);
     }
 
-    
- 
-   
+    public void SetPercentHealth(float value)
+    {
+        var a = (soAgent.health * value) / 100; 
+        _health += a;
+        if (_health>=soAgent.health)  _health = soAgent.health;
+    }
+
+    public void SetPercentSpeed(float value)
+    {
+        var a = (soAgent.speed * value) / 100;
+        navMeshAgent.speed = _speed + a;
+    }
+
+
+    public void SetPercentAttack(float value)
+    {
+        var a = (soAgent.damage * value) / 100;
+        _damage += a;
+    }
+
+    public void SetPercentTakeDamage(float value)
+    {
+        var a=(soAgent.health * value) / 100;
+        TakeDamage(a);
+    }
 }

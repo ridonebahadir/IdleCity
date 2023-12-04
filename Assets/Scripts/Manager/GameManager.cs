@@ -21,18 +21,9 @@ public class GameManager : MonoBehaviour
    
    [Space(10)]
    [Header("REWARD")]
-   [SerializeField]
-   public float goldCount;
+   [SerializeField] private float goldCount;
    [SerializeField] private float goldRate;
    
- 
-  
-   
-   
-  
-
-   
-  
    private void Awake()
    {
       SetText();
@@ -44,29 +35,6 @@ public class GameManager : MonoBehaviour
       StartCoroutine(GoldSystem());
 
    }
-
-   private void Start()
-   {
-      
-
-
-      
-      // StartCoroutine(ControlGold(_soldierCost,uIManager.spawnSoldier,uIManager.soldierImage));
-      // StartCoroutine(ControlGold(_soldierArcherCost,uIManager.spawnSoldierArcher,uIManager.soldierArcherImage));
-      // StartCoroutine(ControlGold(_soldierDiggerCost,uIManager.spawnSoldierDigger,uIManager.soldierDiggerImage));
-
-
-      
-
-     
-   }
-
-  
-   
-
-
-  
-   
    public void RemoveList(AgentBase agentBase,AgentType agentType)
    {
       if (agentType==AgentType.Enemy)
@@ -79,7 +47,6 @@ public class GameManager : MonoBehaviour
          soldiers.Remove(agentBase);
       }
    }
-
    private IEnumerator GoldSystem()
    {
       WaitForSeconds waitForSeconds = new(1);
@@ -90,22 +57,20 @@ public class GameManager : MonoBehaviour
          yield return waitForSeconds;
       }
    }
-
-   public void SetGoldRate(int a)
+   public void SetGoldRate(float a)
    {
       goldRate += a;
    }
    private void SetText()
    {
-     
       uIManager.goldTextCount.text ="Gold =" + goldCount;
       uIManager.timeText.text ="Rate =" + goldRate;
    }
-
-   public void GetReward(int value)
+   public void GetReward(float value)
    {
       goldCount += value;
       SetText();
    }
    public float GetGold => goldCount;
+   public float GetGoldRate => goldRate;
 }

@@ -81,6 +81,6 @@ public class EnemySpawn : MonoBehaviour
     private void SpawnEnemyDigger()
     {
         var obj= Instantiate(enemyDigger, spawnPointEnemy.position,Quaternion.identity,spawnPointEnemy);
-        _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
+        _gameManager.enemies.Add(obj.GetComponent<AgentBase>());
     }
 }

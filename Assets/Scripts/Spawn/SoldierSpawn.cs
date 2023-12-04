@@ -23,9 +23,9 @@ public class SoldierSpawn : MonoBehaviour
     
     
     [Header("COST")] 
-     private int _soldierCost;
-     private int _soldierArcherCost;
-     private int _soldierDiggerCost;
+     private float _soldierCost;
+     private float _soldierArcherCost;
+     private float _soldierDiggerCost;
 
     
     private GameManager _gameManager;
@@ -51,9 +51,9 @@ public class SoldierSpawn : MonoBehaviour
     public Button spawnSoldierDiggerButton;
 
 
-    private IEnumerator _enemyEnumerator;
-    private IEnumerator _enemyEnumeratorArcher;
-    private IEnumerator _enemyEnumeratorDigger;
+    private IEnumerator _soldierEnumerator;
+    private IEnumerator _soldierEnumeratorArcher;
+    private IEnumerator _soldierEnumeratorDigger;
     private void Start()
     {
         _gameManager = GameManager.Instance;
@@ -71,24 +71,24 @@ public class SoldierSpawn : MonoBehaviour
         soldierArcherCostText.text = _soldierArcherCost + "G";
         soldierDiggerCostText.text = _soldierDiggerCost + "G";
         
-        _enemyEnumerator = ControlGold(_soldierCost,spawnSoldierButton,soldierImage);
-        _enemyEnumeratorArcher = ControlGold(_soldierArcherCost,spawnSoldierArcherButton,soldierArcherImage);
-        _enemyEnumeratorDigger = ControlGold(_soldierDiggerCost,spawnSoldierDiggerButton,soldierDiggerImage);
+        _soldierEnumerator = ControlGold(_soldierCost,spawnSoldierButton,soldierImage);
+        _soldierEnumeratorArcher = ControlGold(_soldierArcherCost,spawnSoldierArcherButton,soldierArcherImage);
+        _soldierEnumeratorDigger = ControlGold(_soldierDiggerCost,spawnSoldierDiggerButton,soldierDiggerImage);
         
-        StartCoroutine(_enemyEnumerator);
-        StartCoroutine(_enemyEnumeratorArcher);
-        StartCoroutine(_enemyEnumeratorDigger);
+        StartCoroutine(_soldierEnumerator);
+        StartCoroutine(_soldierEnumeratorArcher);
+        StartCoroutine(_soldierEnumeratorDigger);
     }
     
-    IEnumerator ControlGold(int cost,Button button,Image image)
+    IEnumerator ControlGold(float cost,Button button,Image image)
     {
         WaitForSeconds waitForSeconds = new(1);
         while (true)
         {
-            if (_gameManager.goldCount<cost)
+            if (_gameManager.GetGold<cost)
             {
                 button.interactable = false;
-                var value =(_gameManager.goldCount/cost);
+                var value =(_gameManager.GetGold/cost);
                 image.DOFillAmount(value, 0.5f);
                 //image.fillAmount = value;
             }
@@ -111,9 +111,9 @@ public class SoldierSpawn : MonoBehaviour
         var obj= Instantiate(soldier, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
         _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
         _gameManager.GetReward(-_soldierCost);
-        StopCoroutine(_enemyEnumerator); 
+        StopCoroutine(_soldierEnumerator); 
         soldierImage.fillAmount = 0;
-        StartCoroutine(_enemyEnumerator);
+        StartCoroutine(_soldierEnumerator);
         
     }
     private void SpawnSoldierArcher()
@@ -122,9 +122,9 @@ public class SoldierSpawn : MonoBehaviour
         var obj= Instantiate(soldierArcher, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
         _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
         _gameManager.GetReward(-_soldierArcherCost);
-        StopCoroutine(_enemyEnumeratorArcher); 
+        StopCoroutine(_soldierEnumeratorArcher); 
         soldierArcherImage.fillAmount = 0;
-        StartCoroutine(_enemyEnumeratorArcher);
+        StartCoroutine(_soldierEnumeratorArcher);
     }
     private void SpawnSoldierDigger()
     {
@@ -132,9 +132,9 @@ public class SoldierSpawn : MonoBehaviour
         var obj= Instantiate(soldierDigger, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
         _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
         _gameManager.GetReward(-_soldierDiggerCost);
-        StopCoroutine(_enemyEnumeratorDigger);
+        StopCoroutine(_soldierEnumeratorDigger);
         soldierDiggerImage.fillAmount = 0;
-        StartCoroutine(_enemyEnumeratorDigger);
+        StartCoroutine(_soldierEnumeratorDigger);
        
     }
    

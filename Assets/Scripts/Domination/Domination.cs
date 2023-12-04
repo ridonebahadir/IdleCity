@@ -28,7 +28,8 @@ namespace Domination
         private SplinePoint[] _points;
         private IEnumerator _dominationMove;
         private bool _isWin = true;
-    
+        
+        public SplineFollower GetSplineFollower => splineFollower;
         private void Start()
         {
             _points = splineComputer.GetPoints();

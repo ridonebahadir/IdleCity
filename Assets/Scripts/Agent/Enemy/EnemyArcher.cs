@@ -18,7 +18,7 @@ public class EnemyArcher : AgentBase
             arrow.gameObject.SetActive(false);
             arrow.transform.SetParent(transform);
             arrow.transform.localPosition = Vector3.zero;
-            _agentBase.TakeDamage();
+            _agentBase.TakeDamage(_damage);
             _agentBase = null;
             DetectTarget();
             
