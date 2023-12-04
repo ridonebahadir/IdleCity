@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
          Instance = this;
       }
 
-      StartCoroutine(GoldSystem());
+      //StartCoroutine(GoldSystem());
 
    }
    public void RemoveList(AgentBase agentBase,AgentType agentType)
@@ -47,14 +47,27 @@ public class GameManager : MonoBehaviour
          soldiers.Remove(agentBase);
       }
    }
+
+   private void Update()
+   {
+      SetText();
+      goldCount += goldRate * Time.deltaTime;
+   }
+
    private IEnumerator GoldSystem()
    {
-      WaitForSeconds waitForSeconds = new(1);
+      
       while (true)
       {
-         goldCount+=goldRate;
-         SetText();
-         yield return waitForSeconds;
+         for (int i = 0; i < goldRate; i++)
+         {
+            goldCount++;
+            SetText();
+           //WaitForSeconds waitForSeconds = new(1/goldRate);
+            yield return new WaitForSeconds(1/goldRate);
+         }
+        
+         //yield return waitForSeconds;
       }
    }
    public void SetGoldRate(float a)
@@ -63,7 +76,7 @@ public class GameManager : MonoBehaviour
    }
    private void SetText()
    {
-      uIManager.goldTextCount.text ="Gold =" + goldCount;
+      uIManager.goldTextCount.text ="Gold =" +(int)goldCount;
       uIManager.timeText.text ="Rate =" + goldRate;
    }
    public void GetReward(float value)
