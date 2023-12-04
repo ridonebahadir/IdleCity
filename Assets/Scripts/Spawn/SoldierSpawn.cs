@@ -1,5 +1,6 @@
 
 using System.Collections;
+using System.Diagnostics;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -82,7 +83,7 @@ public class SoldierSpawn : MonoBehaviour
     
     IEnumerator ControlGold(float cost,Button button,Image image)
     {
-        WaitForSeconds waitForSeconds = new(1);
+        WaitForSeconds waitForSeconds = new(0.5f);
         while (true)
         {
             if (_gameManager.GetGold<cost)
@@ -111,9 +112,9 @@ public class SoldierSpawn : MonoBehaviour
         var obj= Instantiate(soldier, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
         _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
         _gameManager.GetReward(-_soldierCost);
-        StopCoroutine(_soldierEnumerator); 
+        Stop();
         soldierImage.fillAmount = 0;
-        StartCoroutine(_soldierEnumerator);
+       Go();
         
     }
     private void SpawnSoldierArcher()
@@ -122,9 +123,9 @@ public class SoldierSpawn : MonoBehaviour
         var obj= Instantiate(soldierArcher, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
         _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
         _gameManager.GetReward(-_soldierArcherCost);
-        StopCoroutine(_soldierEnumeratorArcher); 
+       Stop();
         soldierArcherImage.fillAmount = 0;
-        StartCoroutine(_soldierEnumeratorArcher);
+        Go();
     }
     private void SpawnSoldierDigger()
     {
@@ -132,12 +133,24 @@ public class SoldierSpawn : MonoBehaviour
         var obj= Instantiate(soldierDigger, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
         _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
         _gameManager.GetReward(-_soldierDiggerCost);
-        StopCoroutine(_soldierEnumeratorDigger);
+        Stop();
         soldierDiggerImage.fillAmount = 0;
-        StartCoroutine(_soldierEnumeratorDigger);
-       
+        Go();
+
     }
-   
+
+    private void Stop()
+    {
+        StopCoroutine(_soldierEnumerator);
+        StopCoroutine(_soldierEnumeratorArcher);
+        StopCoroutine(_soldierEnumeratorDigger);
+    }
+    private void Go()
+    {
+        StartCoroutine(_soldierEnumerator);
+        StartCoroutine(_soldierEnumeratorArcher);
+        StartCoroutine(_soldierEnumeratorDigger);
+    }
     
     private void OnEnable()
     {
