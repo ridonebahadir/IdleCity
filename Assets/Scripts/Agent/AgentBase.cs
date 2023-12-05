@@ -13,6 +13,7 @@ public abstract class AgentBase : MonoBehaviour
     public SOAgent soAgent;
 
     [SerializeField] public Animator animator;
+    [SerializeField] private ParticleSystem particleSystem;
     
     private AgentType _agentType;
     private float _diggSpeed;
@@ -141,6 +142,7 @@ public abstract class AgentBase : MonoBehaviour
     
     public void TakeDamage(float damage)
     {
+        particleSystem.Play();
         _health -= damage;
         if (_health>0)
         {
