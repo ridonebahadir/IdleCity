@@ -18,6 +18,6 @@ MonoBehaviour:
   attackRate: 0
   health: 20
   damage: 5
-  attackDistance: 1
+  attackDistance: 2
   cost: 0
   reward: 3

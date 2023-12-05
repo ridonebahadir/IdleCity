@@ -10,6 +10,8 @@ public class EnemyArcher : AgentBase
     
     protected override void AttackType()
     {
+        if (isDeath) return;
+        animator.SetTrigger("Attack");
         var arrow = Instantiate(arrowObj,transform.position,UnityEngine.Quaternion.identity,transform);
         arrow.gameObject.SetActive(true);
         arrow.transform.SetParent(_target);
@@ -33,8 +35,16 @@ public class EnemyArcher : AgentBase
             
             if (_dist <_attackDistance && _agentBase!=null)
             {
-                Flee(_target.position);
-                AttackType();
+                if (isWar)
+                {
+                    Flee(_target.position);
+                    AttackType();
+                }
+                else
+                {
+                    animator.SetBool("Digg",true);
+                }
+                
             }
             else
             {

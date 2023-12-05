@@ -11,6 +11,8 @@ public enum AgentType
 public abstract class AgentBase : MonoBehaviour
 {
     public SOAgent soAgent;
+
+    [SerializeField] public Animator animator;
     
     private AgentType _agentType;
     private float _diggSpeed;
@@ -30,18 +32,31 @@ public abstract class AgentBase : MonoBehaviour
     internal bool isInside;
     protected WaitForSeconds _wait = new(0.5f);
     public float _dist;
+    
+    protected bool isDeath;
     public float DiggSpeed => _diggSpeed;
-
+    private IEnumerator Move;
     private void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         _gameManager=GameManager.Instance;
-        _target = _gameManager.dominationArea.transform;
+        
+        
         _domination = _gameManager.dominationArea;
         
         SetPercentSpeed(100);
         InıtAgent();
-        StartCoroutine(MoveDominationArea());
+        
+        if (_agentType == AgentType.Enemy)
+        {
+            _target = _gameManager.dominationArea.transform;
+        }
+        else
+        {
+            _target = _gameManager.dominationArea.transform;
+        }
+        Move = MoveDominationArea();
+        StartCoroutine(Move);
        
     }
 
@@ -64,8 +79,14 @@ public abstract class AgentBase : MonoBehaviour
             
             if (_dist<_attackDistance)
             {
-                AttackType();
-
+                if (isWar)
+                {
+                   AttackType();
+                }
+                else
+                {
+                    animator.SetBool("Digg",true);
+                }
             }
             else
             {
@@ -75,9 +96,12 @@ public abstract class AgentBase : MonoBehaviour
         }
     }
 
+    protected bool isWar;
     protected abstract void AttackType();
     public void Attack(Transform target)
     {
+        animator.SetBool("Digg",false);
+        isWar = true;
         _target = target;
         _agentBase = target.transform.GetComponent<AgentBase>();
     }
@@ -94,6 +118,7 @@ public abstract class AgentBase : MonoBehaviour
                 else 
                 {
                     _target = GameManager.Instance.dominationArea.transform;
+                    isWar = false;
                 }
                 break;
             }
@@ -106,6 +131,7 @@ public abstract class AgentBase : MonoBehaviour
                 else 
                 {
                     _target = GameManager.Instance.dominationArea.transform;
+                     isWar = false;
                 }
 
                 break;
@@ -124,15 +150,29 @@ public abstract class AgentBase : MonoBehaviour
         {
             Death();
            
+           
         }
        
     }
 
+    
     private void Death()
     {
-        if (_agentType==AgentType.Enemy)  GetReward();
-        RemoveList();
-        gameObject.SetActive(false);
+        if (isDeath) return;
+        StartCoroutine(DeathIE());
+        IEnumerator DeathIE()
+        {
+            StopCoroutine(Move);
+            isDeath = true;
+            animator.SetTrigger("Death");
+            if (_agentType==AgentType.Enemy)  GetReward();
+            RemoveList();
+            navMeshAgent.enabled = false;
+            yield return new WaitForSeconds(2.25f);
+            gameObject.SetActive(false);
+        }
+
+
     }
 
     void RemoveList()

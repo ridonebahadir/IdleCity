@@ -70,17 +70,20 @@ public class EnemySpawn : MonoBehaviour
     private void SpawnEnemy()
     {
         var obj= Instantiate(enemy, spawnPointEnemy.position,Quaternion.identity,spawnPointEnemy);
+        obj.transform.localScale = new Vector3(2, 2, 2);
         _gameManager.enemies.Add(obj.GetComponent<AgentBase>());
     }
 
     private void SpawnEnemyArcher()
     {
         var obj= Instantiate(enemyArcher, spawnPointEnemy.position,Quaternion.identity,spawnPointEnemy);
+        obj.transform.localScale = new Vector3(2, 2, 2);
         _gameManager.enemies.Add(obj.GetComponent<AgentBase>());
     }
     private void SpawnEnemyDigger()
     {
         var obj= Instantiate(enemyDigger, spawnPointEnemy.position,Quaternion.identity,spawnPointEnemy);
+        obj.transform.localScale = new Vector3(2, 2, 2);
         _gameManager.enemies.Add(obj.GetComponent<AgentBase>());
     }
 }

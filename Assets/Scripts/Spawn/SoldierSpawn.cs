@@ -106,36 +106,51 @@ public class SoldierSpawn : MonoBehaviour
         }
     }
 
+    private void Spawn(float cost,GameObject prefab,Transform pos,Image image)
+    {
+        if (_gameManager.GetGold < cost) return;
+        var obj= Instantiate(prefab, pos.position,Quaternion.identity,pos);
+        obj.transform.localScale = new Vector3(2, 2, 2);
+        _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
+        _gameManager.GetReward(-cost);
+        Stop();
+        image.fillAmount = 0;
+        Go();
+    }
     private void SpawnSoldier()
     {
-        if (_gameManager.GetGold < _soldierCost) return;
-        var obj= Instantiate(soldier, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
-        _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
-        _gameManager.GetReward(-_soldierCost);
-        Stop();
-        soldierImage.fillAmount = 0;
-       Go();
+        Spawn(_soldierCost,soldier,spawnPointSoldier,soldierImage);
+        
+       //  if (_gameManager.GetGold < _soldierCost) return;
+       //  var obj= Instantiate(soldier, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
+       //  _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
+       //  _gameManager.GetReward(-_soldierCost);
+       //  Stop();
+       //  soldierImage.fillAmount = 0;
+       // Go();
         
     }
     private void SpawnSoldierArcher()
     {
-        if (_gameManager.GetGold < _soldierArcherCost) return;
-        var obj= Instantiate(soldierArcher, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
-        _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
-        _gameManager.GetReward(-_soldierArcherCost);
-       Stop();
-        soldierArcherImage.fillAmount = 0;
-        Go();
+        Spawn(_soldierArcherCost,soldierArcher,spawnPointSoldier,soldierArcherImage);
+       //  if (_gameManager.GetGold < _soldierArcherCost) return;
+       //  var obj= Instantiate(soldierArcher, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
+       //  _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
+       //  _gameManager.GetReward(-_soldierArcherCost);
+       // Stop();
+       //  soldierArcherImage.fillAmount = 0;
+       //  Go();
     }
     private void SpawnSoldierDigger()
     {
-        if (_gameManager.GetGold < _soldierDiggerCost) return;
-        var obj= Instantiate(soldierDigger, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
-        _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
-        _gameManager.GetReward(-_soldierDiggerCost);
-        Stop();
-        soldierDiggerImage.fillAmount = 0;
-        Go();
+        Spawn(_soldierDiggerCost,soldierDigger,spawnPointSoldier,soldierDiggerImage);
+        // if (_gameManager.GetGold < _soldierDiggerCost) return;
+        // var obj= Instantiate(soldierDigger, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);
+        // _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
+        // _gameManager.GetReward(-_soldierDiggerCost);
+        // Stop();
+        // soldierDiggerImage.fillAmount = 0;
+        // Go();
 
     }
 
