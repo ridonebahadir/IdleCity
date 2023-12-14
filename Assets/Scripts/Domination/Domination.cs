@@ -9,6 +9,11 @@ namespace Domination
 {
     public class Domination : MonoBehaviour
     {
+        public List<Transform> enemiesSlot = new List<Transform>(); 
+        public List<Transform> soldiersSlot = new List<Transform>();
+        
+        
+        
         [SerializeField] private Transform sphere;
         //[SerializeField] private SplinePositioner splinePositioner;
         [SerializeField] private SplineFollower splineFollower;
@@ -28,6 +33,7 @@ namespace Domination
         private SplinePoint[] _points;
         private IEnumerator _dominationMove;
         private bool _isWin = true;
+        
         
         public SplineFollower GetSplineFollower => splineFollower;
         private void Start()

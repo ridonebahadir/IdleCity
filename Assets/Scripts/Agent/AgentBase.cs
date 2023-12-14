@@ -13,7 +13,7 @@ public abstract class AgentBase : MonoBehaviour
     public SOAgent soAgent;
 
     [SerializeField] public Animator animator;
-    [SerializeField] private ParticleSystem particleSystem;
+    //[SerializeField] private ParticleSystem particleSystem;
     
     private AgentType _agentType;
     private float _diggSpeed;
@@ -56,7 +56,7 @@ public abstract class AgentBase : MonoBehaviour
         {
             _target = _gameManager.dominationArea.transform;
         }
-        Move = MoveDominationArea();
+        Move = MoveTarget();
         StartCoroutine(Move);
        
     }
@@ -71,7 +71,7 @@ public abstract class AgentBase : MonoBehaviour
         _attackDistance = soAgent.attackDistance;
 
     }
-    protected virtual IEnumerator MoveDominationArea()
+    protected virtual IEnumerator MoveTarget()
     {
         while (true)
         {
@@ -142,7 +142,7 @@ public abstract class AgentBase : MonoBehaviour
     
     public void TakeDamage(float damage)
     {
-        particleSystem.Play();
+        //particleSystem.Play();
         _health -= damage;
         if (_health>0)
         {

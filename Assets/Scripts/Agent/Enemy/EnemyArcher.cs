@@ -27,7 +27,7 @@ public class EnemyArcher : AgentBase
         });
     }
 
-    protected override IEnumerator MoveDominationArea()
+    protected override IEnumerator MoveTarget()
     {
         while (true)
         {
