@@ -20,9 +20,9 @@ public class EnemyArcher : AgentBase
             arrow.gameObject.SetActive(false);
             arrow.transform.SetParent(transform);
             arrow.transform.localPosition = Vector3.zero;
-            _agentBase.TakeDamage(_damage);
-            _agentBase = null;
-            DetectTarget();
+            _targetAgentBase.TakeDamage(_damage);
+            _targetAgentBase = null;
+            //DetectTarget();
             
         });
     }
@@ -33,9 +33,9 @@ public class EnemyArcher : AgentBase
         {
             _dist = Vector3.Distance(transform.position, _target.position);
             
-            if (_dist <_attackDistance && _agentBase!=null)
+            if (_dist <_attackDistance && _targetAgentBase!=null)
             {
-                if (isWar)
+                if (agentState==AgentState.Fighting)
                 {
                     Flee(_target.position);
                     AttackType();

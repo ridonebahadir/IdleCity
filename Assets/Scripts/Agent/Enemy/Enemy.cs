@@ -4,21 +4,58 @@ using UnityEngine;
 
 public class Enemy : AgentBase
 {
+    private IEnumerator _attack;
     protected override void AttackType()
     {
-        if (_agentBase!=null && !isDeath)
+        if (_attack==null)
         {
-            _agentBase.TakeDamage(_damage); 
-            animator.SetTrigger("Attack");
-            DetectTarget();
+            _attack = AttackCoroutine();
+            StartCoroutine(_attack);
+        }
+       
+       
             
-        }
-        else
-        {
-                    
-        }
-    }
 
+           
+            //DetectTarget();
+            
+       
+    }
+    IEnumerator AttackCoroutine()
+    {
+        WaitForSeconds wait = new(2);
+        animator.SetBool("Attack",true);
+        while (true)
+        {
+            if (_targetAgentBase.GetHealth<=0)
+            {
+                animator.SetBool("Attack",false);
+                _collider.enabled = true;
+                agentState = AgentState.Walking;
+                _attack = null;
+                yield break;
+                       
+            }
+            else
+            {
+                if (GetHealth>0)
+                {
+                           
+                    yield return wait; 
+                    _targetAgentBase.TakeDamage(_damage);
+                }
+                else
+                {
+                    animator.SetBool("Attack",false);
+                    yield break;
+                }
+                        
+            }
+            yield return null; 
+        }
+                
+
+    }
     
 
     

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,59 +9,67 @@ public enum AgentType
     Enemy,
     Soldier,
 }
+public enum AgentState
+{
+    Walking,
+    Waiting,
+    Fighting
+}
 public abstract class AgentBase : MonoBehaviour
 {
     public SOAgent soAgent;
-
+    [SerializeField] protected AgentState agentState;
     [SerializeField] public Animator animator;
-    //[SerializeField] private ParticleSystem particleSystem;
-    
-    private AgentType _agentType;
+    private AgentType _agentType; 
     private float _diggSpeed;
-    protected float _attackDistance;
+    [SerializeField] protected float _attackDistance;
     [SerializeField]  private float _health;
     [SerializeField]  private float _speed;
     [SerializeField]  protected float _damage;
     private float cost;
-    
+    protected Collider _collider;
     protected NavMeshAgent navMeshAgent;
 
     private Domination.Domination _domination;
     private GameManager _gameManager;
     public Transform _target;
     
-    protected AgentBase _agentBase;
+    protected AgentBase _targetAgentBase;
     internal bool isInside;
-    protected WaitForSeconds _wait = new(0.5f);
+    protected WaitForSeconds _wait = new(0.05f);
     public float _dist;
     
     protected bool isDeath;
+    private float _navMeshStopDistance;
     public float DiggSpeed => _diggSpeed;
-    private IEnumerator Move;
+    protected IEnumerator Move;
     private void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        _navMeshStopDistance = navMeshAgent.stoppingDistance;
         _gameManager=GameManager.Instance;
         
         
         _domination = _gameManager.dominationArea;
-        
+        _collider = GetComponent<Collider>();
         SetPercentSpeed(100);
         InıtAgent();
-        
-        if (_agentType == AgentType.Enemy)
+       
+        if (agentState == AgentState.Walking)
         {
+           
             _target = _gameManager.dominationArea.transform;
         }
         else
         {
-            _target = _gameManager.dominationArea.transform;
+            _target = _domination.SlotTarget(_agentType);
+            //_attackDistance = 0;
         }
+        navMeshAgent.SetDestination(_target.position);
         Move = MoveTarget();
         StartCoroutine(Move);
        
     }
-
     private void InıtAgent()
     {
         _agentType = soAgent.agentType;
@@ -75,37 +84,67 @@ public abstract class AgentBase : MonoBehaviour
     {
         while (true)
         {
+            navMeshAgent.SetDestination(_target.position);
             _dist = Vector3.Distance(transform.position, _target.position);
-           
-            
-            if (_dist<_attackDistance)
+            if (_dist < _attackDistance)
             {
-                if (isWar)
-                {
+                if (agentState == AgentState.Fighting)
+                { 
                    AttackType();
+                   //StopCoroutine(Move);
                 }
-                else
+                if (agentState==AgentState.Waiting)
                 {
-                    animator.SetBool("Digg",true);
+                    _attackDistance = 0;
+                    navMeshAgent.stoppingDistance = 0;
+                    Debug.Log("Wait");
                 }
+
+                if (agentState==AgentState.Walking)
+                {
+                    _target = _domination.SlotTarget(_agentType);
+                    agentState = AgentState.Waiting;
+                    //_attackDistance = 0;
+                    //animator.SetBool("Digg",true);
+                }
+               
+                
             }
             else
             {
-                navMeshAgent.destination = _target.position;
+               
+                //navMeshAgent.destination = _target.position;
             }
             yield return _wait;
         }
     }
-
-    protected bool isWar;
+   
     protected abstract void AttackType();
     public void Attack(Transform target)
     {
-        animator.SetBool("Digg",false);
-        isWar = true;
-        _target = target;
-        _agentBase = target.transform.GetComponent<AgentBase>();
+        //animator.SetBool("Digg",false);
+        //isWar = true;
+        //_attackDistance = soAgent.attackDistance;
+       
+        //_target = target;
+       
+        //_agentBase = target.transform.GetComponent<AgentBase>();
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out AgentBase otherAgentBase))
+        {
+            _attackDistance = soAgent.attackDistance;
+            navMeshAgent.stoppingDistance =_navMeshStopDistance;
+            _collider.enabled = false;
+            _targetAgentBase = otherAgentBase;
+            agentState = AgentState.Fighting;
+            _target = otherAgentBase.transform;
+            //Attack(otherAgentBase.transform);
+        }
+    }
+
     protected void DetectTarget()
     {
         switch (_agentType)
@@ -119,7 +158,8 @@ public abstract class AgentBase : MonoBehaviour
                 else 
                 {
                     _target = GameManager.Instance.dominationArea.transform;
-                    isWar = false;
+                    //isWar = false;
+                    agentState = AgentState.Walking;
                 }
                 break;
             }
@@ -132,7 +172,8 @@ public abstract class AgentBase : MonoBehaviour
                 else 
                 {
                     _target = GameManager.Instance.dominationArea.transform;
-                     isWar = false;
+                     //isWar = false;
+                     agentState = AgentState.Walking;
                 }
 
                 break;
@@ -150,6 +191,8 @@ public abstract class AgentBase : MonoBehaviour
         }
         else
         {
+            _collider.enabled = false;
+            StopCoroutine(Move);
             Death();
            
            
@@ -161,16 +204,16 @@ public abstract class AgentBase : MonoBehaviour
     private void Death()
     {
         if (isDeath) return;
+       
         StartCoroutine(DeathIE());
         IEnumerator DeathIE()
         {
-            StopCoroutine(Move);
-            isDeath = true;
+            //isDeath = true;
             animator.SetTrigger("Death");
             if (_agentType==AgentType.Enemy)  GetReward();
-            RemoveList();
-            navMeshAgent.enabled = false;
+            //RemoveList();
             yield return new WaitForSeconds(2.25f);
+            navMeshAgent.enabled = false;
             gameObject.SetActive(false);
         }
 
@@ -213,4 +256,12 @@ public abstract class AgentBase : MonoBehaviour
         var a=(soAgent.health * value) / 100;
         TakeDamage(a);
     }
+
+    public void SetBattleLineState()
+    {
+        agentState = AgentState.Waiting;
+    }
+
+    public float GetHealth => _health;
+    
 }

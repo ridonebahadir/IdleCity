@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class EnemySpawn : MonoBehaviour
 {
@@ -38,9 +39,9 @@ public class EnemySpawn : MonoBehaviour
         yield return new WaitForSeconds(10);
         StartCoroutine(SpawnEnemyRoutine(1,spawnEnemyTime,enemyImage));
         yield return new WaitForSeconds(spawnEnemyTime);
-        StartCoroutine(SpawnEnemyRoutine(2,spawnEnemyArcherTime,enemyArcherImage));
+        //StartCoroutine(SpawnEnemyRoutine(2,spawnEnemyArcherTime,enemyArcherImage));
         yield return new WaitForSeconds(spawnEnemyArcherTime);
-        StartCoroutine(SpawnEnemyRoutine(3,spawnEnemyDiggerTime,enemyDiggerImage));
+        //StartCoroutine(SpawnEnemyRoutine(3,spawnEnemyDiggerTime,enemyDiggerImage));
     }
     private IEnumerator SpawnEnemyRoutine(int turn,int time,Image image)
     {
@@ -52,7 +53,11 @@ public class EnemySpawn : MonoBehaviour
                 switch (turn)
                 {
                     case 1 :
-                        SpawnEnemy();
+                        for (int i = 0; i < 4; i++)
+                        {
+                            SpawnEnemy();
+                        }
+                        
                         break;
                     case 2:
                         SpawnEnemyArcher();
@@ -70,6 +75,8 @@ public class EnemySpawn : MonoBehaviour
     private void SpawnEnemy()
     {
         var obj= Instantiate(enemy, spawnPointEnemy.position,Quaternion.identity,spawnPointEnemy);
+        var rand = Random.Range(10, -10);
+        obj.transform.localPosition = new Vector3(rand, 0, 0);
         obj.transform.localScale = new Vector3(2, 2, 2);
         _gameManager.enemies.Add(obj.GetComponent<AgentBase>());
     }

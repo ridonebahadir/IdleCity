@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Diagnostics;
 using DG.Tweening;
+using Domination;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,6 +31,7 @@ public class SoldierSpawn : MonoBehaviour
 
     
     private GameManager _gameManager;
+    private Domination.Domination _domination;
     private UIManager _uiManager;
     
     
@@ -58,8 +60,9 @@ public class SoldierSpawn : MonoBehaviour
     private void Start()
     {
         _gameManager = GameManager.Instance;
+        _domination = _gameManager.dominationArea;
         _uiManager = _gameManager.uIManager;
-       
+        
         spawnSoldierButton.onClick.AddListener(SpawnSoldier);
         spawnSoldierArcherButton.onClick.AddListener(SpawnSoldierArcher);
         spawnSoldierDiggerButton.onClick.AddListener(SpawnSoldierDigger);
@@ -108,18 +111,26 @@ public class SoldierSpawn : MonoBehaviour
 
     private void Spawn(float cost,GameObject prefab,Transform pos,Image image)
     {
-        if (_gameManager.GetGold < cost) return;
+        //if (_gameManager.GetGold < cost) return;
         var obj= Instantiate(prefab, pos.position,Quaternion.identity,pos);
+        var rand = Random.Range(10, -10);
+        obj.transform.localPosition = new Vector3(rand, 0, 0);
         obj.transform.localScale = new Vector3(2, 2, 2);
-        _gameManager.soldiers.Add(obj.GetComponent<AgentBase>());
-        _gameManager.GetReward(-cost);
+        AgentBase agentBase = obj.GetComponent<AgentBase>();
+        _gameManager.soldiers.Add(agentBase);
+        if (_domination.dominationMoveDirect == DominationMoveDirect.AlliesMove) agentBase.SetBattleLineState();
+        //_gameManager.GetReward(-cost);
         Stop();
         image.fillAmount = 0;
         Go();
     }
     private void SpawnSoldier()
     {
+        for (int i = 0; i < 30; i++)
+        {
         Spawn(_soldierCost,soldier,spawnPointSoldier,soldierImage);
+            
+        }
         
        //  if (_gameManager.GetGold < _soldierCost) return;
        //  var obj= Instantiate(soldier, spawnPointSoldier.position,Quaternion.identity,spawnPointSoldier);

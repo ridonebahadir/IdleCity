@@ -1,19 +1,27 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Dreamteck.Splines;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 namespace Domination
 {
+    public enum DominationMoveDirect
+    {
+        AlliesMove,
+        EnemyMove,
+        None,
+    }
     public class Domination : MonoBehaviour
     {
         public List<Transform> enemiesSlot = new List<Transform>(); 
-        public List<Transform> soldiersSlot = new List<Transform>();
-        
-        
-        
+         public List<Transform> alliesSlot = new List<Transform>();
+
+
+         public DominationMoveDirect dominationMoveDirect;
         [SerializeField] private Transform sphere;
         //[SerializeField] private SplinePositioner splinePositioner;
         [SerializeField] private SplineFollower splineFollower;
@@ -31,8 +39,8 @@ namespace Domination
         private float _goneRoad;
         private readonly WaitForSeconds _wait = new(0.01f);
         private SplinePoint[] _points;
-        private IEnumerator _dominationMove;
-        private bool _isWin = true;
+        private IEnumerator _dominationMove; 
+        //public bool isWin = true;
         
         
         public SplineFollower GetSplineFollower => splineFollower;
@@ -57,6 +65,8 @@ namespace Domination
                 {
                     speed = 0;
                     StopCoroutine(_dominationMove);
+                    splineFollower.followSpeed = 0;
+                    dominationMoveDirect = DominationMoveDirect.None;
                     _start = true;
                     
                 }
@@ -68,7 +78,7 @@ namespace Domination
         {
             while (true)
             {
-                if (_isWin)
+                if (dominationMoveDirect == DominationMoveDirect.AlliesMove)
                 {
                     //_currentDistance += Time.deltaTime*speed;
                     splineFollower.followSpeed = speed;
@@ -119,22 +129,22 @@ namespace Domination
         }
         private void EnemyMove()
         {
-           
-            _isWin = false;
+            speed = 0.5f;
+            dominationMoveDirect = DominationMoveDirect.EnemyMove;
             StopCoroutine(_dominationMove);
             StartCoroutine(_dominationMove);
         }
 
         private void SoldierMove()
         {
-            
-            _isWin = true;
+            speed = 0.5f;
+            dominationMoveDirect = DominationMoveDirect.AlliesMove;
             StopCoroutine(_dominationMove);
             StartCoroutine(_dominationMove);
         }
         private void Calculate()
         {
-            if (_isWin)
+            if ( dominationMoveDirect == DominationMoveDirect.AlliesMove)
             {
                 _dist = Vector3.Distance(sphere.position, _points[_turn+1].position);
                 _sizeSpeed = (riverWidth-(splineComputer.GetPoint(_turn).size)) / (_dist / speed);
@@ -152,35 +162,94 @@ namespace Domination
         private void Update()
         {
             if (!_start) return;
-            if (enemies.Count > 0 && soldiers.Count > 0)
-            {
-                splineFollower.followSpeed = 0;
-                StopCoroutine(_dominationMove);
-               
-            }
+            // if (enemies.Count > 0 && soldiers.Count > 0)
+            // {
+            //     splineFollower.followSpeed = 0;
+            //     StopCoroutine(_dominationMove);
+            //    
+            // }
 
-            if (enemies.Count == 0 && soldiers.Count == 0)
+            /*if (enemies.Count == 0 && soldiers.Count == 0)
             {
                 splineFollower.followSpeed = 0;
                 StopCoroutine(_dominationMove);
                 
+            }*/
+            if (!isMove)
+            {
+                captureTime -= Time.deltaTime;
+                if (captureTime<=0)
+                {
+                    captureTime = 0;
+                    if (!isWin)
+                    {
+                        EnemyMove();
+                        isMove = true;
+                    }
+                    else
+                    {
+                        SoldierMove();
+                        isMove = true;
+                    }
+                }
+                else
+                {
+                    speed = 0;
+                }
             }
+           
 
 
         }
-     
+
+        [SerializeField] private float captureTime = 3;
+        [SerializeField] private bool isWin;
+        [SerializeField] private bool isMove = true;
         private void OnTriggerEnter(Collider other)
         {
             if (other.TryGetComponent(out AgentBase agentBase))
             {
-                Register(agentBase);
+                
+                if (agentBase.soAgent.agentType==AgentType.Enemy)
+                {
+                    if (!isWin)
+                    {
+                        
+                    }
+                    else
+                    {
+                        captureTime = 3;
+                        isMove = false;
+                    }
+                    isWin = false;
+                   
+                }
+                else
+                {
+                    if (isWin)
+                    {
+                        
+                    }
+                    else
+                    {
+                        captureTime = 3;
+                        isMove = false;
+                    }
+                    isWin = true;
+                }
             }
         }
+
+        private void TimeStart()
+        {
+            
+        }
+
         private void OnTriggerExit(Collider other)
         {
             if (other.TryGetComponent(out AgentBase agentBase))
             {
-                UnRegister(agentBase);
+                //UnRegister(agentBase);
             
             }
         
@@ -193,30 +262,32 @@ namespace Domination
             {
                 case AgentType.Enemy:
                 {
-                    _isWin = false;
+                     dominationMoveDirect = DominationMoveDirect.EnemyMove;
                     if (!enemies.Contains(agentBase))
                     {
                         enemies.Add(agentBase);
-                        if (!_isWin) speed = TotalDiggerSpeed(enemies);
+                        speed = 0.5f;
+                        //if (dominationMoveDirect == DominationMoveDirect.EnemyMove) speed = TotalDiggerSpeed(enemies);
                     }
                     if (enemies.Count==1) EnemyMove();
                     if (enemies.Count <= 0 || soldiers.Count <= 0) return;
-                    AttackEnemy(); 
-                    AttackSoldier();
+                    // AttackEnemy(); 
+                    // AttackSoldier();
                     break;
                 }
                 case AgentType.Soldier:
                 {
-                    _isWin = true;
+                    dominationMoveDirect = DominationMoveDirect.AlliesMove;
                     if (!soldiers.Contains(agentBase))
                     {
                         soldiers.Add(agentBase);
-                        if (_isWin)  speed = TotalDiggerSpeed(soldiers);
+                        speed = -0.5f;
+                        //if ( dominationMoveDirect == DominationMoveDirect.AlliesMove)  speed = TotalDiggerSpeed(soldiers);
                     }
                     if (soldiers.Count==1) SoldierMove();
                     if (enemies.Count <= 0 || soldiers.Count <= 0) return;
-                    AttackEnemy(); 
-                    AttackSoldier();
+                    // AttackEnemy(); 
+                    // AttackSoldier();
                     break;
                 }
             }
@@ -260,21 +331,21 @@ namespace Domination
                 case AgentType.Enemy:
                 {
                     enemies.Remove(agentBase);
-                    if (enemies.Count == 0)
-                    {
-                        speed = TotalDiggerSpeed(soldiers);
-                        SoldierMove();
-                    }
+                    // if (enemies.Count == 0)
+                    // {
+                    //     speed = TotalDiggerSpeed(soldiers);
+                    //     SoldierMove();
+                    // }
                     break;
                 }
                 case AgentType.Soldier:
                 {
                     soldiers.Remove(agentBase);
-                    if (soldiers.Count == 0)
-                    {
-                        speed = TotalDiggerSpeed(enemies);
-                        EnemyMove();
-                    }
+                    // if (soldiers.Count == 0)
+                    // {
+                    //     speed = TotalDiggerSpeed(enemies);
+                    //     EnemyMove();
+                    // }
                     break;
                 }
             }
@@ -299,6 +370,26 @@ namespace Domination
             }
 
             return a;
+        }
+
+        private int _turnEnemies;
+        private int _turnAllies;
+        public Transform SlotTarget(AgentType agentType)
+        {
+            if (agentType==AgentType.Enemy)
+            {
+                if (_turnEnemies<enemiesSlot.Count-1)  _turnEnemies++;
+                else   _turnEnemies = 1;
+                return enemiesSlot[_turnEnemies-1];
+            }
+            else
+            {
+                if (_turnAllies < alliesSlot.Count - 1) _turnAllies++;
+                else _turnAllies = 1;
+                return alliesSlot[_turnAllies-1];
+            }
+            
+            
         }
        
     }
