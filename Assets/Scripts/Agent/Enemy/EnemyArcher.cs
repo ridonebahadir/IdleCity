@@ -23,9 +23,15 @@ public class EnemyArcher : AgentBase
     {
         Domination.SlotTargetArcherRemove(AgentType);
     }
-    private void Flee(Vector3 location)
+
+    protected override void Flee()
+    {
+        FleeArcher();
+    }
+
+    private void FleeArcher()
      {
-         Vector3 fleeVector = location - transform.position;
+         Vector3 fleeVector = target.position - transform.position;
          NavMeshAgent.SetDestination(transform.position - fleeVector);
      }
 

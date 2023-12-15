@@ -88,6 +88,7 @@ namespace Agent
             attackDistance = soAgent.attackDistance;
             _navMeshStopDistance = soAgent.attackDistance;
         }
+        
         private IEnumerator MoveTarget()
         {
             while (true)
@@ -106,6 +107,7 @@ namespace Agent
                 {
                     if (agentState == AgentState.Fighting)
                     { 
+                        //Flee();
                         Attack();
                     }
                     if (agentState==AgentState.Waiting)
@@ -123,6 +125,10 @@ namespace Agent
                
                 
                 }
+                else
+                {
+                   
+                }
                
                 yield return _wait;
             }
@@ -132,6 +138,7 @@ namespace Agent
         protected abstract void AttackType();
         protected abstract void SlotTarget();
         protected abstract void  SlotTargetRemove();
+        protected abstract void  Flee();
         
         
         

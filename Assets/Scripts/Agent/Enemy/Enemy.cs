@@ -22,5 +22,5 @@ public class Enemy : AgentBase
         Domination.SlotTargetRemove(AgentType);
     }
 
-   
+    protected override void Flee(){}
 }

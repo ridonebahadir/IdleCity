@@ -42,8 +42,8 @@ public class HealthBar : MonoBehaviour
 
     public void StopHealthBarShow()
     {
+        if (_healBarShow != null)  StopCoroutine(_healBarShow);
         Hide();
-        if (_healBarShow!=null) StopCoroutine(_healBarShow);
     }
     private IEnumerator HealthBarShow()
     {
