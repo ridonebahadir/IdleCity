@@ -978,6 +978,7 @@ GameObject:
   - component: {fileID: 6449831550102716620}
   - component: {fileID: 6449831550102716616}
   - component: {fileID: 5531966602892104994}
+  - component: {fileID: 8557716105136597393}
   m_Layer: 10
   m_Name: EnemyArcher
   m_TagString: Untagged
@@ -1015,7 +1016,7 @@ NavMeshAgent:
   m_Acceleration: 1000
   avoidancePriority: 50
   m_AngularSpeed: 1000
-  m_StoppingDistance: 0
+  m_StoppingDistance: 10
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1033,8 +1034,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1
+  m_Radius: 5
+  m_Height: 5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5531966602892104994
@@ -1052,12 +1053,29 @@ MonoBehaviour:
   soAgent: {fileID: 11400000, guid: c409dd69cb0f12f4f857a84145db3cb6, type: 2}
   agentState: 0
   animator: {fileID: 7409108003278187282}
+  _attackDistance: 0
   _health: 0
   _speed: 0
   _damage: 0
   _target: {fileID: 0}
   _dist: 0
   arrowObj: {fileID: 7949706603488123534, guid: 1108022a0924868458e03b7f82f321af, type: 3}
+--- !u!54 &8557716105136597393
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6449831550102716610}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &6449831550120285007
 GameObject:
   m_ObjectHideFlags: 0

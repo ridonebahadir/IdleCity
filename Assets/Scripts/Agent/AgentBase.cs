@@ -20,7 +20,7 @@ public abstract class AgentBase : MonoBehaviour
     public SOAgent soAgent;
     [SerializeField] protected AgentState agentState;
     [SerializeField] public Animator animator;
-    private AgentType _agentType; 
+    protected AgentType _agentType; 
     private float _diggSpeed;
     [SerializeField] protected float _attackDistance;
     [SerializeField]  private float _health;
@@ -30,7 +30,7 @@ public abstract class AgentBase : MonoBehaviour
     protected Collider _collider;
     protected NavMeshAgent navMeshAgent;
 
-    private Domination.Domination _domination;
+    protected Domination.Domination _domination;
     private GameManager _gameManager;
     public Transform _target;
     
@@ -80,7 +80,7 @@ public abstract class AgentBase : MonoBehaviour
         _attackDistance = soAgent.attackDistance;
 
     }
-    protected virtual IEnumerator MoveTarget()
+    protected IEnumerator MoveTarget()
     {
         while (true)
         {
@@ -102,7 +102,7 @@ public abstract class AgentBase : MonoBehaviour
 
                 if (agentState==AgentState.Walking)
                 {
-                    _target = _domination.SlotTarget(_agentType);
+                    SlotTarget();
                     agentState = AgentState.Waiting;
                     //_attackDistance = 0;
                     //animator.SetBool("Digg",true);
@@ -120,15 +120,9 @@ public abstract class AgentBase : MonoBehaviour
     }
    
     protected abstract void AttackType();
+    protected abstract void SlotTarget();
     public void Attack(Transform target)
     {
-        //animator.SetBool("Digg",false);
-        //isWar = true;
-        //_attackDistance = soAgent.attackDistance;
-       
-        //_target = target;
-       
-        //_agentBase = target.transform.GetComponent<AgentBase>();
     }
 
     private void OnTriggerEnter(Collider other)

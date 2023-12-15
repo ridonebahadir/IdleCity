@@ -375,7 +375,9 @@ namespace Domination
         }
 
         private int _turnEnemies;
+        private int _turnEnemiesArcher;
         private int _turnAllies;
+        private int _turnAlliesArcher;
         public Transform SlotTarget(AgentType agentType)
         {
             if (agentType==AgentType.Enemy)
@@ -392,6 +394,23 @@ namespace Domination
             }
             
             
+        }
+
+        public Transform SlotArcherTarget(AgentType agentType)
+        {
+            if (agentType==AgentType.Enemy)
+            {
+                if (_turnEnemiesArcher<enemiesArcherSlot.Count-1)  _turnEnemiesArcher++;
+                else   _turnEnemiesArcher = 1;
+                return enemiesArcherSlot[_turnEnemiesArcher-1];
+            }
+            else
+            {
+                if (_turnAlliesArcher < alliesArcherSlot.Count - 1) _turnAlliesArcher++;
+                else _turnAlliesArcher = 1;
+                return alliesArcherSlot[_turnAlliesArcher-1];
+            }
+
         }
        
     }

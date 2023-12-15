@@ -12,15 +12,14 @@ public class Enemy : AgentBase
             _attack = AttackCoroutine();
             StartCoroutine(_attack);
         }
-       
-       
-            
-
-           
             //DetectTarget();
-            
-       
     }
+
+    protected override void SlotTarget()
+    {
+        _target = _domination.SlotTarget(_agentType);
+    }
+
     IEnumerator AttackCoroutine()
     {
         WaitForSeconds wait = new(2);

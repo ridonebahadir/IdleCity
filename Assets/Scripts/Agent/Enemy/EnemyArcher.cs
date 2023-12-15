@@ -7,53 +7,94 @@ using Quaternion = System.Numerics.Quaternion;
 public class EnemyArcher : AgentBase
 {
     [SerializeField] private GameObject arrowObj;
-    
+    private IEnumerator _attack;
     protected override void AttackType()
     {
-        if (isDeath) return;
-        animator.SetTrigger("Attack");
-        var arrow = Instantiate(arrowObj,transform.position,UnityEngine.Quaternion.identity,transform);
-        arrow.gameObject.SetActive(true);
-        arrow.transform.SetParent(_target);
-        arrow.transform.DOLocalJump(Vector3.zero, 6, 0, 0.5f).OnComplete(() =>
+        if (_attack==null)
         {
-            arrow.gameObject.SetActive(false);
-            arrow.transform.SetParent(transform);
-            arrow.transform.localPosition = Vector3.zero;
-            _targetAgentBase.TakeDamage(_damage);
-            _targetAgentBase = null;
-            //DetectTarget();
-            
-        });
+            _attack = AttackCoroutine();
+            StartCoroutine(_attack);
+            //StopCoroutine(MoveTarget());
+        }
+        
+       
     }
 
-    protected override IEnumerator MoveTarget()
+    protected override void SlotTarget()
     {
+        _target = _domination.SlotArcherTarget(_agentType);
+    }
+
+    IEnumerator AttackCoroutine()
+    {
+        WaitForSeconds wait = new(2);
+        animator.SetBool("Attack",true);
         while (true)
         {
-            _dist = Vector3.Distance(transform.position, _target.position);
             
-            if (_dist <_attackDistance && _targetAgentBase!=null)
-            {
-                if (agentState==AgentState.Fighting)
+            
+                if (_targetAgentBase.GetHealth<=0)
                 {
-                    Flee(_target.position);
-                    AttackType();
+                    animator.SetBool("Attack",false);
+                    _collider.enabled = true;
+                    agentState = AgentState.Walking;
+                    //StartCoroutine(MoveTarget());
+                    _attack = null;
+                    yield break;
+                       
                 }
                 else
                 {
-                    animator.SetBool("Digg",true);
+                    if (GetHealth>0)
+                    {
+                           
+                        yield return wait;
+                        ThrowArrow();
+                        yield return new WaitForSeconds(0.6f);
+                        //_targetAgentBase.TakeDamage(_damage);
+                    }
+                    else
+                    {
+                        animator.SetBool("Attack",false);
+                        yield break;
+                    }
+                        
                 }
-                
-            }
-            else
-            {
-                Seek(_target.position);
-            }
+            
+            
            
-            yield return _wait;
+            yield return null; 
         }
+                
+
     }
+    // protected override IEnumerator MoveTarget()
+    // {
+    //     while (true)
+    //     {
+    //         _dist = Vector3.Distance(transform.position, _target.position);
+    //         
+    //         if (_dist <_attackDistance && _targetAgentBase!=null)
+    //         {
+    //             if (agentState==AgentState.Fighting)
+    //             {
+    //                 Flee(_target.position);
+    //                 AttackType();
+    //             }
+    //             else
+    //             {
+    //                 animator.SetBool("Digg",true);
+    //             }
+    //             
+    //         }
+    //         else
+    //         {
+    //             Seek(_target.position);
+    //         }
+    //        
+    //         yield return _wait;
+    //     }
+    // }
 
 
     private void Flee(Vector3 location)
@@ -66,8 +107,22 @@ public class EnemyArcher : AgentBase
      {
          navMeshAgent.SetDestination(location);
      }
-        
-    
+
+    void ThrowArrow()
+    {
+        if (isDeath) return;
+        var arrow = Instantiate(arrowObj,transform.position,UnityEngine.Quaternion.identity,transform);
+        arrow.gameObject.SetActive(true);
+        arrow.transform.SetParent(_target);
+        arrow.transform.DOLocalJump(Vector3.zero, 6, 0, 0.5f).OnComplete(() =>
+        {
+            arrow.gameObject.SetActive(false);
+            arrow.transform.SetParent(transform);
+            arrow.transform.localPosition = Vector3.zero;
+            _targetAgentBase.TakeDamage(_damage);
+            //_targetAgentBase = null;
+        });
+    }
     
 
   

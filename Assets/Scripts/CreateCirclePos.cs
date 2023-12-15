@@ -23,8 +23,8 @@ public class CreateCirclePos : MonoBehaviour
     {
         CreateHalfCirclePositions(15,20,90,180,alliesParent,domination.alliesSlot);
         CreateHalfCirclePositions(15,20,270,360,enemiesParent,domination.enemiesSlot);
-        CreateHalfCirclePositions(10,10,90,180,enemiesArcherParent,domination.enemiesArcherSlot);
-        CreateHalfCirclePositions(10,10,270,360,alliesArcherParent,domination.alliesArcherSlot);
+        CreateHalfCirclePositions(10,10,90,180,alliesArcherParent,domination.alliesArcherSlot);
+        CreateHalfCirclePositions(10,10,270,360,enemiesArcherParent,domination.enemiesArcherSlot);
     }
 
    
