@@ -298,7 +298,7 @@ NavMeshAgent:
   m_Acceleration: 5
   avoidancePriority: 50
   m_AngularSpeed: 720
-  m_StoppingDistance: 3
+  m_StoppingDistance: 4
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -325,8 +325,11 @@ MonoBehaviour:
   _health: 0
   _speed: 0
   _damage: 0
+  particleSystem: {fileID: 2143774791339529255}
   _target: {fileID: 0}
   _dist: 0
+  closeList: []
+  slotTurn: 0
 --- !u!136 &1290499214970128173
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1522,6 +1525,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 138dd9aa2bf7d7f40996158e86ed30b9, type: 3}
+--- !u!198 &2143774791339529255 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6088807506454102112, guid: 138dd9aa2bf7d7f40996158e86ed30b9, type: 3}
+  m_PrefabInstance: {fileID: 5314245336776512583}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2143774791339529256 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6088807506454102127, guid: 138dd9aa2bf7d7f40996158e86ed30b9, type: 3}

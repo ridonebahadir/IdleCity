@@ -38,9 +38,9 @@ public class EnemySpawn : MonoBehaviour
     {
         yield return new WaitForSeconds(10);
         StartCoroutine(SpawnEnemyRoutine(1,spawnEnemyTime,enemyImage));
-        yield return new WaitForSeconds(spawnEnemyTime);
+        //yield return new WaitForSeconds(spawnEnemyTime);
         StartCoroutine(SpawnEnemyRoutine(2,spawnEnemyArcherTime,enemyArcherImage));
-        yield return new WaitForSeconds(spawnEnemyArcherTime);
+        //yield return new WaitForSeconds(spawnEnemyArcherTime);
         StartCoroutine(SpawnEnemyRoutine(3,spawnEnemyDiggerTime,enemyDiggerImage));
     }
     private IEnumerator SpawnEnemyRoutine(int turn,int time,Image image)
@@ -53,17 +53,25 @@ public class EnemySpawn : MonoBehaviour
                 switch (turn)
                 {
                     case 1 :
-                        for (int i = 0; i < 4; i++)
+                        for (int i = 0; i < 3; i++)
                         {
                             SpawnEnemy();
                         }
                         
                         break;
                     case 2:
-                        SpawnEnemyArcher();
+                        for (int i = 0; i < 3; i++)
+                        {
+                            SpawnEnemyArcher();
+                        }
+                        
                         break;
                     case 3:
-                        SpawnEnemyDigger();
+                        for (int i = 0; i < 3; i++)
+                        {
+                            SpawnEnemyDigger();
+                        }
+                       
                         break;
                 }
                 image.fillAmount = 1;

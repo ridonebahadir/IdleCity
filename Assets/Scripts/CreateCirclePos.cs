@@ -21,10 +21,10 @@ public class CreateCirclePos : MonoBehaviour
     [ContextMenu("Spawn")]
     public void Spawn()
     {
-        CreateHalfCirclePositions(15,20,90,180,alliesParent,domination.alliesSlot);
-        CreateHalfCirclePositions(15,20,270,360,enemiesParent,domination.enemiesSlot);
-        CreateHalfCirclePositions(10,10,90,180,alliesArcherParent,domination.alliesArcherSlot);
-        CreateHalfCirclePositions(10,10,270,360,enemiesArcherParent,domination.enemiesArcherSlot);
+        CreateHalfCirclePositions(15,20,90,135,alliesParent,domination.alliesSlot);
+        CreateHalfCirclePositions(15,20,270,315,enemiesParent,domination.enemiesSlot);
+        CreateHalfCirclePositions(10,10,90,135,alliesArcherParent,domination.alliesArcherSlot);
+        CreateHalfCirclePositions(10,10,270,315,enemiesArcherParent,domination.enemiesArcherSlot);
     }
 
    

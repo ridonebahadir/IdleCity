@@ -10,14 +10,7 @@ public class EnemyArcher : AgentBase
     private IEnumerator _attack;
     protected override void AttackType()
     {
-        if (_attack==null)
-        {
-            _attack = AttackCoroutine();
-            StartCoroutine(_attack);
-            //StopCoroutine(MoveTarget());
-        }
-        
-       
+       ThrowArrow();
     }
 
     protected override void SlotTarget()
@@ -25,49 +18,12 @@ public class EnemyArcher : AgentBase
         _target = _domination.SlotArcherTarget(_agentType);
     }
 
-    IEnumerator AttackCoroutine()
+    protected override void SlotTargetRemove()
     {
-        WaitForSeconds wait = new(2);
-        animator.SetBool("Attack",true);
-        while (true)
-        {
-            
-            
-                if (_targetAgentBase.GetHealth<=0)
-                {
-                    animator.SetBool("Attack",false);
-                    _collider.enabled = true;
-                    agentState = AgentState.Walking;
-                    //StartCoroutine(MoveTarget());
-                    _attack = null;
-                    yield break;
-                       
-                }
-                else
-                {
-                    if (GetHealth>0)
-                    {
-                           
-                        yield return wait;
-                        ThrowArrow();
-                        yield return new WaitForSeconds(0.6f);
-                        //_targetAgentBase.TakeDamage(_damage);
-                    }
-                    else
-                    {
-                        animator.SetBool("Attack",false);
-                        yield break;
-                    }
-                        
-                }
-            
-            
-           
-            yield return null; 
-        }
-                
-
+        _domination.SlotTargetArcherRemove(_agentType);
     }
+
+
     // protected override IEnumerator MoveTarget()
     // {
     //     while (true)

@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
@@ -30,6 +32,8 @@ public abstract class AgentBase : MonoBehaviour
     protected Collider _collider;
     protected NavMeshAgent navMeshAgent;
 
+    [SerializeField] private ParticleSystem particleSystem;
+    
     protected Domination.Domination _domination;
     private GameManager _gameManager;
     public Transform _target;
@@ -41,8 +45,12 @@ public abstract class AgentBase : MonoBehaviour
     
     protected bool isDeath;
     private float _navMeshStopDistance;
+    [SerializeField] private List<AgentBase> closeList;
+    
     public float DiggSpeed => _diggSpeed;
     protected IEnumerator Move;
+    [SerializeField] private int slotTurn;
+    
     private void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -86,11 +94,18 @@ public abstract class AgentBase : MonoBehaviour
         {
             navMeshAgent.SetDestination(_target.position);
             _dist = Vector3.Distance(transform.position, _target.position);
+            if (agentState == AgentState.Fighting)
+            {
+                if (_targetAgentBase.GetHealth<=0)
+                {
+                    TargetDeath();
+                }
+            }
             if (_dist < _attackDistance)
             {
                 if (agentState == AgentState.Fighting)
                 { 
-                   AttackType();
+                   Attack();
                    //StopCoroutine(Move);
                 }
                 if (agentState==AgentState.Waiting)
@@ -121,63 +136,107 @@ public abstract class AgentBase : MonoBehaviour
    
     protected abstract void AttackType();
     protected abstract void SlotTarget();
-    public void Attack(Transform target)
+    protected abstract void  SlotTargetRemove();
+    
+    private IEnumerator _attack;
+    public void Attack()
     {
+        if (_attack==null)
+        {
+            _attack = AttackCoroutine();
+            StartCoroutine(_attack);
+        }
+    }
+    IEnumerator AttackCoroutine()
+    {
+        WaitForSeconds wait = new(1);
+        animator.SetBool("Attack",true);
+        while (true)
+        {
+            
+            
+            if (_targetAgentBase.GetHealth<=0)
+            {
+                TargetDeath();
+                yield break;
+                       
+            }
+            else
+            {
+                if (GetHealth>0)
+                {
+                           
+                    yield return wait;
+                    AttackType();
+                    yield return new WaitForSeconds(0.6f);
+                    //_targetAgentBase.TakeDamage(_damage);
+                }
+                else
+                {
+                    SlotTarget();
+                    animator.SetBool("Attack",false);
+                    yield break;
+                }
+                        
+            }
+            
+            
+           
+            yield return null; 
+        }
+                
+
+    }
+
+    private void TargetDeath()
+    {
+        animator.SetBool("Attack",false);
+        agentState = AgentState.Walking;
+        if (_attack!=null) StopCoroutine(_attack);
+        _targetAgentBase = null;
+        _attack = null;
+        AliveAgentCheck();
+        if(closeList.Count>0)StartAttack();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        
+            if (other.TryGetComponent(out AgentBase otherAgentBase))
+            {
+                closeList.Add(otherAgentBase);
+                if (closeList.Count==1)
+                {
+                    StartAttack();
+                }
+               
+                //Attack(otherAgentBase.transform);
+            }
+        
+       
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
         if (other.TryGetComponent(out AgentBase otherAgentBase))
         {
-            _attackDistance = soAgent.attackDistance;
-            navMeshAgent.stoppingDistance =_navMeshStopDistance;
-            _collider.enabled = false;
-            _targetAgentBase = otherAgentBase;
-            agentState = AgentState.Fighting;
-            _target = otherAgentBase.transform;
-            //Attack(otherAgentBase.transform);
+            closeList.Remove(otherAgentBase);
         }
     }
 
-    protected void DetectTarget()
+    private void StartAttack()
     {
-        switch (_agentType)
-        {
-            case AgentType.Enemy:
-            {
-                if (_domination.soldiers.Count>0 && isInside)
-                {
-                    Attack(_domination.CloseAgentSoldier(transform));
-                }
-                else 
-                {
-                    _target = GameManager.Instance.dominationArea.transform;
-                    //isWar = false;
-                    agentState = AgentState.Walking;
-                }
-                break;
-            }
-            case AgentType.Soldier:
-            {
-                if (_domination.enemies.Count>0 && isInside)
-                {
-                    Attack(_domination.CloseAgentEnemy(transform));
-                }
-                else 
-                {
-                    _target = GameManager.Instance.dominationArea.transform;
-                     //isWar = false;
-                     agentState = AgentState.Walking;
-                }
-
-                break;
-            }
-        }
+        SlotTargetRemove();
+        _attackDistance = soAgent.attackDistance;
+        navMeshAgent.stoppingDistance =_navMeshStopDistance;
+        _targetAgentBase = CloseAgent();
+        _target = _targetAgentBase.transform;
+        agentState = AgentState.Fighting;
+        //_targetAgentBase = _target.transform.GetComponent<AgentBase>();
     }
-    
     public void TakeDamage(float damage)
     {
-        //particleSystem.Play();
+        particleSystem.Play();
         _health -= damage;
         if (_health>0)
         {
@@ -256,6 +315,23 @@ public abstract class AgentBase : MonoBehaviour
         agentState = AgentState.Waiting;
     }
 
+    private void AliveAgentCheck()
+    {
+        for (int i = 0; i < closeList.Count; i++)
+        {
+            if (closeList[i].GetHealth<=0)
+            {
+                Debug.Log("DELETE");
+                closeList.Remove(closeList[i]);
+            }
+            
+        }
+    }
+    private AgentBase CloseAgent()
+    {
+       
+        return closeList.OrderBy(go => (transform.position - go.transform.position).sqrMagnitude).First();
+    }
     public float GetHealth => _health;
     
 }

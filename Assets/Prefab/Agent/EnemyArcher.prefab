@@ -1057,6 +1057,7 @@ MonoBehaviour:
   _health: 0
   _speed: 0
   _damage: 0
+  particleSystem: {fileID: 4974162349608904326}
   _target: {fileID: 0}
   _dist: 0
   arrowObj: {fileID: 7949706603488123534, guid: 1108022a0924868458e03b7f82f321af, type: 3}
@@ -1527,6 +1528,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 138dd9aa2bf7d7f40996158e86ed30b9, type: 3}
+--- !u!198 &4974162349608904326 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6088807506454102112, guid: 138dd9aa2bf7d7f40996158e86ed30b9, type: 3}
+  m_PrefabInstance: {fileID: 1258769735330457318}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4974162349608904329 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6088807506454102127, guid: 138dd9aa2bf7d7f40996158e86ed30b9, type: 3}

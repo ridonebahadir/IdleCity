@@ -312,7 +312,7 @@ namespace Domination
         {
             for (int i = 0; i < enemies.Count; i++)
             {
-                enemies[i].Attack(CloseAgentSoldier(transform));
+                //enemies[i].Attack(CloseAgentSoldier(transform));
             }
         }
         private void AttackSoldier()
@@ -320,7 +320,7 @@ namespace Domination
          
             for (int i = 0; i < soldiers.Count; i++)
             {
-                soldiers[i].Attack(CloseAgentEnemy(transform));
+                //soldiers[i].Attack(CloseAgentEnemy(transform));
             }
          
         }
@@ -376,7 +376,7 @@ namespace Domination
 
         private int _turnEnemies;
         private int _turnEnemiesArcher;
-        private int _turnAllies;
+        [SerializeField] private int _turnAllies;
         private int _turnAlliesArcher;
         public Transform SlotTarget(AgentType agentType)
         {
@@ -396,6 +396,19 @@ namespace Domination
             
         }
 
+        public void SlotTargetRemove(AgentType agentType)
+        {
+            if (agentType==AgentType.Enemy)
+            {
+                if (_turnEnemies>0)  _turnEnemies--;
+                else   _turnEnemies = 0;
+            }
+            else
+            {
+                if (_turnAllies>0)  _turnAllies--;
+                else   _turnAllies = 0;
+            }
+        }
         public Transform SlotArcherTarget(AgentType agentType)
         {
             if (agentType==AgentType.Enemy)
@@ -411,6 +424,19 @@ namespace Domination
                 return alliesArcherSlot[_turnAlliesArcher-1];
             }
 
+        }
+        public void SlotTargetArcherRemove(AgentType agentType)
+        {
+            if (agentType==AgentType.Enemy)
+            {
+                if (_turnEnemiesArcher>0)  _turnEnemiesArcher--;
+                else   _turnEnemiesArcher = 0;
+            }
+            else
+            {
+                if (_turnAlliesArcher>0)  _turnAlliesArcher--;
+                else   _turnAlliesArcher = 0;
+            }
         }
        
     }

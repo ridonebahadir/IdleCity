@@ -16,8 +16,8 @@ MonoBehaviour:
   speed: 5
   diggSpeed: 0.2
   attackRate: 0
-  health: 15
-  damage: 5
+  health: 5
+  damage: 2
   attackDistance: 10
   cost: 10
   reward: 2

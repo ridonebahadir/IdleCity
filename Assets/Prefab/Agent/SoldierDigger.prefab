@@ -163,6 +163,7 @@ GameObject:
   - component: {fileID: 1046398179152315647}
   - component: {fileID: 1046398179152315643}
   - component: {fileID: 1046398179152315632}
+  - component: {fileID: 3812005523478207954}
   m_Layer: 7
   m_Name: SoldierDigger
   m_TagString: Untagged
@@ -200,7 +201,7 @@ NavMeshAgent:
   m_Acceleration: 1000
   avoidancePriority: 50
   m_AngularSpeed: 1000
-  m_StoppingDistance: 0
+  m_StoppingDistance: 4
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -218,8 +219,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1.7549224
+  m_Radius: 5
+  m_Height: 5
   m_Direction: 1
   m_Center: {x: 0, y: 1.3505569, z: 0}
 --- !u!114 &1046398179152315632
@@ -235,13 +236,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soAgent: {fileID: 11400000, guid: 47a5a8c6d5a91a642b4c3aac68dd39a8, type: 2}
+  agentState: 0
   animator: {fileID: 1062136002237037008}
-  particleSystem: {fileID: 3813829820178417101}
+  _attackDistance: 0
   _health: 0
   _speed: 0
   _damage: 0
+  particleSystem: {fileID: 3813829820178417101}
   _target: {fileID: 0}
   _dist: 0
+  slotTurn: 0
+--- !u!54 &3812005523478207954
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046398179152315633}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1062414587079137429
 GameObject:
   m_ObjectHideFlags: 0

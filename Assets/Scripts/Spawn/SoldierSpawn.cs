@@ -111,7 +111,7 @@ public class SoldierSpawn : MonoBehaviour
 
     private void Spawn(float cost,GameObject prefab,Transform pos,Image image)
     {
-        //if (_gameManager.GetGold < cost) return;
+        if (_gameManager.GetGold < cost) return;
         var obj= Instantiate(prefab, pos.position,Quaternion.identity,pos);
         var rand = Random.Range(10, -10);
         obj.transform.localPosition = new Vector3(rand, 0, 0);
@@ -119,7 +119,7 @@ public class SoldierSpawn : MonoBehaviour
         AgentBase agentBase = obj.GetComponent<AgentBase>();
         _gameManager.soldiers.Add(agentBase);
         if (_domination.dominationMoveDirect == DominationMoveDirect.AlliesMove) agentBase.SetBattleLineState();
-        //_gameManager.GetReward(-cost);
+        _gameManager.GetReward(-cost);
         Stop();
         image.fillAmount = 0;
         Go();
