@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Agent;
 using Dreamteck.Splines;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -259,7 +260,6 @@ namespace Domination
      
         private void Register(AgentBase agentBase)
         {
-            agentBase.isInside = true;
             switch (agentBase.soAgent.agentType)
             {
                 case AgentType.Enemy:
@@ -327,7 +327,7 @@ namespace Domination
         
         public void RemoveList(AgentBase agentBase,AgentType agentType)
         {
-            agentBase.isInside = false;
+          
             switch (agentType)
             {
                 case AgentType.Enemy:

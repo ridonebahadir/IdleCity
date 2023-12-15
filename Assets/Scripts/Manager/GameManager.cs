@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Agent;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -15,8 +16,9 @@ public class GameManager : MonoBehaviour
    public BuildManager buildManager;
    public UIManager uIManager;
    public Domination.Domination dominationArea;
-   public Transform enemyPoint;
-   public Transform soldierPoint;
+   public Camera mainCamera;
+   // public Transform enemyPoint;
+   // public Transform soldierPoint;
 
    public List<AgentBase> enemies;
    public List<AgentBase> soldiers;
