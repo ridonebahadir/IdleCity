@@ -126,9 +126,9 @@ public class SoldierSpawn : MonoBehaviour
     }
     private void SpawnSoldier()
     {
+        Spawn(_soldierCost,soldier,spawnPointSoldier,soldierImage);
         for (int i = 0; i < 30; i++)
         {
-        Spawn(_soldierCost,soldier,spawnPointSoldier,soldierImage);
             
         }
         

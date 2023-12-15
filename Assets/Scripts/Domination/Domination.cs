@@ -19,6 +19,8 @@ namespace Domination
     {
         public List<Transform> enemiesSlot = new List<Transform>(); 
          public List<Transform> alliesSlot = new List<Transform>();
+         public List<Transform> alliesArcherSlot = new List<Transform>();
+         public List<Transform> enemiesArcherSlot = new List<Transform>();
 
 
          public DominationMoveDirect dominationMoveDirect;
