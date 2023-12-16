@@ -51,6 +51,7 @@ namespace Agent
         private readonly WaitForSeconds _wait = new(0.05f); 
         private IEnumerator _move;
         private float _navMeshStopDistance;
+        private float _startRotateSpeed;
         private WaitForSeconds _firstAnimWaitForSeconds;
         private WaitForSeconds _secondAnimWaitForSeconds;
     
@@ -87,6 +88,7 @@ namespace Agent
             _diggSpeed = soAgent.diggSpeed;
             attackDistance = soAgent.attackDistance;
             _navMeshStopDistance = soAgent.attackDistance;
+            _startRotateSpeed = NavMeshAgent.angularSpeed;
         }
         
         private IEnumerator MoveTarget()
@@ -112,6 +114,8 @@ namespace Agent
                     }
                     if (agentState==AgentState.Waiting)
                     {
+                        NavMeshAgent.angularSpeed = 0;
+                        animator.SetBool(Wait,true);
                         attackDistance = 0;
                         NavMeshAgent.stoppingDistance = 0;
                     }
@@ -146,6 +150,7 @@ namespace Agent
         private IEnumerator _attack;
         private static readonly int Death1 = Animator.StringToHash("Death");
         private static readonly int Attack1 = Animator.StringToHash("Attack");
+        private static readonly int Wait = Animator.StringToHash("Wait");
 
         private void Attack()
         {
@@ -206,6 +211,8 @@ namespace Agent
                 closeList.Add(otherAgentBase);
                 if (closeList.Count==1)
                 {
+                    animator.SetBool(Wait,false);
+                    NavMeshAgent.angularSpeed = _startRotateSpeed;
                     StartAttack();
                 }
                
