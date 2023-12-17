@@ -300,8 +300,9 @@ namespace Agent
             var a=(soAgent.health * value) / 100;
             TakeDamage(a);
         }
-        private void SetStartTarget()
+        public void SetStartTarget()
         {
+            if (agentState==AgentState.Fighting) return;
             if (AgentType==AgentType.Enemy)
             {
                 if ( Domination.dominationMoveDirect==DominationMoveDirect.EnemyMove)
@@ -311,9 +312,9 @@ namespace Agent
                 }
                 else
                 {
-                    target=_gameManager.dominationArea.transform;
-                    attackDistance = 0.3f;
-                    NavMeshAgent.stoppingDistance =  0.3f;
+                    target = Domination.transform;
+                    attackDistance = 1;
+                    NavMeshAgent.stoppingDistance =  1f;
                 }
                 
             }
@@ -326,9 +327,9 @@ namespace Agent
                 }
                 else
                 {
-                    target=_gameManager.dominationArea.transform;
-                    attackDistance = 0.3f;
-                    NavMeshAgent.stoppingDistance =  0.3f;
+                    target = Domination.transform;
+                    attackDistance = 1f;
+                    NavMeshAgent.stoppingDistance =  1f;
                 }
             }
             NavMeshAgent.SetDestination(target.position);

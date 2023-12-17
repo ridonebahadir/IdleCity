@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
       {
          foreach (var item in enemies)
          {
-            item.DominationMove();
+            item.SetStartTarget();
          }
          
       }
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
       {
          foreach (var item in soldiers)
          {
-            item.DominationMove();
+            item.SetStartTarget();
          }
       }
    }

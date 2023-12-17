@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: EnemyArcher
   m_EditorClassIdentifier: 
   agentType: 0
-  speed: 5
+  speed: 10
   diggSpeed: 0.2
   attackRate: 0
   health: 5
   damage: 2
-  attackDistance: 20
+  attackDistance: 15
   cost: 0
   reward: 2

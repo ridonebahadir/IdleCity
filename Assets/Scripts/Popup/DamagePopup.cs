@@ -29,7 +29,7 @@ public class DamagePopup : MonoBehaviour
 
     private void Setup(float damage)
     {
-        _textMeshPro.text = damage.ToString();
+        _textMeshPro.text = "-"+ damage;
         transform.DOScale(Vector3.one, 0.5f).OnComplete(() =>
         {
             transform.DOScale(Vector3.zero, 1).OnComplete(()=>Destroy(gameObject));

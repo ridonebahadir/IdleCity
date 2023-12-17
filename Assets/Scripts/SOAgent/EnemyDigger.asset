@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: EnemyDigger
   m_EditorClassIdentifier: 
   agentType: 0
-  speed: 5
+  speed: 10
   diggSpeed: 0.5
   attackRate: 0
   health: 20
   damage: 2
-  attackDistance: 5
+  attackDistance: 4
   cost: 0
   reward: 3
