@@ -142,12 +142,7 @@ namespace Agent
                     if (agentState==AgentState.Waiting)
                     {
                         NavMeshAgent.angularSpeed = 0;
-                        if (NavMeshAgent.remainingDistance<=NavMeshAgent.stoppingDistance)
-                        {
-                            animator.SetBool(Wait,true);
-                        }
-                        attackDistance = 0;
-                        NavMeshAgent.stoppingDistance = 0;
+                        animator.SetBool(Wait,true);
                     }
 
                     if (agentState==AgentState.Walking)
@@ -295,11 +290,13 @@ namespace Agent
                 if ( Domination.dominationMoveDirect==DominationMoveDirect.EnemyMove)
                 {
                     agentState = AgentState.Waiting;
-                    target=Domination.SlotTarget(AgentType);
+                    SlotTarget();
                 }
                 else
                 {
                     target=_gameManager.dominationArea.transform;
+                    attackDistance = 0.3f;
+                    NavMeshAgent.stoppingDistance =  0.3f;
                 }
                 
             }
@@ -308,11 +305,13 @@ namespace Agent
                 if ( Domination.dominationMoveDirect==DominationMoveDirect.AlliesMove)
                 {
                     agentState = AgentState.Waiting;
-                    target=Domination.SlotTarget(AgentType);
+                    SlotTarget();
                 }
                 else
                 {
                     target=_gameManager.dominationArea.transform;
+                    attackDistance = 0.3f;
+                    NavMeshAgent.stoppingDistance =  0.3f;
                 }
             }
             NavMeshAgent.SetDestination(target.position);

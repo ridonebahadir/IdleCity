@@ -904,7 +904,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 5077695223906588931}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.2
   m_Speed: 3.5
   m_Acceleration: 1000
   avoidancePriority: 50
@@ -913,7 +913,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
+  m_Height: 0.2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
@@ -958,7 +958,6 @@ MonoBehaviour:
   firstAnimWait: 0.51
   secondAnimWait: 0
   arrowObj: {fileID: 7949706603488123534, guid: fc4e6898850147f488bebf7a996b4c64, type: 3}
-  fleePoint: {fileID: 7381742201968394968}
 --- !u!95 &3450941993008791966
 Animator:
   serializedVersion: 5

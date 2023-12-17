@@ -17,11 +17,15 @@ public class EnemyArcher : AgentBase
     protected override void SlotTarget()
     {
         target = Domination.SlotArcherTarget(AgentType);
+        attackDistance = 0.3f;
+        NavMeshAgent.stoppingDistance =  0.3f;
     }
 
     protected override void SlotTargetRemove()
     {
         Domination.SlotTargetArcherRemove(AgentType);
+        attackDistance = soAgent.attackDistance;
+        NavMeshAgent.stoppingDistance = attackDistance;
     }
 
     protected override void Flee()
