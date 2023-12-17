@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39beb36aa1af336478446b66439d7432, type: 3}
-  m_Name: SoldierArcher
+  m_Name: EnemyDigger 1
   m_EditorClassIdentifier: 
-  agentType: 1
+  agentType: 0
   speed: 5
-  diggSpeed: 0.2
+  diggSpeed: 0.5
   attackRate: 0
-  health: 5
+  health: 20
   damage: 2
-  attackDistance: 20
-  cost: 10
-  reward: 2
+  attackDistance: 6.5
+  cost: 0
+  reward: 3

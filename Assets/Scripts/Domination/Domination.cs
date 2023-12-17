@@ -190,10 +190,10 @@ namespace Domination
         [SerializeField] private bool isMove = true;
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out AgentBase agentBase))
+            if (other.TryGetComponent(out SmallTrigger small))
             {
                 
-                if (agentBase.soAgent.agentType==AgentType.Enemy)
+                if (small._agentType==AgentType.Enemy)
                 {
                     if (!isWin)
                     {

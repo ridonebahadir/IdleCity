@@ -12,6 +12,7 @@ using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
+   public GameObject damageTextPrefab;
    public static GameManager Instance;
    public BuildManager buildManager;
    public UIManager uIManager;

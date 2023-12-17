@@ -126,6 +126,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1046398179043900456}
+  - component: {fileID: 4229564975333882113}
+  - component: {fileID: 4997231151371194252}
   m_Layer: 7
   m_Name: Mesh
   m_TagString: Untagged
@@ -151,6 +153,32 @@ Transform:
   m_Father: {fileID: 1046398179152315646}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &4229564975333882113
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046398179043900459}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.17
+  m_Center: {x: 0, y: 0.18, z: 0}
+--- !u!114 &4997231151371194252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046398179043900459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35603735ba334af49a7eadf371c40aba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _agentType: 1
 --- !u!1 &1046398179152315633
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,6 +278,7 @@ MonoBehaviour:
   healthBar: {fileID: 2093479535934846623}
   firstAnimWait: 0.2
   secondAnimWait: 1
+  _oneTimeRun: 1
 --- !u!54 &3812005523478207954
 Rigidbody:
   m_ObjectHideFlags: 0

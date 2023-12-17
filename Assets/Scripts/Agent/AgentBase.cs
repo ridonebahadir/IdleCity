@@ -90,6 +90,7 @@ namespace Agent
             if (closeList.Count != 1) return;
             animator.SetBool(Wait,false);
             NavMeshAgent.angularSpeed = _startRotateSpeed;
+            if (agentState!=AgentState.Fighting) SlotTargetRemove();
             StartAttack();
         }
         private void OnTriggerExit(Collider other)
@@ -118,6 +119,8 @@ namespace Agent
             _navMeshStopDistance = soAgent.attackDistance;
             _startRotateSpeed = NavMeshAgent.angularSpeed;
         }
+
+        public bool _oneTimeRun = true;
         private IEnumerator MoveTarget()
         {
             while (true)
@@ -127,9 +130,12 @@ namespace Agent
                 dist = Vector3.Distance(transform.position, pos);
                 if (agentState == AgentState.Fighting)
                 {
-                    if (TargetAgentBase.GetHealth<=0)
-                    {
+                    if (!TargetAgentBase._oneTimeRun)
+                    { 
+                        if (_attack!=null)StopCoroutine(_attack);
                         TargetDeath();
+                        
+                        _oneTimeRun = true;
                     }
                 }
                 if (dist < attackDistance)
@@ -167,39 +173,50 @@ namespace Agent
         }
         IEnumerator AttackCoroutine()
         {
+            Debug.Log(gameObject.name +" = time");
             animator.SetBool(Attack1,true);
             while (true)
             {
-                if (TargetAgentBase.GetHealth<=0)
+                if (GetHealth>0)
                 {
-                    TargetDeath();
-                    yield break;
+                    yield return _firstAnimWaitForSeconds;
+                    //Debug.Log(gameObject.name +" = "+target.name);
+                    if (dist<=attackDistance) AttackType();
+                    else TargetDeath();
+                    yield return _secondAnimWaitForSeconds;
                 }
+                // if (TargetAgentBase.GetHealth<=0)
+                // {
+                //     TargetDeath();
+                //    
+                //     yield break;
+                // }
                 else
                 {
-                    if (GetHealth>0)
-                    {
-                        yield return _firstAnimWaitForSeconds;
-                        AttackType();
-                        yield return _secondAnimWaitForSeconds;
-                    }
-                    else
-                    {
-                        SlotTarget();
-                        animator.SetBool(Attack1,false);
-                        yield break;
-                    }
+                    // if (GetHealth>0)
+                    // {
+                    //     yield return _firstAnimWaitForSeconds;
+                    //     Debug.Log(gameObject.name +" = "+target.name);
+                    //     AttackType();
+                    //     yield return _secondAnimWaitForSeconds;
+                    // }
+                    // else
+                    // {
+                    //     // SlotTarget();
+                    //     // animator.SetBool(Attack1,false);
+                    //     // yield break;
+                    // }
                 }
-                yield return null; 
+                yield return Wait; 
             }
                 
 
         }
         private void TargetDeath()
         {
+            if (_attack!=null) StopCoroutine(_attack);
             animator.SetBool(Attack1,false);
             agentState = AgentState.Walking;
-            if (_attack!=null) StopCoroutine(_attack);
             TargetAgentBase = null;
             _attack = null;
             AliveAgentCheck();
@@ -209,7 +226,6 @@ namespace Agent
         
         private void StartAttack()
         {
-            SlotTargetRemove();
             attackDistance = soAgent.attackDistance;
             NavMeshAgent.stoppingDistance =_navMeshStopDistance;
             TargetAgentBase = CloseAgent();
@@ -219,7 +235,7 @@ namespace Agent
         }
         public void TakeDamage(float dmg)
         {
-
+            DamagePopup.Create(healthBar.transform, dmg);
             healthBar.HealthBarCanvasGroupShow();
             particleSystem.Play();
             health -= dmg;
@@ -230,6 +246,7 @@ namespace Agent
             }
             else
             {
+                _oneTimeRun = false;
                 healthBar.StopHealthBarShow();
                 StopCoroutine(_move);
                 Death();
@@ -335,7 +352,7 @@ namespace Agent
         private float GetHealth => health;
         public void DominationMove()
         {
-            if (agentState==AgentState.Waiting)
+            if (agentState!=AgentState.Fighting)
             {
                 agentState = AgentState.Walking;
                 target = Domination.transform;
