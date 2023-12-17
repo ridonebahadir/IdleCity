@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
     
     public delegate void ClickAction();
    
-    public static event ClickAction OnClickedSoldierSpawnButton;
+    public static event ClickAction OnClickedSoldierSpawnButton;    
     public static event ClickAction OnClickedSoldierArcherSpawnButton;
     public static event ClickAction OnClickedSoldierDiggerSpawnButton;
     

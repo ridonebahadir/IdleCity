@@ -49,6 +49,24 @@ public class GameManager : MonoBehaviour
       }
    }
 
+   public void GoDominationArea(bool isEnemy)
+   {
+      if (isEnemy)
+      {
+         foreach (var item in enemies)
+         {
+            item.DominationMove();
+         }
+         
+      }
+      else
+      {
+         foreach (var item in soldiers)
+         {
+            item.DominationMove();
+         }
+      }
+   }
    private void Update()
    {
       SetText();

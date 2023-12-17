@@ -1,11 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Agent;
 using Dreamteck.Splines;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 
 namespace Domination
@@ -18,23 +15,19 @@ namespace Domination
     }
     public class Domination : MonoBehaviour
     {
+        public SplineFollower GetSplineFollower => splineFollower;
+        public DominationMoveDirect dominationMoveDirect; 
         public List<Transform> enemiesSlot = new List<Transform>(); 
-         public List<Transform> alliesSlot = new List<Transform>();
-         public List<Transform> alliesArcherSlot = new List<Transform>();
-         public List<Transform> enemiesArcherSlot = new List<Transform>();
-
-
-         public DominationMoveDirect dominationMoveDirect;
+        public List<Transform> alliesSlot = new List<Transform>();
+        public List<Transform> alliesArcherSlot = new List<Transform>();
+        public List<Transform> enemiesArcherSlot = new List<Transform>();
+        
         [SerializeField] private Transform sphere;
-        //[SerializeField] private SplinePositioner splinePositioner;
         [SerializeField] private SplineFollower splineFollower;
         [SerializeField] private SplineComputer splineComputer;
         [SerializeField] private float speed;
         [SerializeField] private float riverWidth; 
-        public List<AgentBase> enemies = new List<AgentBase>(); 
-        public List<AgentBase> soldiers = new List<AgentBase>();
         
-        //private float _currentDistance;
         private float _sizeSpeed;
         private int _turn;
         private float _dist;
@@ -43,10 +36,8 @@ namespace Domination
         private readonly WaitForSeconds _wait = new(0.01f);
         private SplinePoint[] _points;
         private IEnumerator _dominationMove; 
-        //public bool isWin = true;
+        private GameManager _gameManager;
         
-        
-        public SplineFollower GetSplineFollower => splineFollower;
         private void Start()
         {
             _points = splineComputer.GetPoints();
@@ -54,7 +45,7 @@ namespace Domination
             _dominationMove=DominationMove();
             StartCoroutine(_dominationMove);
             StartCoroutine(SetupDomination());
-            
+            _gameManager = GameManager.Instance;
 
         }
 
@@ -165,19 +156,6 @@ namespace Domination
         private void Update()
         {
             if (!_start) return;
-            // if (enemies.Count > 0 && soldiers.Count > 0)
-            // {
-            //     splineFollower.followSpeed = 0;
-            //     StopCoroutine(_dominationMove);
-            //    
-            // }
-
-            /*if (enemies.Count == 0 && soldiers.Count == 0)
-            {
-                splineFollower.followSpeed = 0;
-                StopCoroutine(_dominationMove);
-                
-            }*/
             if (!isMove)
             {
                 captureTime -= Time.deltaTime;
@@ -187,11 +165,13 @@ namespace Domination
                     if (!isWin)
                     {
                         EnemyMove();
+                        _gameManager.GoDominationArea(false);
                         isMove = true;
                     }
                     else
                     {
                         SoldierMove();
+                        _gameManager.GoDominationArea(true);
                         isMove = true;
                     }
                 }
@@ -243,140 +223,10 @@ namespace Domination
             }
         }
 
-        private void TimeStart()
-        {
-            
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.TryGetComponent(out AgentBase agentBase))
-            {
-                //UnRegister(agentBase);
-            
-            }
         
-        }
-     
-        private void Register(AgentBase agentBase)
-        {
-            switch (agentBase.soAgent.agentType)
-            {
-                case AgentType.Enemy:
-                {
-                     dominationMoveDirect = DominationMoveDirect.EnemyMove;
-                    if (!enemies.Contains(agentBase))
-                    {
-                        enemies.Add(agentBase);
-                        speed = 0.5f;
-                        //if (dominationMoveDirect == DominationMoveDirect.EnemyMove) speed = TotalDiggerSpeed(enemies);
-                    }
-                    if (enemies.Count==1) EnemyMove();
-                    if (enemies.Count <= 0 || soldiers.Count <= 0) return;
-                    // AttackEnemy(); 
-                    // AttackSoldier();
-                    break;
-                }
-                case AgentType.Soldier:
-                {
-                    dominationMoveDirect = DominationMoveDirect.AlliesMove;
-                    if (!soldiers.Contains(agentBase))
-                    {
-                        soldiers.Add(agentBase);
-                        speed = -0.5f;
-                        //if ( dominationMoveDirect == DominationMoveDirect.AlliesMove)  speed = TotalDiggerSpeed(soldiers);
-                    }
-                    if (soldiers.Count==1) SoldierMove();
-                    if (enemies.Count <= 0 || soldiers.Count <= 0) return;
-                    // AttackEnemy(); 
-                    // AttackSoldier();
-                    break;
-                }
-            }
-        }
-
-        private void UnRegister(AgentBase agentBase)
-        {
-            switch (agentBase.soAgent.agentType)
-            {
-                case AgentType.Enemy:
-                    if (enemies.Contains(agentBase)) RemoveList(agentBase,AgentType.Enemy);
-                    break;
-                case AgentType.Soldier:
-                    if (soldiers.Contains(agentBase)) RemoveList(agentBase,AgentType.Soldier);
-                    break;
-            }
-        }
-
-        private void AttackEnemy()
-        {
-            for (int i = 0; i < enemies.Count; i++)
-            {
-                //enemies[i].Attack(CloseAgentSoldier(transform));
-            }
-        }
-        private void AttackSoldier()
-        {
-         
-            for (int i = 0; i < soldiers.Count; i++)
-            {
-                //soldiers[i].Attack(CloseAgentEnemy(transform));
-            }
-         
-        }
-        
-        public void RemoveList(AgentBase agentBase,AgentType agentType)
-        {
-          
-            switch (agentType)
-            {
-                case AgentType.Enemy:
-                {
-                    enemies.Remove(agentBase);
-                    // if (enemies.Count == 0)
-                    // {
-                    //     speed = TotalDiggerSpeed(soldiers);
-                    //     SoldierMove();
-                    // }
-                    break;
-                }
-                case AgentType.Soldier:
-                {
-                    soldiers.Remove(agentBase);
-                    // if (soldiers.Count == 0)
-                    // {
-                    //     speed = TotalDiggerSpeed(enemies);
-                    //     EnemyMove();
-                    // }
-                    break;
-                }
-            }
-        }
-
-        public Transform CloseAgentEnemy(Transform who)
-        {
-            return enemies.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
-        }
-
-        public Transform CloseAgentSoldier(Transform who)
-        {
-            return soldiers.OrderBy(go => (who.position - go.transform.position).sqrMagnitude).First().transform;
-        }
-
-        float TotalDiggerSpeed(List<AgentBase> agentBases)
-        {
-            float a = 0;
-            foreach (var item in agentBases)
-            {
-                a += item.DiggSpeed;
-            }
-
-            return a;
-        }
-
         private int _turnEnemies;
         private int _turnEnemiesArcher;
-        [SerializeField] private int _turnAllies;
+        private int _turnAllies;
         private int _turnAlliesArcher;
         public Transform SlotTarget(AgentType agentType)
         {

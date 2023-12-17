@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Agent;
 using DG.Tweening;
+using Domination;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -10,6 +11,7 @@ using Random = UnityEngine.Random;
 public class EnemySpawn : MonoBehaviour
 {
     private GameManager _gameManager;
+    private Domination.Domination _domination;
 
     [SerializeField] private GameObject enemy;
     [SerializeField] private GameObject enemyDigger;
@@ -87,19 +89,25 @@ public class EnemySpawn : MonoBehaviour
         var rand = Random.Range(10, -10);
         obj.transform.localPosition = new Vector3(rand, 0, 0);
         obj.transform.localScale = new Vector3(2, 2, 2);
-        _gameManager.enemies.Add(obj.GetComponent<AgentBase>());
+        AgentBase agentBase = obj.GetComponent<AgentBase>();
+        _gameManager.enemies.Add(agentBase);
+        //if (_domination.dominationMoveDirect == DominationMoveDirect.EnemyMove) agentBase.SetBattleLineState();
     }
 
     private void SpawnEnemyArcher()
     {
         var obj= Instantiate(enemyArcher, spawnPointEnemy.position,Quaternion.identity,spawnPointEnemy);
         obj.transform.localScale = new Vector3(2, 2, 2);
-        _gameManager.enemies.Add(obj.GetComponent<AgentBase>());
+        AgentBase agentBase = obj.GetComponent<AgentBase>();
+        _gameManager.enemies.Add(agentBase);
+        //if (_domination.dominationMoveDirect == DominationMoveDirect.EnemyMove) agentBase.SetBattleLineState();
     }
     private void SpawnEnemyDigger()
     {
         var obj= Instantiate(enemyDigger, spawnPointEnemy.position,Quaternion.identity,spawnPointEnemy);
         obj.transform.localScale = new Vector3(2, 2, 2);
-        _gameManager.enemies.Add(obj.GetComponent<AgentBase>());
+        AgentBase agentBase = obj.GetComponent<AgentBase>();
+        _gameManager.enemies.Add(agentBase);
+       // if (_domination.dominationMoveDirect == DominationMoveDirect.EnemyMove) agentBase.SetBattleLineState();
     }
 }

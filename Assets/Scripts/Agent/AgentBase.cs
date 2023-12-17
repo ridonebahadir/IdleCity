@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Domination;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -36,9 +38,6 @@ namespace Agent
         [SerializeField] private float firstAnimWait;
         [SerializeField] private float secondAnimWait;
         
-        
-        
-        
         protected AgentType AgentType; 
         protected NavMeshAgent NavMeshAgent;
         protected Domination.Domination Domination;
@@ -54,24 +53,29 @@ namespace Agent
         private float _startRotateSpeed;
         private WaitForSeconds _firstAnimWaitForSeconds;
         private WaitForSeconds _secondAnimWaitForSeconds;
-    
+        private IEnumerator _attack;
+        private static readonly int Death1 = Animator.StringToHash("Death");
+        private static readonly int Attack1 = Animator.StringToHash("Attack");
+        private static readonly int Wait = Animator.StringToHash("Wait");
+        
         public float DiggSpeed => _diggSpeed;
-       
-    
+
+        private void Awake()
+        {
+            _gameManager=GameManager.Instance;
+            Domination = _gameManager.dominationArea;
+        }
+
         private void Start()
         {
             NavMeshAgent = GetComponent<NavMeshAgent>();
             NavMeshAgent.stoppingDistance = soAgent.attackDistance;
             
-            _gameManager=GameManager.Instance;
-
-            
-            Domination = _gameManager.dominationArea;
-            
             SetPercentSpeed(100);
             InıtAgent();
-            target = agentState == AgentState.Walking ? _gameManager.dominationArea.transform : Domination.SlotTarget(AgentType);
-            NavMeshAgent.SetDestination(target.position);
+            SetStartTarget();
+           
+            
             _move = MoveTarget();
             StartCoroutine(_move);
            
@@ -79,6 +83,30 @@ namespace Agent
             _secondAnimWaitForSeconds = new WaitForSeconds(secondAnimWait);
 
         }
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!other.TryGetComponent(out AgentBase otherAgentBase)) return;
+            closeList.Add(otherAgentBase);
+            if (closeList.Count != 1) return;
+            animator.SetBool(Wait,false);
+            NavMeshAgent.angularSpeed = _startRotateSpeed;
+            StartAttack();
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.TryGetComponent(out AgentBase otherAgentBase))
+            {
+                closeList.Remove(otherAgentBase);
+            }
+        }
+        
+        protected abstract void AttackType();
+        protected abstract void SlotTarget();
+        protected abstract void  SlotTargetRemove();
+        protected abstract void  Flee();
+        
+        
+        
         private void InıtAgent()
         {
             AgentType = soAgent.agentType;
@@ -90,7 +118,6 @@ namespace Agent
             _navMeshStopDistance = soAgent.attackDistance;
             _startRotateSpeed = NavMeshAgent.angularSpeed;
         }
-        
         private IEnumerator MoveTarget()
         {
             while (true)
@@ -115,7 +142,10 @@ namespace Agent
                     if (agentState==AgentState.Waiting)
                     {
                         NavMeshAgent.angularSpeed = 0;
-                        animator.SetBool(Wait,true);
+                        if (NavMeshAgent.remainingDistance<=NavMeshAgent.stoppingDistance)
+                        {
+                            animator.SetBool(Wait,true);
+                        }
                         attackDistance = 0;
                         NavMeshAgent.stoppingDistance = 0;
                     }
@@ -124,43 +154,22 @@ namespace Agent
                     {
                         SlotTarget();
                         agentState = AgentState.Waiting;
-                      
                     }
-               
-                
+                    
                 }
-                else
-                {
-                   
-                }
-               
                 yield return _wait;
             }
             // ReSharper disable once IteratorNeverReturns
         }
-   
-        protected abstract void AttackType();
-        protected abstract void SlotTarget();
-        protected abstract void  SlotTargetRemove();
-        protected abstract void  Flee();
-        
-        
-        
-    
-        private IEnumerator _attack;
-        private static readonly int Death1 = Animator.StringToHash("Death");
-        private static readonly int Attack1 = Animator.StringToHash("Attack");
-        private static readonly int Wait = Animator.StringToHash("Wait");
-
         private void Attack()
         {
+            animator.SetBool(Wait,false);
             if (_attack==null)
             {
                 _attack = AttackCoroutine();
                 StartCoroutine(_attack);
             }
         }
-        
         IEnumerator AttackCoroutine()
         {
             animator.SetBool(Attack1,true);
@@ -191,7 +200,6 @@ namespace Agent
                 
 
         }
-
         private void TargetDeath()
         {
             animator.SetBool(Attack1,false);
@@ -201,35 +209,9 @@ namespace Agent
             _attack = null;
             AliveAgentCheck();
             if(closeList.Count>0)StartAttack();
+            else SetStartTarget();
         }
-
-        private void OnTriggerEnter(Collider other)
-        {
         
-            if (other.TryGetComponent(out AgentBase otherAgentBase))
-            {
-                closeList.Add(otherAgentBase);
-                if (closeList.Count==1)
-                {
-                    animator.SetBool(Wait,false);
-                    NavMeshAgent.angularSpeed = _startRotateSpeed;
-                    StartAttack();
-                }
-               
-                //Attack(otherAgentBase.transform);
-            }
-        
-       
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.TryGetComponent(out AgentBase otherAgentBase))
-            {
-                closeList.Remove(otherAgentBase);
-            }
-        }
-
         private void StartAttack()
         {
             SlotTargetRemove();
@@ -261,8 +243,6 @@ namespace Agent
             }
        
         }
-
-    
         private void Death()
         {
             if (IsDeath) return;
@@ -274,8 +254,8 @@ namespace Agent
             {
                 IsDeath = true;
                 animator.SetTrigger(Death1);
-                if (AgentType==AgentType.Enemy)  GetReward();
-                //RemoveList();
+                if (AgentType==AgentType.Enemy)  GetReward(); 
+                _gameManager.RemoveList(this,AgentType);
                 yield return new WaitForSeconds(2.25f);
                 NavMeshAgent.enabled = false;
                 gameObject.SetActive(false);
@@ -283,45 +263,60 @@ namespace Agent
 
 
         }
-        
-        
-
         void GetReward()
         {
             _gameManager.GetReward(soAgent.reward);
         }
-
         public void SetPercentHealth(float value)
         {
             var a = (soAgent.health * value) / 100; 
             health += a;
             if (health>=soAgent.health)  health = soAgent.health;
         }
-
         public void SetPercentSpeed(float value)
         {
             var a = (soAgent.speed * value) / 100;
             NavMeshAgent.speed = speed + a;
         }
-
-
         public void SetPercentAttack(float value)
         {
             var a = (soAgent.damage * value) / 100;
             damage += a;
         }
-
         public void SetPercentTakeDamage(float value)
         {
             var a=(soAgent.health * value) / 100;
             TakeDamage(a);
         }
-
-        public void SetBattleLineState()
+        private void SetStartTarget()
         {
-            agentState = AgentState.Waiting;
+            if (AgentType==AgentType.Enemy)
+            {
+                if ( Domination.dominationMoveDirect==DominationMoveDirect.EnemyMove)
+                {
+                    agentState = AgentState.Waiting;
+                    target=Domination.SlotTarget(AgentType);
+                }
+                else
+                {
+                    target=_gameManager.dominationArea.transform;
+                }
+                
+            }
+            else
+            {
+                if ( Domination.dominationMoveDirect==DominationMoveDirect.AlliesMove)
+                {
+                    agentState = AgentState.Waiting;
+                    target=Domination.SlotTarget(AgentType);
+                }
+                else
+                {
+                    target=_gameManager.dominationArea.transform;
+                }
+            }
+            NavMeshAgent.SetDestination(target.position);
         }
-
         private void AliveAgentCheck()
         {
             for (var i = 0; i < closeList.Count; i++)
@@ -339,6 +334,17 @@ namespace Agent
             return closeList.OrderBy(go => (transform.position - go.transform.position).sqrMagnitude).First();
         }
         private float GetHealth => health;
-    
+        public void DominationMove()
+        {
+            if (agentState==AgentState.Waiting)
+            {
+                agentState = AgentState.Walking;
+                target = Domination.transform;
+            }
+          
+        }
+
+       
+        
     }
 }

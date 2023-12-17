@@ -55,7 +55,5 @@ public class EnemyArcher : AgentBase
             //_targetAgentBase = null;
         });
     }
-    
-
   
 }

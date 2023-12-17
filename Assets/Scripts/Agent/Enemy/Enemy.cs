@@ -23,4 +23,5 @@ public class Enemy : AgentBase
     }
 
     protected override void Flee(){}
+    
 }
