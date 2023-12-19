@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Agent;
 using Dreamteck.Splines;
+using TMPro;
 using UnityEngine;
 
 
@@ -15,7 +17,7 @@ namespace Domination
     }
     public class Domination : MonoBehaviour
     {
-        public SplineFollower GetSplineFollower => splineFollower;
+        public SplineFollower getSplineFollower => splineFollower;
         public DominationMoveDirect dominationMoveDirect; 
         public List<Transform> enemiesSlot = new List<Transform>(); 
         public List<Transform> alliesSlot = new List<Transform>();
@@ -26,7 +28,9 @@ namespace Domination
         [SerializeField] private SplineFollower splineFollower;
         [SerializeField] private SplineComputer splineComputer;
         [SerializeField] private float speed;
-        [SerializeField] private float riverWidth; 
+        [SerializeField] private float riverWidth;
+        [SerializeField] private TextMeshPro timeText;
+        
         
         private float _sizeSpeed;
         private int _turn;
@@ -125,6 +129,7 @@ namespace Domination
         {
             speed = 0.5f;
             dominationMoveDirect = DominationMoveDirect.EnemyMove;
+            _gameManager.GoDominationArea(true);
             StopCoroutine(_dominationMove);
             StartCoroutine(_dominationMove);
         }
@@ -133,6 +138,7 @@ namespace Domination
         {
             speed = 0.5f;
             dominationMoveDirect = DominationMoveDirect.AlliesMove;
+            _gameManager.GoDominationArea(false);
             StopCoroutine(_dominationMove);
             StartCoroutine(_dominationMove);
         }
@@ -159,21 +165,23 @@ namespace Domination
             if (!isMove)
             {
                 captureTime -= Time.deltaTime;
+                var time = (int)captureTime;
+                timeText.text = time.ToString();
                 if (captureTime<=0)
                 {
-                    captureTime = 0;
-                    if (!isWin)
+                    if (dominationMoveDirect!=DominationMoveDirect.AlliesMove)
                     {
                         EnemyMove();
-                        _gameManager.GoDominationArea(false);
+                       
                         isMove = true;
                     }
-                    else
+                    if(dominationMoveDirect!=DominationMoveDirect.EnemyMove)
                     {
                         SoldierMove();
-                        _gameManager.GoDominationArea(true);
+                        
                         isMove = true;
                     }
+                    captureTime = 0;
                 }
                 else
                 {
@@ -186,7 +194,6 @@ namespace Domination
         }
 
         [SerializeField] private float captureTime = 3;
-        [SerializeField] private bool isWin;
         [SerializeField] private bool isMove = true;
         private void OnTriggerEnter(Collider other)
         {
@@ -195,35 +202,74 @@ namespace Domination
                 
                 if (small._agentType==AgentType.Enemy)
                 {
-                    if (!isWin)
-                    {
-                        
-                    }
-                    else
-                    {
-                        captureTime = 3;
-                        isMove = false;
-                    }
-                    isWin = false;
+                    enemies.Add(small);
+                   
                    
                 }
                 else
                 {
-                    if (isWin)
-                    {
-                        
-                    }
-                    else
-                    {
-                        captureTime = 3;
-                        isMove = false;
-                    }
-                    isWin = true;
+                    allies.Add(small);
+                    
                 }
             }
         }
 
+        [SerializeField] private List<SmallTrigger> enemies;
+        [SerializeField] private List<SmallTrigger> allies;
         
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.transform.TryGetComponent(out SmallTrigger small))
+            {
+                if (enemies.Count > 0 && allies.Count > 0)  captureTime = 3;
+                else
+                {
+                    if (enemies.Count>0)
+                    {
+                        if (dominationMoveDirect!=DominationMoveDirect.EnemyMove)
+                        {
+                            captureTime = 3;
+                            isMove = false;
+                            dominationMoveDirect = DominationMoveDirect.EnemyMove;
+                        }
+                    }
+
+                    if (allies.Count>0)
+                    {
+                        Debug.Log("fjdlkjlk");
+                        if (dominationMoveDirect!=DominationMoveDirect.AlliesMove)
+                        {
+                            captureTime = 3;
+                            isMove = false;
+                            dominationMoveDirect = DominationMoveDirect.AlliesMove;
+                        }
+                    }
+                }
+                
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.transform.TryGetComponent(out SmallTrigger small))
+            {
+                UnRegister(small);
+            }
+        }
+
+        public void UnRegister(SmallTrigger small)
+        {
+            if (small._agentType==AgentType.Enemy)
+            {
+                enemies.Remove(small);
+            }
+            else
+            {
+                allies.Remove(small);
+            }
+        }
+
+
         private int _turnEnemies;
         private int _turnEnemiesArcher;
         private int _turnAllies;

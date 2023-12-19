@@ -13,8 +13,11 @@ public class SkillManager : MonoBehaviour
     private float _freezeWaterCoolTime;
     
     [Header("Heal Allies")] 
-    private float _healPercent;
+    private float _healAlliesActiveTime;
     private float _healCoolTime;
+    private GameObject _angelObj;
+    [SerializeField] private Transform angelSpawnPoint;
+    
     
     [Header("Slow Enemies")] 
     private float _slowPercent;
@@ -28,7 +31,10 @@ public class SkillManager : MonoBehaviour
     
     [Header("Deal Damage")] 
     private float _dealDamagePercent;
+    private int _bombCount;
+    private float _dealDamageActiveTime;
     private float _dealDamageCoolTime;
+    private GameObject _bomb;
     
     [Header("Increase Gold")] 
     private float _increaseGolPercent;
@@ -61,8 +67,9 @@ public class SkillManager : MonoBehaviour
         _freezeWaterActiveTime = soSkillSettings.freezeWaterActiveTime;
         _freezeWaterCoolTime = soSkillSettings.freezeWaterCoolTime;
         
-        _healPercent = soSkillSettings.healPercent;
+        _healAlliesActiveTime = soSkillSettings.healAlliesActiveTime;
         _healCoolTime = soSkillSettings.healCoolTime;
+        _angelObj = soSkillSettings.angelObj;
 
         _slowPercent = soSkillSettings.slowPercent;
         _slowActiveTime = soSkillSettings.slowActiveTime;
@@ -73,7 +80,11 @@ public class SkillManager : MonoBehaviour
         _attackCoolTime = soSkillSettings.attackCoolTime;
 
         _dealDamagePercent = soSkillSettings.dealDamagePercent;
+        _dealDamageCoolTime = soSkillSettings.dealDamageActiveTime;
         _dealDamageCoolTime = soSkillSettings.dealDamageCoolTime;
+        _bomb = soSkillSettings.bomb;
+        _bombCount = soSkillSettings.bombCount;
+        
 
         _increaseGolPercent = soSkillSettings.increaseGolPercent;
         _increaseGoldCoolTime = soSkillSettings.increaseGoldCoolTime;
@@ -82,33 +93,43 @@ public class SkillManager : MonoBehaviour
 
     private void FreezeWater()
     {
-        ButtonClicked(freezeWaterButton,0);
+        ButtonClicked(freezeWaterButton,_freezeWaterActiveTime);
         StartCoroutine(FreezeWaterIe());
+        return;
+
         IEnumerator FreezeWaterIe()
         {
-            _gameManager.dominationArea.GetSplineFollower.enabled = false;
+            _gameManager.dominationArea.getSplineFollower.enabled = false;
             _gameManager.dominationArea.enabled = false;
             yield return new WaitForSeconds(_freezeWaterActiveTime);
             _gameManager.dominationArea.enabled = true;
-            _gameManager.dominationArea.GetSplineFollower.enabled = true;
+            _gameManager.dominationArea.getSplineFollower.enabled = true;
             ButtonClickAfter(freezeWaterButton,_freezeWaterCoolTime);
         }
         
     }
     private void HealAllies()
     {
-        ButtonClicked(healAlliesButton,0);
-        foreach (var item in _gameManager.soldiers)
+        if (_gameManager.soldiers.Count==0) return;
+        ButtonClicked(healAlliesButton,_healAlliesActiveTime);
+        Angel.Create(_angelObj, angelSpawnPoint, _gameManager.GetFurthestAllie(),_healAlliesActiveTime);
+        StartCoroutine(ClickButton());
+        return;
+
+        IEnumerator ClickButton()
         {
-            item.SetPercentHealth(_healPercent);
+            yield return new WaitForSeconds(_healAlliesActiveTime);
+            ButtonClickAfter(healAlliesButton,_healCoolTime);
         }
-        ButtonClickAfter(healAlliesButton,_healCoolTime);
+        
     }
 
     private void SlowEnemies() 
     {
         ButtonClicked(slowEnemiesButton,_slowActiveTime);
         StartCoroutine(SlowEnemy());
+        return;
+
         IEnumerator SlowEnemy()
         {
             
@@ -148,14 +169,25 @@ public class SkillManager : MonoBehaviour
 
     private void DealDamage()
     {
-        ButtonClicked(dealDamageButton,0);
-        foreach (var item in _gameManager.enemies.ToArray())
-        {
-            item.SetPercentTakeDamage(_dealDamagePercent);
-        }
-        ButtonClickAfter(dealDamageButton,_dealDamageCoolTime);
-    }
+        ButtonClicked(dealDamageButton,_dealDamageActiveTime);
+        StartCoroutine(BombCreate());
+        return;
 
+        IEnumerator BombCreate()
+        { 
+            WaitForSeconds waitDealDamage = new(0.5f);
+            for (var i = 0; i < _bombCount; i++)
+            {
+                var randomPos = (_gameManager.dominationArea.transform.position)+Random.insideUnitSphere * 15;
+                randomPos.y = 50;
+                Instantiate(_bomb, randomPos, Quaternion.identity);
+                yield return waitDealDamage;
+            }
+            yield return new WaitForSeconds(_dealDamageActiveTime); 
+            ButtonClickAfter(dealDamageButton,_dealDamageCoolTime);
+        }
+      
+    }
     private void IncreaseGold()
     {
         ButtonClicked(increaseGoldButton,_increaseGoldActiveTime);
@@ -185,6 +217,11 @@ public class SkillManager : MonoBehaviour
         button.interactable = false;
         button.image.DOFillAmount(0, activeTime);
     }
+    private void ButtonClick(Button button,float activeTime)
+    {
+        button.image.DOFillAmount(0, activeTime);
+    }
+    
   
 
     

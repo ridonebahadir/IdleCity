@@ -13,17 +13,21 @@ MonoBehaviour:
   m_Name: SOSkillSettings
   m_EditorClassIdentifier: 
   freezeWaterActiveTime: 5
-  freezeWaterCoolTime: 60
-  healPercent: 25
-  healCoolTime: 90
+  freezeWaterCoolTime: 3
+  healAlliesActiveTime: 10
+  healCoolTime: 3
+  angelObj: {fileID: 2993453493395546654, guid: fe0a5c97005df8e4d9defd9752d0e5da, type: 3}
   slowPercent: 50
   slowActiveTime: 3
-  slowCoolTime: 90
+  slowCoolTime: 3
   attackPercent: 30
   attackActiveTime: 10
-  attackCoolTime: 90
-  dealDamagePercent: 20
-  dealDamageCoolTime: 120
+  attackCoolTime: 3
+  dealDamagePercent: 10
+  dealDamageActiveTime: 3
+  dealDamageCoolTime: 3
+  bombCount: 30
+  bomb: {fileID: 4893531181890306079, guid: eeaa2dacc8fdf204699a3259f15c8306, type: 3}
   increaseGolPercent: 100
   increaseGoldActiveTime: 10
-  increaseGoldCoolTime: 90
+  increaseGoldCoolTime: 3

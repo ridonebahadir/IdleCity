@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Agent;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,11 +13,10 @@ public class HealthBar : MonoBehaviour
     private readonly WaitForSeconds _waitCloseHealthBar = new(2f);
     private IEnumerator _healBarShow;
     [SerializeField] private Image content;
-    [SerializeField] private float lerpSpeed;
-    [SerializeField] private float fillAmount;
-    [SerializeField] private Color fullColor;
     [SerializeField] private Color lowColor;
-    
+    [SerializeField] private Color mediumColor;
+    [SerializeField] private Color highColor;
+    [SerializeField] private Color healthColor;
     
     
     private void Start()
@@ -30,7 +30,7 @@ public class HealthBar : MonoBehaviour
     private void LateUpdate()
     {
         var rotation = _camera.transform.rotation;
-        transform.LookAt(transform.position + rotation * Vector3.back, rotation * Vector3.up);
+        transform.LookAt(transform.position + rotation * Vector3.forward, rotation * Vector3.up);
     }
 
     public void HealthBarCanvasGroupShow()
@@ -64,10 +64,29 @@ public class HealthBar : MonoBehaviour
 
     }
 
-    public void SetHealthBar(float startHealth,float dmg)
+    public void SetHealthBar(float startHealth,float dmg,AgentType agentType)
     {
         var a = dmg / startHealth;
+        var fillAmount = content.fillAmount;
         content.fillAmount = a;
+        if (agentType==AgentType.Enemy) return;
+        if (_ishealth)
+        {
+            content.color = healthColor;
+        }
+        else
+        {
+            content.color = fillAmount switch
+            {
+                <= 0.33f => lowColor,
+                <= 0.66f => mediumColor,
+                _ => highColor
+            };
+        }
+        
     }
+
+    public bool _ishealth;
+   
     
 }

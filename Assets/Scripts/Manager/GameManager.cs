@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
 
    public void GoDominationArea(bool isEnemy)
    {
+      Debug.Log("Battline");
       if (isEnemy)
       {
          foreach (var item in enemies)
@@ -64,6 +65,7 @@ public class GameManager : MonoBehaviour
       {
          foreach (var item in soldiers)
          {
+            
             item.SetStartTarget();
          }
       }
@@ -89,4 +91,20 @@ public class GameManager : MonoBehaviour
    }
    public float GetGold => goldCount;
    public float GetGoldRate => goldRate;
+
+   public AgentBase GetFurthestAllie()
+   {
+      if (soldiers == null || soldiers.Count == 0)  return null;
+      var far = float.MinValue;
+      AgentBase furthest = null;
+      foreach (AgentBase obj in soldiers)
+      {
+         if (obj == null) continue;
+         var zPoz = obj.transform.position.z;
+         if (!(zPoz > far)) continue;
+         far = zPoz;
+         furthest = obj;
+      }
+      return furthest;
+   }
 }

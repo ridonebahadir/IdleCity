@@ -5,6 +5,7 @@ using System.Linq;
 using Domination;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 
 namespace Agent
@@ -37,8 +38,9 @@ namespace Agent
         [SerializeField] private HealthBar healthBar;
         [SerializeField] private float firstAnimWait;
         [SerializeField] private float secondAnimWait;
+        [SerializeField] private SmallTrigger small;
         
-        protected AgentType AgentType; 
+        protected AgentType agentType; 
         protected NavMeshAgent NavMeshAgent;
         protected Domination.Domination Domination;
         protected AgentBase TargetAgentBase;
@@ -54,6 +56,7 @@ namespace Agent
         private WaitForSeconds _firstAnimWaitForSeconds;
         private WaitForSeconds _secondAnimWaitForSeconds;
         private IEnumerator _attack;
+        private float _maxHealth;
         private static readonly int Death1 = Animator.StringToHash("Death");
         private static readonly int Attack1 = Animator.StringToHash("Attack");
         private static readonly int Wait = Animator.StringToHash("Wait");
@@ -74,7 +77,7 @@ namespace Agent
             SetPercentSpeed(100);
             InıtAgent();
             SetStartTarget();
-           
+            animator.SetBool(Wait,false);
             
             _move = MoveTarget();
             StartCoroutine(_move);
@@ -110,9 +113,10 @@ namespace Agent
         
         private void InıtAgent()
         {
-            AgentType = soAgent.agentType;
+            agentType = soAgent.agentType;
             speed = soAgent.speed;
             health = soAgent.health;
+            _maxHealth = soAgent.health;
             damage = soAgent.damage;
             _diggSpeed = soAgent.diggSpeed;
             attackDistance = soAgent.attackDistance;
@@ -125,9 +129,6 @@ namespace Agent
         {
             while (true)
             {
-                var pos = target.position;
-                NavMeshAgent.SetDestination(pos);
-                dist = Vector3.Distance(transform.position, pos);
                 if (agentState == AgentState.Fighting)
                 {
                     if (!TargetAgentBase._oneTimeRun)
@@ -138,7 +139,7 @@ namespace Agent
                         _oneTimeRun = true;
                     }
                 }
-                if (dist < attackDistance)
+                if (dist <= attackDistance)
                 {
                     if (agentState == AgentState.Fighting)
                     { 
@@ -147,17 +148,20 @@ namespace Agent
                     }
                     if (agentState==AgentState.Waiting)
                     {
-                        NavMeshAgent.angularSpeed = 0;
+                        //NavMeshAgent.angularSpeed = 0;
                         animator.SetBool(Wait,true);
                     }
 
                     if (agentState==AgentState.Walking)
                     {
-                        SlotTarget();
+                        //SlotTarget();
                         agentState = AgentState.Waiting;
                     }
                     
                 }
+                var pos = target.position;
+                NavMeshAgent.SetDestination(pos);
+                dist = Vector3.Distance(transform.position, pos);
                 yield return _wait;
             }
             // ReSharper disable once IteratorNeverReturns
@@ -239,7 +243,7 @@ namespace Agent
             healthBar.HealthBarCanvasGroupShow();
             particleSystem.Play();
             health -= dmg;
-            healthBar.SetHealthBar(soAgent.health,health);
+            healthBar.SetHealthBar(_maxHealth,health,agentType);
             if (health>0)
             {
             
@@ -265,9 +269,10 @@ namespace Agent
             IEnumerator DeathIE()
             {
                 IsDeath = true;
+                Domination.UnRegister(small);
                 animator.SetTrigger(Death1);
-                if (AgentType==AgentType.Enemy)  GetReward(); 
-                _gameManager.RemoveList(this,AgentType);
+                if (agentType==AgentType.Enemy)  GetReward(); 
+                _gameManager.RemoveList(this,agentType);
                 yield return new WaitForSeconds(2.25f);
                 NavMeshAgent.enabled = false;
                 gameObject.SetActive(false);
@@ -279,12 +284,12 @@ namespace Agent
         {
             _gameManager.GetReward(soAgent.reward);
         }
-        public void SetPercentHealth(float value)
-        {
-            var a = (soAgent.health * value) / 100; 
-            health += a;
-            if (health>=soAgent.health)  health = soAgent.health;
-        }
+        // public void SetPercentHealth(float value)
+        // {
+        //     var a = (soAgent.health * value) / 100; 
+        //     health += a;
+        //     if (health>=soAgent.health)  health = soAgent.health;
+        // }
         public void SetPercentSpeed(float value)
         {
             var a = (soAgent.speed * value) / 100;
@@ -302,19 +307,20 @@ namespace Agent
         }
         public void SetStartTarget()
         {
+            
             if (agentState==AgentState.Fighting) return;
-            if (AgentType==AgentType.Enemy)
+            if (agentType==AgentType.Enemy)
             {
                 if ( Domination.dominationMoveDirect==DominationMoveDirect.EnemyMove)
                 {
-                    agentState = AgentState.Waiting;
                     SlotTarget();
+                    agentState = AgentState.Waiting;
                 }
                 else
                 {
                     target = Domination.transform;
-                    attackDistance = 1;
-                    NavMeshAgent.stoppingDistance =  1f;
+                    attackDistance = 0.3f;
+                    NavMeshAgent.stoppingDistance =  0f;
                 }
                 
             }
@@ -322,14 +328,15 @@ namespace Agent
             {
                 if ( Domination.dominationMoveDirect==DominationMoveDirect.AlliesMove)
                 {
-                    agentState = AgentState.Waiting;
+                    
                     SlotTarget();
+                    agentState = AgentState.Waiting;
                 }
                 else
                 {
                     target = Domination.transform;
-                    attackDistance = 1f;
-                    NavMeshAgent.stoppingDistance =  1f;
+                    attackDistance = 0.3f;
+                    NavMeshAgent.stoppingDistance =  0f;
                 }
             }
             NavMeshAgent.SetDestination(target.position);
@@ -350,15 +357,29 @@ namespace Agent
        
             return closeList.OrderBy(go => (transform.position - go.transform.position).sqrMagnitude).First();
         }
-        private float GetHealth => health;
-        public void DominationMove()
+        public float GetHealth => health;
+        // public void DominationMove()
+        // {
+        //     if (agentState!=AgentState.Fighting)
+        //     {
+        //         agentState = AgentState.Walking;
+        //         target = Domination.transform;
+        //     }
+        //   
+        // }
+        public void TakeHeal(float value)
         {
-            if (agentState!=AgentState.Fighting)
-            {
-                agentState = AgentState.Walking;
-                target = Domination.transform;
-            }
-          
+            if (IsDeath) return;
+            healthBar._ishealth = true;
+            if (!(health < _maxHealth)) return;
+            health += value;
+            if (health>=_maxHealth) health = _maxHealth;
+
+        }
+
+        public void TakeHealOver()
+        {
+            healthBar._ishealth = false;
         }
 
        

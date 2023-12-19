@@ -14,14 +14,15 @@ public class Enemy : AgentBase
 
     protected override void SlotTarget()
     {
-        target = Domination.SlotTarget(AgentType);
+        target = Domination.SlotTarget(agentType);
         attackDistance = 0.3f;
-        NavMeshAgent.stoppingDistance =  0.3f;
+        NavMeshAgent.stoppingDistance =  0;
+        
     }
 
     protected override void SlotTargetRemove()
     {
-        Domination.SlotTargetRemove(AgentType);
+        Domination.SlotTargetRemove(agentType);
         attackDistance = soAgent.attackDistance;
         NavMeshAgent.stoppingDistance = attackDistance;
     }

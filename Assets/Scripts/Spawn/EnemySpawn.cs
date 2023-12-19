@@ -88,7 +88,7 @@ public class EnemySpawn : MonoBehaviour
         var obj= Instantiate(enemy, spawnPointEnemy.position,Quaternion.identity,spawnPointEnemy);
         var rand = Random.Range(10, -10);
         obj.transform.localPosition = new Vector3(rand, 0, 0);
-        obj.transform.localScale = new Vector3(2, 2, 2);
+        obj.transform.localScale = new Vector3(1.75f, 1.75f, 1.75f);
         AgentBase agentBase = obj.GetComponent<AgentBase>();
         _gameManager.enemies.Add(agentBase);
         //if (_domination.dominationMoveDirect == DominationMoveDirect.EnemyMove) agentBase.SetBattleLineState();
@@ -97,7 +97,7 @@ public class EnemySpawn : MonoBehaviour
     private void SpawnEnemyArcher()
     {
         var obj= Instantiate(enemyArcher, spawnPointEnemy.position,Quaternion.identity,spawnPointEnemy);
-        obj.transform.localScale = new Vector3(2, 2, 2);
+        obj.transform.localScale = new Vector3(1.75f, 1.75f, 1.75f);
         AgentBase agentBase = obj.GetComponent<AgentBase>();
         _gameManager.enemies.Add(agentBase);
         //if (_domination.dominationMoveDirect == DominationMoveDirect.EnemyMove) agentBase.SetBattleLineState();
@@ -105,7 +105,7 @@ public class EnemySpawn : MonoBehaviour
     private void SpawnEnemyDigger()
     {
         var obj= Instantiate(enemyDigger, spawnPointEnemy.position,Quaternion.identity,spawnPointEnemy);
-        obj.transform.localScale = new Vector3(2, 2, 2);
+        obj.transform.localScale = new Vector3(1.75f, 1.75f, 1.75f);
         AgentBase agentBase = obj.GetComponent<AgentBase>();
         _gameManager.enemies.Add(agentBase);
        // if (_domination.dominationMoveDirect == DominationMoveDirect.EnemyMove) agentBase.SetBattleLineState();

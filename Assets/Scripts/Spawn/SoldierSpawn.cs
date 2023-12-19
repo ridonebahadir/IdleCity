@@ -113,7 +113,7 @@ public class SoldierSpawn : MonoBehaviour
         var obj= Instantiate(prefab, pos.position,Quaternion.identity,pos);
         var rand = Random.Range(10, -10);
         obj.transform.localPosition = new Vector3(rand, 0, 0);
-        obj.transform.localScale = new Vector3(2, 2, 2);
+        obj.transform.localScale = new Vector3(1.75f, 1.75f, 1.75f);
         AgentBase agentBase = obj.GetComponent<AgentBase>();
         _gameManager.soldiers.Add(agentBase);
         _gameManager.GetReward(-cost);
