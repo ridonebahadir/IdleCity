@@ -2,6 +2,7 @@
 using System.Collections;
 using Agent;
 using DG.Tweening;
+using LeonBrave;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -55,10 +56,13 @@ public class SoldierSpawn : MonoBehaviour
     private IEnumerator _soldierEnumerator;
     private IEnumerator _soldierEnumeratorArcher;
     private IEnumerator _soldierEnumeratorDigger;
+
+
+    private SingletonHandler _singletonHandler;
     private void Start()
     {
         _gameManager = GameManager.Instance;
-    
+        _singletonHandler = SingletonHandler.Instance;
         
         spawnSoldierButton.onClick.AddListener(SpawnSoldier);
         spawnSoldierArcherButton.onClick.AddListener(SpawnSoldierArcher);
@@ -107,14 +111,17 @@ public class SoldierSpawn : MonoBehaviour
         // ReSharper disable once IteratorNeverReturns
     }
 
-    private void Spawn(float cost,GameObject prefab,Transform pos,Image image)
+    private void Spawn(float cost,ObjectType objectType,Image image)
     {
         if (_gameManager.GetGold < cost) return;
-        var obj= Instantiate(prefab, pos.position,Quaternion.identity,pos);
+        var cloneObj = _singletonHandler.GetSingleton<ObjectPool>().TakeObject(objectType);
+        //var obj= Instantiate(prefab, pos.position,Quaternion.identity,pos);
         var rand = Random.Range(10, -10);
-        obj.transform.localPosition = new Vector3(rand, 0, 0);
-        obj.transform.localScale = new Vector3(1.75f, 1.75f, 1.75f);
-        AgentBase agentBase = obj.GetComponent<AgentBase>();
+        cloneObj.transform.localPosition = new Vector3(rand, 0, 0);
+        cloneObj.transform.localScale = new Vector3(1.75f, 1.75f, 1.75f);
+        cloneObj.SetActive(true);
+        AgentBase agentBase = cloneObj.GetComponent<AgentBase>();
+        agentBase.InıtAgent();
         _gameManager.soldiers.Add(agentBase);
         _gameManager.GetReward(-cost);
         Stop();
@@ -123,15 +130,15 @@ public class SoldierSpawn : MonoBehaviour
     }
     private void SpawnSoldier()
     {
-        Spawn(_soldierCost,soldier,spawnPointSoldier,soldierImage);
+        Spawn(_soldierCost,ObjectType.Soldier,soldierImage);
     }
     private void SpawnSoldierArcher()
     {
-        Spawn(_soldierArcherCost,soldierArcher,spawnPointSoldier,soldierArcherImage);
+        Spawn(_soldierArcherCost,ObjectType.SoldierArcher,soldierArcherImage);
     }
     private void SpawnSoldierDigger()
     {
-        Spawn(_soldierDiggerCost,soldierDigger,spawnPointSoldier,soldierDiggerImage);
+        Spawn(_soldierDiggerCost,ObjectType.SoliderDigger,soldierDiggerImage);
     }
 
     private void Stop()

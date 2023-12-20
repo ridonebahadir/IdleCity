@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Agent;
 using DG.Tweening;
+using LeonBrave;
 using UnityEngine;
 using Quaternion = System.Numerics.Quaternion;
 
 public class EnemyArcher : AgentBase
 {
     [SerializeField] private GameObject arrowObj;
+    [SerializeField] private ObjectType arrowType;
+    
     private IEnumerator _attack;
     protected override void AttackType()
     {
@@ -48,7 +51,10 @@ public class EnemyArcher : AgentBase
     void ThrowArrow()
     {
         if (IsDeath) return;
-        var arrow = Instantiate(arrowObj,transform.position,UnityEngine.Quaternion.identity,transform);
+        var arrow = SingletonHandler.GetSingleton<ObjectPool>().TakeObject(arrowType);
+        //var arrow = Instantiate(arrowObj,transform.position,UnityEngine.Quaternion.identity,transform);
+        arrow.transform.position = transform.position;
+        arrow.transform.SetParent(transform);
         arrow.gameObject.SetActive(true);
         arrow.transform.SetParent(target);
         arrow.transform.DOLocalJump(Vector3.zero, 6, 0, 0.5f).OnComplete(() =>

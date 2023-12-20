@@ -1057,7 +1057,7 @@ NavMeshAgent:
   m_Height: 0.1
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 1
+  m_ObstacleAvoidanceType: 0
 --- !u!136 &6449831550102716616
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1084,10 +1084,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8e78f4c60113754facbac405d49587f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agentState: 0
+  objectType: 1
   soAgent: {fileID: 11400000, guid: c409dd69cb0f12f4f857a84145db3cb6, type: 2}
   target: {fileID: 0}
   dist: 0
-  agentState: 0
   animator: {fileID: 7409108003278187282}
   attackDistance: 0
   health: 0
@@ -1099,8 +1100,12 @@ MonoBehaviour:
   firstAnimWait: 0.51
   secondAnimWait: 0
   small: {fileID: 613762716850155245}
+  col: {fileID: 6449831550102716616}
+  NavMeshAgent: {fileID: 6449831550102716620}
   _oneTimeRun: 1
+  mesh: {fileID: 6449831550530975771}
   arrowObj: {fileID: 7949706603488123534, guid: 1108022a0924868458e03b7f82f321af, type: 3}
+  arrowType: 6
 --- !u!54 &8557716105136597393
 Rigidbody:
   m_ObjectHideFlags: 0

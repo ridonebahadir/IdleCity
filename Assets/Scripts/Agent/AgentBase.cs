@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Domination;
+using LeonBrave;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
@@ -23,11 +25,13 @@ namespace Agent
     }
     public abstract class AgentBase : MonoBehaviour
     {
+        [SerializeField] private AgentState agentState;
+        [SerializeField] private ObjectType objectType;
+        
         public SOAgent soAgent;
         public Transform target;
         public float dist;
         
-        [SerializeField] protected AgentState agentState;
         [SerializeField] private Animator animator;
         [SerializeField] protected float attackDistance;
         [SerializeField] private float health;
@@ -39,16 +43,18 @@ namespace Agent
         [SerializeField] private float firstAnimWait;
         [SerializeField] private float secondAnimWait;
         [SerializeField] private SmallTrigger small;
+        [SerializeField] private Collider col;
+        [SerializeField] protected NavMeshAgent NavMeshAgent;
         
         protected AgentType agentType; 
-        protected NavMeshAgent NavMeshAgent;
         protected Domination.Domination Domination;
         protected AgentBase TargetAgentBase;
         protected bool IsDeath;
         
         private float _diggSpeed;
         private float _cost;
-        private GameManager _gameManager; 
+        private GameManager _gameManager;
+        protected SingletonHandler SingletonHandler;
         private readonly WaitForSeconds _wait = new(0.05f); 
         private IEnumerator _move;
         private float _navMeshStopDistance;
@@ -61,27 +67,38 @@ namespace Agent
         private static readonly int Attack1 = Animator.StringToHash("Attack");
         private static readonly int Wait = Animator.StringToHash("Wait");
         
-        public float DiggSpeed => _diggSpeed;
-
-        private void Awake()
+        
+        
+        public void InıtAgent()
         {
+            Debug.Log("dşsglşi");
             _gameManager=GameManager.Instance;
+            SingletonHandler = SingletonHandler.Instance;
             Domination = _gameManager.dominationArea;
-        }
-
-        private void Start()
-        {
             NavMeshAgent = GetComponent<NavMeshAgent>();
+            NavMeshAgent.enabled = true;
             NavMeshAgent.stoppingDistance = soAgent.attackDistance;
+            agentType = soAgent.agentType;
+            speed = soAgent.speed;
+            health = soAgent.health;
+            _maxHealth = soAgent.health;
+            damage = soAgent.damage;
+            _diggSpeed = soAgent.diggSpeed;
+            attackDistance = soAgent.attackDistance;
+            _navMeshStopDistance = soAgent.attackDistance;
+            _startRotateSpeed = NavMeshAgent.angularSpeed;
+            NavMeshAgent.speed = speed;
             
-            SetPercentSpeed(100);
-            InıtAgent();
+            col.enabled = true;
+            agentState = AgentState.Walking;
+            _oneTimeRun = true;
+            IsDeath = false;
             SetStartTarget();
+            //SetPercentSpeed(100);
             animator.SetBool(Wait,false);
-            
             _move = MoveTarget();
             StartCoroutine(_move);
-           
+            
             _firstAnimWaitForSeconds = new WaitForSeconds(firstAnimWait);
             _secondAnimWaitForSeconds = new WaitForSeconds(secondAnimWait);
 
@@ -89,9 +106,11 @@ namespace Agent
         private void OnTriggerEnter(Collider other)
         {
             if (!other.TryGetComponent(out AgentBase otherAgentBase)) return;
+            if (closeList.Contains(otherAgentBase)) return;
             closeList.Add(otherAgentBase);
             if (closeList.Count != 1) return;
             animator.SetBool(Wait,false);
+            mesh.transform.localRotation = Quaternion.Euler(0,0,0);
             NavMeshAgent.angularSpeed = _startRotateSpeed;
             if (agentState!=AgentState.Fighting) SlotTargetRemove();
             StartAttack();
@@ -109,22 +128,13 @@ namespace Agent
         protected abstract void  SlotTargetRemove();
         protected abstract void  Flee();
         
-        
-        
-        private void InıtAgent()
-        {
-            agentType = soAgent.agentType;
-            speed = soAgent.speed;
-            health = soAgent.health;
-            _maxHealth = soAgent.health;
-            damage = soAgent.damage;
-            _diggSpeed = soAgent.diggSpeed;
-            attackDistance = soAgent.attackDistance;
-            _navMeshStopDistance = soAgent.attackDistance;
-            _startRotateSpeed = NavMeshAgent.angularSpeed;
-        }
+
+       
 
         public bool _oneTimeRun = true;
+        [SerializeField] private Transform mesh;
+        private readonly Vector3 _worldForwardDirection = Vector3.forward;
+        private readonly Vector3 _worldBackwardDirection = Vector3.back;
         private IEnumerator MoveTarget()
         {
             while (true)
@@ -149,6 +159,9 @@ namespace Agent
                     if (agentState==AgentState.Waiting)
                     {
                         //NavMeshAgent.angularSpeed = 0;
+                        if (agentType==AgentType.Enemy) mesh.transform.rotation = Quaternion.LookRotation(_worldBackwardDirection, Vector3.up);
+                        else mesh.transform.rotation = Quaternion.LookRotation(_worldForwardDirection, Vector3.up);
+
                         animator.SetBool(Wait,true);
                     }
 
@@ -169,6 +182,7 @@ namespace Agent
         private void Attack()
         {
             animator.SetBool(Wait,false);
+            mesh.transform.localRotation = Quaternion.Euler(0,0,0);
             if (_attack==null)
             {
                 _attack = AttackCoroutine();
@@ -177,14 +191,12 @@ namespace Agent
         }
         IEnumerator AttackCoroutine()
         {
-            Debug.Log(gameObject.name +" = time");
             animator.SetBool(Attack1,true);
             while (true)
             {
                 if (GetHealth>0)
                 {
                     yield return _firstAnimWaitForSeconds;
-                    //Debug.Log(gameObject.name +" = "+target.name);
                     if (dist<=attackDistance) AttackType();
                     else TargetDeath();
                     yield return _secondAnimWaitForSeconds;
@@ -259,11 +271,14 @@ namespace Agent
             }
        
         }
+
+        private IEnumerator _deathIE;
         private void Death()
         {
             if (IsDeath) return;
-       
-            StartCoroutine(DeathIE());
+            _deathIE = DeathIE();
+            StartCoroutine(_deathIE);
+            col.enabled = false;
             return;
 
             IEnumerator DeathIE()
@@ -273,9 +288,18 @@ namespace Agent
                 animator.SetTrigger(Death1);
                 if (agentType==AgentType.Enemy)  GetReward(); 
                 _gameManager.RemoveList(this,agentType);
+                
+               
                 yield return new WaitForSeconds(2.25f);
                 NavMeshAgent.enabled = false;
-                gameObject.SetActive(false);
+                closeList.Clear();
+                if (_attack != null)
+                {
+                    StopCoroutine(_attack);
+                    _attack = null;
+                }
+                SingletonHandler.GetSingleton<ObjectPool>().AddObject(gameObject,objectType);
+                
             }
 
 
@@ -314,10 +338,11 @@ namespace Agent
                 if ( Domination.dominationMoveDirect==DominationMoveDirect.EnemyMove)
                 {
                     SlotTarget();
-                    agentState = AgentState.Waiting;
+                    //agentState = AgentState.Waiting;
                 }
                 else
                 {
+                    mesh.transform.localRotation = Quaternion.Euler(0,0,0);
                     target = Domination.transform;
                     attackDistance = 0.3f;
                     NavMeshAgent.stoppingDistance =  0f;
@@ -330,10 +355,11 @@ namespace Agent
                 {
                     
                     SlotTarget();
-                    agentState = AgentState.Waiting;
+                    //agentState = AgentState.Waiting;
                 }
                 else
                 {
+                    mesh.transform.localRotation = Quaternion.Euler(0,0,0);
                     target = Domination.transform;
                     attackDistance = 0.3f;
                     NavMeshAgent.stoppingDistance =  0f;

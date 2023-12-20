@@ -236,7 +236,6 @@ namespace Domination
 
                     if (allies.Count>0)
                     {
-                        Debug.Log("fjdlkjlk");
                         if (dominationMoveDirect!=DominationMoveDirect.AlliesMove)
                         {
                             captureTime = 3;
@@ -259,12 +258,15 @@ namespace Domination
 
         public void UnRegister(SmallTrigger small)
         {
+            
             if (small._agentType==AgentType.Enemy)
             {
+                if (!enemies.Contains(small)) return;
                 enemies.Remove(small);
             }
             else
             {
+                if (!allies.Contains(small)) return;
                 allies.Remove(small);
             }
         }
