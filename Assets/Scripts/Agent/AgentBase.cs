@@ -44,7 +44,7 @@ namespace Agent
         [SerializeField] private float secondAnimWait;
         [SerializeField] private SmallTrigger small;
         [SerializeField] private Collider col;
-        [SerializeField] protected NavMeshAgent NavMeshAgent;
+        [SerializeField] public NavMeshAgent NavMeshAgent;
         
         protected AgentType agentType; 
         protected Domination.Domination Domination;
@@ -74,7 +74,7 @@ namespace Agent
             _gameManager=GameManager.Instance;
             SingletonHandler = SingletonHandler.Instance;
             Domination = _gameManager.dominationArea;
-            NavMeshAgent = GetComponent<NavMeshAgent>();
+            //NavMeshAgent = GetComponent<NavMeshAgent>();
             NavMeshAgent.enabled = true;
             NavMeshAgent.stoppingDistance = soAgent.attackDistance;
             agentType = soAgent.agentType;
@@ -349,14 +349,14 @@ namespace Agent
                 {
                     mesh.transform.localRotation = Quaternion.Euler(0,0,0);
                     target = Domination.transform;
-                    attackDistance = 0.5f;
+                    attackDistance = 1f;
                     NavMeshAgent.stoppingDistance =  0f;
                 }
                 
             }
             else
             {
-                if ( Domination.dominationMoveDirect==DominationMoveDirect.AlliesMove)
+                if ( Domination.captureTime<=0 && Domination.dominationMoveDirect==DominationMoveDirect.AlliesMove)
                 {
                     
                     SlotTarget();
@@ -366,7 +366,7 @@ namespace Agent
                 {
                     mesh.transform.localRotation = Quaternion.Euler(0,0,0);
                     target = Domination.transform;
-                    attackDistance = 0.5f;
+                    attackDistance = 1f;
                     NavMeshAgent.stoppingDistance =  0f;
                 }
             }

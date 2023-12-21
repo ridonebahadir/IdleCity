@@ -99,11 +99,11 @@ public class SkillManager : MonoBehaviour
 
         IEnumerator FreezeWaterIe()
         {
-            _gameManager.dominationArea.getSplineFollower.enabled = false;
+            //_gameManager.dominationArea.getSplineFollower.enabled = false;
             _gameManager.dominationArea.enabled = false;
             yield return new WaitForSeconds(_freezeWaterActiveTime);
             _gameManager.dominationArea.enabled = true;
-            _gameManager.dominationArea.getSplineFollower.enabled = true;
+            //_gameManager.dominationArea.getSplineFollower.enabled = true;
             ButtonClickAfter(freezeWaterButton,_freezeWaterCoolTime);
         }
         

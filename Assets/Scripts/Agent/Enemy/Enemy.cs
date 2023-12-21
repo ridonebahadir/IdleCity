@@ -15,7 +15,7 @@ public class Enemy : AgentBase
     protected override void SlotTarget()
     {
         target = Domination.SlotTarget(agentType);
-        attackDistance = 0.5f;
+        attackDistance = 1f;
         NavMeshAgent.stoppingDistance =  0;
         
     }
