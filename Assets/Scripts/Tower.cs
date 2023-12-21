@@ -1,13 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using OpenCover.Framework.Model;
+//using OpenCover.Framework.Model;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class Tower : MonoBehaviour
 {
-    private bool _isFire;
+    /*private bool _isFire;
     private WaitForSeconds _wait=new (1);
 
     [SerializeField] private GameObject bulletPrefab; 
@@ -49,5 +49,5 @@ public class Tower : MonoBehaviour
             bullet.GetComponent<Bullet>().InitBullet(direction,30,10);
             yield return _wait;
         }
-    }
+    }*/
 }
