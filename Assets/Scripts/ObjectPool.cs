@@ -46,8 +46,8 @@ public class ObjectTypePool
     [SerializeField] private ObjectType objectType; 
     [SerializeField] private GameObject objectPrefab;
     [SerializeField] private Transform takeTransform;
-    [SerializeField] private List<GameObject> objects;
     [SerializeField] private int count;
+    [SerializeField] private List<GameObject> objects;
     
     public GameObject TakeItem()
     {
@@ -97,6 +97,7 @@ public enum ObjectType
     SoliderDigger=5,
     EnemyArrow=6,
     SoldierArrow=7,
+    Coin=8,
 }
 
 }

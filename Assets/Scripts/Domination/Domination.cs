@@ -30,6 +30,12 @@ namespace Domination
         [SerializeField] private float speed;
         [SerializeField] private float riverWidth;
         [SerializeField] private TextMeshPro timeText;
+        [SerializeField] private float rotationSpeed;
+        [SerializeField] private Transform bridgeMesh;
+        [SerializeField] private ParticleSystem circleParticle;
+        private ParticleSystem.MainModule _mainModule;
+
+        
         
         
         private float _sizeSpeed;
@@ -44,6 +50,7 @@ namespace Domination
         
         private void Start()
         {
+            ChangeParticleColor(Color.white);
             splineComputer.SetPointSize(0,riverWidth);
             _points = splineComputer.GetPoints();
             Calculate();
@@ -79,6 +86,7 @@ namespace Domination
                 if (dominationMoveDirect == DominationMoveDirect.AlliesMove)
                 {
                     //_currentDistance += Time.deltaTime*speed;
+                    bridgeMesh.transform.Rotate(Vector3.right * rotationSpeed * Time.deltaTime);
                     splineFollower.followSpeed = speed;
                     _goneRoad += Time.deltaTime*speed;
                     if (_size<=riverWidth) _size += Time.deltaTime * _sizeSpeed; 
@@ -96,9 +104,10 @@ namespace Domination
                         Calculate();
                     }
                 }
-                else
+                if(dominationMoveDirect == DominationMoveDirect.EnemyMove)
                 {
                     //_currentDistance -= Time.deltaTime*speed;
+                    bridgeMesh.transform.Rotate(-Vector3.right * rotationSpeed * Time.deltaTime);
                     splineFollower.followSpeed = -speed;
                     _goneRoad -= Time.deltaTime*speed;
                     if (_size>=0.1f) _size -= (Time.deltaTime * _sizeSpeed);
@@ -167,24 +176,28 @@ namespace Domination
                 captureTime -= Time.deltaTime;
                 var time = (int)captureTime;
                 timeText.text = time.ToString();
-                if (captureTime<=0)
+
+               
+                
+                if (captureTime<=0f)
                 {
                     if (dominationMoveDirect!=DominationMoveDirect.AlliesMove)
                     {
                         EnemyMove();
-                       
+                        ChangeParticleColor(Color.red);
                         isMove = true;
                     }
                     if(dominationMoveDirect!=DominationMoveDirect.EnemyMove)
                     {
                         SoldierMove();
-                        
+                        ChangeParticleColor(Color.blue);
                         isMove = true;
                     }
                     captureTime = 0;
                 }
                 else
                 {
+                   
                     speed = 0;
                 }
             }
@@ -193,7 +206,14 @@ namespace Domination
 
         }
 
-        [SerializeField] private float captureTime = 3;
+       private void ChangeParticleColor(Color color)
+        {
+            _mainModule = circleParticle.main;
+            _mainModule.startColor = color;
+            circleParticle.Play();
+        }
+       
+        [SerializeField] public float captureTime = 3;
         [SerializeField] private bool isMove = true;
         private void OnTriggerEnter(Collider other)
         {
@@ -221,7 +241,11 @@ namespace Domination
         {
             if (other.transform.TryGetComponent(out SmallTrigger small))
             {
-                if (enemies.Count > 0 && allies.Count > 0)  captureTime = 3;
+                if (enemies.Count > 0 && allies.Count > 0)
+                {
+                    dominationMoveDirect = DominationMoveDirect.None;
+                    captureTime = 3;
+                }
                 else
                 {
                     if (enemies.Count>0)
@@ -272,7 +296,7 @@ namespace Domination
         }
 
 
-        private int _turnEnemies;
+        public int _turnEnemies;
         private int _turnEnemiesArcher;
         private int _turnAllies;
         private int _turnAlliesArcher;

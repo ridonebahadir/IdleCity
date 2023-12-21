@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 19862414}
   - component: {fileID: 19947540}
   m_Layer: 0
-  m_Name: TreasureChestGlowRays
+  m_Name: f
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Agent;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
@@ -22,6 +23,7 @@ public class HealthBar : MonoBehaviour
     private void Start()
     {
         content.fillAmount = 1;
+        content.color = highColor;
         _camera = GameManager.Instance.mainCamera;
         _healthBarCanvasGroup=transform.GetComponent<CanvasGroup>();
         _healthBarCanvasGroup.alpha = 0;
@@ -70,7 +72,7 @@ public class HealthBar : MonoBehaviour
         var fillAmount = content.fillAmount;
         content.fillAmount = a;
         if (agentType==AgentType.Enemy) return;
-        if (_ishealth)
+        if (isHealth)
         {
             content.color = healthColor;
         }
@@ -78,15 +80,15 @@ public class HealthBar : MonoBehaviour
         {
             content.color = fillAmount switch
             {
-                <= 0.33f => lowColor,
-                <= 0.66f => mediumColor,
+                <= 0.45f => lowColor,
+                <= 0.75f => mediumColor,
                 _ => highColor
             };
         }
         
     }
 
-    public bool _ishealth;
+    public bool isHealth;
    
     
 }

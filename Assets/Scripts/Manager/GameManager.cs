@@ -1,14 +1,14 @@
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+
 using Agent;
-using DG.Tweening;
-using Unity.VisualScripting;
+
+using LeonBrave;
+
 using UnityEngine;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
-using Random = UnityEngine.Random;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -18,8 +18,6 @@ public class GameManager : MonoBehaviour
    public UIManager uIManager;
    public Domination.Domination dominationArea;
    public Camera mainCamera;
-   // public Transform enemyPoint;
-   // public Transform soldierPoint;
 
    public List<AgentBase> enemies;
    public List<AgentBase> soldiers;
@@ -28,6 +26,8 @@ public class GameManager : MonoBehaviour
    [Header("REWARD")]
    [SerializeField] private float goldCount;
    [SerializeField] private float goldRate;
+   [SerializeField] private RectTransform goldCountPos;
+   public Transform coinTarget;
    
    private void Awake()
    {
@@ -36,7 +36,15 @@ public class GameManager : MonoBehaviour
       {
          Instance = this;
       }
+      
    }
+
+   private void Start()
+   {
+      Vector3 pos = Camera.main.ViewportToWorldPoint(goldCountPos.position);
+      coinTarget.position = Camera.main.WorldToViewportPoint(pos);
+   }
+
    public void RemoveList(AgentBase agentBase,AgentType agentType)
    {
       if (agentType==AgentType.Enemy)

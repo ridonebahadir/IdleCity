@@ -71,7 +71,6 @@ namespace Agent
         
         public void InıtAgent()
         {
-            Debug.Log("dşsglşi");
             _gameManager=GameManager.Instance;
             SingletonHandler = SingletonHandler.Instance;
             Domination = _gameManager.dominationArea;
@@ -266,6 +265,7 @@ namespace Agent
             else
             {
                 _oneTimeRun = false;
+                Domination.UnRegister(small);
                 healthBar.StopHealthBarShow();
                 StopCoroutine(_move);
                 Death();
@@ -287,14 +287,13 @@ namespace Agent
             IEnumerator DeathIE()
             {
                 IsDeath = true;
-                Domination.UnRegister(small);
                 animator.SetTrigger(Death1);
-                if (agentType==AgentType.Enemy)  GetReward(); 
                 _gameManager.RemoveList(this,agentType);
+                NavMeshAgent.enabled = false;
                 
                
                 yield return new WaitForSeconds(2.25f);
-                NavMeshAgent.enabled = false;
+                if (agentType==AgentType.Enemy)  GetReward(); 
                 closeList.Clear();
                 if (_attack != null)
                 {
@@ -309,7 +308,10 @@ namespace Agent
         }
         void GetReward()
         {
-            _gameManager.GetReward(soAgent.reward);
+            var coin=  SingletonHandler.GetSingleton<ObjectPool>().TakeObject(ObjectType.Coin).transform.GetComponent<Coin>();
+            coin.gameManager = _gameManager;
+            coin.singletonHandler = SingletonHandler;
+            coin.Inıt(transform.position,soAgent.reward);
         }
         // public void SetPercentHealth(float value)
         // {
@@ -338,7 +340,7 @@ namespace Agent
             if (agentState==AgentState.Fighting) return;
             if (agentType==AgentType.Enemy)
             {
-                if ( Domination.dominationMoveDirect==DominationMoveDirect.EnemyMove)
+                if (Domination.captureTime<=0&&Domination.dominationMoveDirect==DominationMoveDirect.EnemyMove)
                 {
                     SlotTarget();
                     //agentState = AgentState.Waiting;
@@ -347,7 +349,7 @@ namespace Agent
                 {
                     mesh.transform.localRotation = Quaternion.Euler(0,0,0);
                     target = Domination.transform;
-                    attackDistance = 0.3f;
+                    attackDistance = 0.5f;
                     NavMeshAgent.stoppingDistance =  0f;
                 }
                 
@@ -364,7 +366,7 @@ namespace Agent
                 {
                     mesh.transform.localRotation = Quaternion.Euler(0,0,0);
                     target = Domination.transform;
-                    attackDistance = 0.3f;
+                    attackDistance = 0.5f;
                     NavMeshAgent.stoppingDistance =  0f;
                 }
             }
@@ -399,7 +401,7 @@ namespace Agent
         public void TakeHeal(float value)
         {
             if (IsDeath) return;
-            healthBar._ishealth = true;
+            healthBar.isHealth = true;
             if (!(health < _maxHealth)) return;
             health += value;
             if (health>=_maxHealth) health = _maxHealth;
@@ -408,7 +410,7 @@ namespace Agent
 
         public void TakeHealOver()
         {
-            healthBar._ishealth = false;
+            healthBar.isHealth = false;
         }
 
        

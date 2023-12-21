@@ -13,7 +13,7 @@ public class SplineTriggerManager : MonoBehaviour
 
     private void Start()
     {
-        Create();
+        //Create();
     }
 #if (UNITY_EDITOR)
     [ContextMenu("Spline Trigger Create")]
