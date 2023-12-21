@@ -404,6 +404,8 @@ namespace Agent
             healthBar.isHealth = true;
             if (!(health < _maxHealth)) return;
             health += value;
+            healthBar.SetHealthBar(_maxHealth,health,agentType);
+            healthBar.HealthBarCanvasGroupShow();
             if (health>=_maxHealth) health = _maxHealth;
 
         }
