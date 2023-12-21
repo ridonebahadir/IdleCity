@@ -27,6 +27,7 @@ namespace Domination
         [SerializeField] private Transform sphere;
         [SerializeField] private SplineFollower splineFollower;
         [SerializeField] private SplineComputer splineComputer;
+        [SerializeField] private SplineMesh splineMesh;
         [SerializeField] private float speed;
         [SerializeField] private float riverWidth;
         [SerializeField] private TextMeshPro timeText;
@@ -129,7 +130,9 @@ namespace Domination
                     }
                 }
                 //splinePositioner.SetDistance(_currentDistance); 
-                splineComputer.SetPointSize(_turn,_size);
+                //splineComputer.SetPointSize(_turn,_size);
+                var a = splineFollower.GetPercent();
+                splineMesh.SetClipRange(0,a);
                 yield return _wait;
             }
        
