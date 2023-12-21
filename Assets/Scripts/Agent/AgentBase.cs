@@ -111,7 +111,7 @@ namespace Agent
             if (closeList.Count != 1) return;
             animator.SetBool(Wait,false);
             mesh.transform.localRotation = Quaternion.Euler(0,0,0);
-            NavMeshAgent.angularSpeed = _startRotateSpeed;
+            //NavMeshAgent.angularSpeed = _startRotateSpeed;
             if (agentState!=AgentState.Fighting) SlotTargetRemove();
             StartAttack();
         }
@@ -236,7 +236,10 @@ namespace Agent
             TargetAgentBase = null;
             _attack = null;
             AliveAgentCheck();
-            if(closeList.Count>0)StartAttack();
+            if (closeList.Count > 0)
+            {
+                StartAttack();
+            }
             else SetStartTarget();
         }
         

@@ -52,7 +52,6 @@ public class GameManager : MonoBehaviour
 
    public void GoDominationArea(bool isEnemy)
    {
-      Debug.Log("Battline");
       if (isEnemy)
       {
          foreach (var item in enemies)

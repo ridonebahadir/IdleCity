@@ -44,6 +44,7 @@ namespace Domination
         
         private void Start()
         {
+            splineComputer.SetPointSize(0,riverWidth);
             _points = splineComputer.GetPoints();
             Calculate();
             _dominationMove=DominationMove();
@@ -55,7 +56,6 @@ namespace Domination
 
         private IEnumerator SetupDomination()
         {
-            WaitForSeconds wait = new(0.25f);
             while (!_start)
             {
 
@@ -68,7 +68,7 @@ namespace Domination
                     _start = true;
                     
                 }
-                yield return wait;
+                yield return _wait;
                
             }
         }
