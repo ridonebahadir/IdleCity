@@ -5,11 +5,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class CharacterUpgradeUIManager : MonoBehaviour
+public class SelectCharacterUpgrade : MonoBehaviour
 {
-    [SerializeField] private Button meleeButton;
-    [SerializeField] private Button archerButton;
-    [SerializeField] private Button diggerButton;
+   
 
     [SerializeField] private List<GameObject> characterUpgradePanels;
     
@@ -21,26 +19,24 @@ public class CharacterUpgradeUIManager : MonoBehaviour
     
     private void Awake()
     {
-        meleeButton.onClick.AddListener(Melee);
-        archerButton.onClick.AddListener(Archer);
-        diggerButton.onClick.AddListener(Digger);
+       
         ClosePanel();
     }
 
-    private void Melee()
+    public void Melee()
     {
         onClickMelee?.Invoke(0);
         ClosePanel();
         OpenPanel(0);
     }
-    private void Archer()
+    public void Archer()
     {
         onClickArcher?.Invoke(1);
         ClosePanel();
         OpenPanel(1);
     }
 
-    private void Digger()
+    public void Digger()
     {
         onClickDigger?.Invoke(2);
         ClosePanel();

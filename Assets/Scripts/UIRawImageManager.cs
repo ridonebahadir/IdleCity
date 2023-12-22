@@ -6,48 +6,57 @@ using UnityEngine;
 public class UIRawImageManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> characters;
-    public float rotationSpeed = 5f;
+    private readonly float _rotationSpeed = 15f;
     public Transform selectCharacter;
-
+    public bool moving;
     void Start()
     {
         Close();
     }
     void Update()
     {
+        if (!moving) return;
         if (selectCharacter != null)
         { 
             var mouseX = Input.GetAxis("Mouse X");
-            selectCharacter.Rotate(Vector3.up, mouseX * rotationSpeed);
+            selectCharacter.Rotate(Vector3.up, mouseX * _rotationSpeed);
             
             if (Input.touchCount > 0)
             {
                 Touch touch = Input.GetTouch(0);
                 var touchDelta = touch.deltaPosition.x;
-                transform.Rotate(Vector3.up, touchDelta * rotationSpeed * Time.deltaTime);
+                transform.Rotate(Vector3.up, touchDelta * _rotationSpeed * Time.deltaTime);
             }
         };
+
     }
     private void Close()
     {
         foreach (var item in characters)
         {
             item.SetActive(false);
+            item.transform.localRotation=Quaternion.Euler(0,145,0);
         }
     }
 
     private void OnEnable()
     {
-        CharacterUpgradeUIManager.onClickMelee += Open;
-        CharacterUpgradeUIManager.onClickArcher += Open;
-        CharacterUpgradeUIManager.onClickDigger += Open;
+        SelectCharacterUpgrade.onClickMelee += Open;
+        SelectCharacterUpgrade.onClickArcher += Open;
+        SelectCharacterUpgrade.onClickDigger += Open;
+
+        RawImageButton.onClickRawImageEnter += SetMovingBool;
+        RawImageButton.onClickRawImageExit += SetMovingBool;
     }
 
     private void OnDisable()
     {
-        CharacterUpgradeUIManager.onClickMelee -= Open;
-        CharacterUpgradeUIManager.onClickArcher -= Open;
-        CharacterUpgradeUIManager.onClickDigger -= Open;
+        SelectCharacterUpgrade.onClickMelee -= Open;
+        SelectCharacterUpgrade.onClickArcher -= Open;
+        SelectCharacterUpgrade.onClickDigger -= Open;
+        
+        RawImageButton.onClickRawImageEnter -= SetMovingBool;
+        RawImageButton.onClickRawImageExit -= SetMovingBool;
     }
 
     private void Open(int a)
@@ -55,5 +64,10 @@ public class UIRawImageManager : MonoBehaviour
         Close();
         selectCharacter = characters[a].transform;
         characters[a].SetActive(true);
+    }
+
+    private void SetMovingBool()
+    {
+        moving = !moving;
     }
 }

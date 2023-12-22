@@ -22,6 +22,11 @@ public class GameManager : MonoBehaviour
    public List<AgentBase> enemies;
    public List<AgentBase> soldiers;
    
+   
+
+   
+   
+   
    [Space(10)]
    [Header("REWARD")]
    [SerializeField] private float goldCount;

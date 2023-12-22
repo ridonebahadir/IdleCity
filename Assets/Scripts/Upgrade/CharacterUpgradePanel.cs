@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -26,10 +28,6 @@ public class CharacterUpgradePanel : MonoBehaviour
     
     [SerializeField] private Button button;
 
-    
-    
-    
-    
     private void Start()
     {
         SetCost();
@@ -59,9 +57,8 @@ public class CharacterUpgradePanel : MonoBehaviour
         }
         else
         {
-            float a= (float)(soAgentUpgrade.levelCount)/(float)soAgentUpgrade.levelBorders[soAgentUpgrade.multipher];
+            var a= (float)(soAgentUpgrade.levelCount)/(float)soAgentUpgrade.levelBorders[soAgentUpgrade.multipher];
             sliderFilled.fillAmount= a;
-            Debug.Log(a);
            
         }
        
@@ -113,5 +110,6 @@ public class CharacterUpgradePanel : MonoBehaviour
         nextIcon.sprite = soAgentUpgrade.nextIcon;
     }
     
+
    
 }
