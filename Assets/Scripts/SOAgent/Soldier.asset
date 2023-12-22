@@ -21,3 +21,6 @@ MonoBehaviour:
   attackDistance: 2
   cost: 1
   reward: 1
+  DefaultValue:
+    health: 10
+    damage: 1

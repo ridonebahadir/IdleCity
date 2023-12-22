@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
 {
     private GameManager _gameManager;
     
+    
     public delegate void ClickAction();
    
     public static event ClickAction OnClickedSoldierSpawnButton;    
@@ -16,7 +17,9 @@ public class UIManager : MonoBehaviour
     public static event ClickAction OnClickedSoldierDiggerSpawnButton;
     
     
-    
+    [Header("UPGRADE")] 
+    //public GameObject characterUpgradeUI;
+    public RectTransform selectedTransform;
 
     [Header("PANELS")] 
     public GameObject winPanel;
@@ -27,8 +30,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI goldTextCount;
     public TextMeshProUGUI timeText;
     
-    
-    
+
     public void WinPanelOpen()
     {
         winPanel.SetActive(true);
