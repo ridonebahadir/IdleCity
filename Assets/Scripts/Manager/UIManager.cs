@@ -11,11 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button restButton;
     
     
-    public delegate void ClickAction();
-   
-    public static event ClickAction OnClickedSoldierSpawnButton;    
-    public static event ClickAction OnClickedSoldierArcherSpawnButton;
-    public static event ClickAction OnClickedSoldierDiggerSpawnButton;
+    
     [Header("BATTLE")] 
     [SerializeField] private Button battleButton;
 
@@ -24,6 +20,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject gameCanvas;
     [SerializeField] private GameObject gameArea;
     [SerializeField] private GameObject spawnManager;
+    [SerializeField] private GameObject uIRawImageManager;
+    
     
     
 
@@ -49,6 +47,8 @@ public class UIManager : MonoBehaviour
         
         mainMenuCanvas.SetActive(true);
         mainArea.SetActive(true);
+        uIRawImageManager.SetActive(true);
+        
         gameCanvas.SetActive(false);
         gameArea.SetActive(false);
         spawnManager.SetActive(false);
@@ -75,31 +75,14 @@ public class UIManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
- 
-   private void OnOnClickedSpawnSoldierButton()
-   {
-       OnClickedSoldierSpawnButton?.Invoke();
-      
-   }
-  
-   public void OnOnClickedSpawnSoldierArcherButton()
-   {
-       
-       OnClickedSoldierArcherSpawnButton?.Invoke();
-       
-   }
-   
-   private void OnOnClickedSoldierDiggerSpawnButton()
-   {
-       
-       OnClickedSoldierDiggerSpawnButton?.Invoke();
-       
-   }
+    
 
    private void BattleButton()
    {
        mainMenuCanvas.SetActive(false);
        mainArea.SetActive(false);
+       uIRawImageManager.SetActive(false);
+       
        gameCanvas.SetActive(true);
        gameArea.SetActive(true);
        spawnManager.SetActive(true);

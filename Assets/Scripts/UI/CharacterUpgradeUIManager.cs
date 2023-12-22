@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class CharacterUpgradeUIManager : MonoBehaviour
@@ -11,6 +12,12 @@ public class CharacterUpgradeUIManager : MonoBehaviour
     [SerializeField] private Button diggerButton;
 
     [SerializeField] private List<GameObject> characterUpgradePanels;
+    
+    public delegate void OnClickCharacter(int a);
+    public static OnClickCharacter onClickMelee;
+    public static OnClickCharacter onClickArcher;
+    public static OnClickCharacter onClickDigger;
+    
     
     private void Awake()
     {
@@ -22,17 +29,20 @@ public class CharacterUpgradeUIManager : MonoBehaviour
 
     private void Melee()
     {
+        onClickMelee?.Invoke(0);
         ClosePanel();
         OpenPanel(0);
     }
     private void Archer()
     {
+        onClickArcher?.Invoke(1);
         ClosePanel();
         OpenPanel(1);
     }
 
     private void Digger()
     {
+        onClickDigger?.Invoke(2);
         ClosePanel();
         OpenPanel(2);
     }

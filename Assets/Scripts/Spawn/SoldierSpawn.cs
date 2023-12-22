@@ -154,20 +154,5 @@ public class SoldierSpawn : MonoBehaviour
         StartCoroutine(_soldierEnumeratorDigger);
     }
     
-    private void OnEnable()
-    {
-      
-        UIManager.OnClickedSoldierSpawnButton += SpawnSoldier;
-        UIManager.OnClickedSoldierArcherSpawnButton += SpawnSoldierArcher;
-        UIManager.OnClickedSoldierDiggerSpawnButton += SpawnSoldierDigger;
-       
-    }
-
-    private void OnDisable()
-    {
-        UIManager.OnClickedSoldierSpawnButton -= SpawnSoldier;
-        UIManager.OnClickedSoldierArcherSpawnButton -= SpawnSoldierArcher;
-        UIManager.OnClickedSoldierDiggerSpawnButton -= SpawnSoldierDigger;
-       
-    }
+   
 }
