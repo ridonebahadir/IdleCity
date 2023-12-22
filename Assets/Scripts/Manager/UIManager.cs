@@ -15,6 +15,17 @@ public class UIManager : MonoBehaviour
     public static event ClickAction OnClickedSoldierSpawnButton;    
     public static event ClickAction OnClickedSoldierArcherSpawnButton;
     public static event ClickAction OnClickedSoldierDiggerSpawnButton;
+    [Header("BATTLE")] 
+    [SerializeField] private Button battleButton;
+
+    [SerializeField] private GameObject mainMenuCanvas;
+    [SerializeField] private GameObject mainArea;
+    [SerializeField] private GameObject gameCanvas;
+    [SerializeField] private GameObject gameArea;
+    [SerializeField] private GameObject spawnManager;
+    
+    
+
     
     
     [Header("UPGRADE")] 
@@ -29,7 +40,11 @@ public class UIManager : MonoBehaviour
     [Header("REWARD")]
     public TextMeshProUGUI goldTextCount;
     public TextMeshProUGUI timeText;
-    
+
+    private void Start()
+    {
+        battleButton.onClick.AddListener(BattleButton);
+    }
 
     public void WinPanelOpen()
     {
@@ -64,5 +79,14 @@ public class UIManager : MonoBehaviour
        
        OnClickedSoldierDiggerSpawnButton?.Invoke();
        
+   }
+
+   private void BattleButton()
+   {
+       mainMenuCanvas.SetActive(false);
+       mainArea.SetActive(false);
+       gameCanvas.SetActive(true);
+       gameArea.SetActive(true);
+       spawnManager.SetActive(true);
    }
 }
