@@ -18,12 +18,14 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Color mediumColor;
     [SerializeField] private Color highColor;
     [SerializeField] private Color healthColor;
+    [SerializeField] private Color enemyColor;
+    [SerializeField] private bool isEnemyBar;
     
     
     private void Start()
     {
-        content.fillAmount = 1;
-        content.color = highColor;
+         content.fillAmount = 1;
+         content.color = isEnemyBar ? enemyColor : highColor;
         _camera = GameManager.Instance.mainCamera;
         _healthBarCanvasGroup=transform.GetComponent<CanvasGroup>();
         _healthBarCanvasGroup.alpha = 0;

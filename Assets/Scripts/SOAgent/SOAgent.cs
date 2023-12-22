@@ -14,8 +14,8 @@ public class SOAgent : ScriptableObject
     public float speed;
     public float diggSpeed;
     public float attackRate;
-    internal float health;
-    internal float damage; 
+    public float health;
+    public float damage; 
     public float attackDistance;
     public float cost;
     public float reward;

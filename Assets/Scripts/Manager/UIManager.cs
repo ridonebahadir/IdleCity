@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     private GameManager _gameManager;
+    [SerializeField] private Button restButton;
     
     
     public delegate void ClickAction();
@@ -44,6 +45,20 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         battleButton.onClick.AddListener(BattleButton);
+        restButton.onClick.AddListener(SceneRest);
+        
+        mainMenuCanvas.SetActive(true);
+        mainArea.SetActive(true);
+        gameCanvas.SetActive(false);
+        gameArea.SetActive(false);
+        spawnManager.SetActive(false);
+        
+    }
+
+    private void SceneRest()
+    {
+        var activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(activeSceneIndex);
     }
 
     public void WinPanelOpen()
