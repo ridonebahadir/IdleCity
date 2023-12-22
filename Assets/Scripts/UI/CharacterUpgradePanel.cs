@@ -21,6 +21,9 @@ public class CharacterUpgradePanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI damageText;
     [SerializeField] private TextMeshProUGUI costText;
     [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI _ratioHealthText;
+    [SerializeField] private TextMeshProUGUI _ratioDamageText;
+    
     [SerializeField] private Button button;
 
     
@@ -67,12 +70,14 @@ public class CharacterUpgradePanel : MonoBehaviour
     private void SetHealth(int value)
     {
         soAgent.health += value;
+        _ratioHealthText.SetText("+" + value);
         healthText.SetText("Health = "+soAgent.health.ToString());
     }
 
     private void SetDamage(int value)
     {
         soAgent.damage += value;
+        _ratioDamageText.SetText("+" + value);
         damageText.SetText("Damage = "+soAgent.damage.ToString());
     }
 
@@ -85,7 +90,7 @@ public class CharacterUpgradePanel : MonoBehaviour
             soAgentUpgrade.multipher++;
             soAgentUpgrade.levelCount = 0;
         }
-        levelText.SetText("Level = "+soAgentUpgrade.levelCount);
+        levelText.SetText("Level = "+soAgentUpgrade.multipher);
     }
 
     private void Clicked()
