@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
 {
    public GameObject damageTextPrefab;
    public static GameManager Instance;
-   public BuildManager buildManager;
+  
    public UIManager uIManager;
    public Domination.Domination dominationArea;
    public Camera mainCamera;
