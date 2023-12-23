@@ -26,7 +26,7 @@ MonoBehaviour:
   dealDamagePercent: 10
   dealDamageActiveTime: 3
   dealDamageCoolTime: 3
-  bombCount: 30
+  bombCount: 10
   bomb: {fileID: 4893531181890306079, guid: eeaa2dacc8fdf204699a3259f15c8306, type: 3}
   increaseGolPercent: 100
   increaseGoldActiveTime: 10

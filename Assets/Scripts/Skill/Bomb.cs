@@ -16,9 +16,9 @@ public class Bomb : MonoBehaviour
    private bool _stop;
    private float _startLifeTime;
    
-   public void Inıt()
+   public void Inıt(SingletonHandler singletonHandler)
    {
-      _singletonHandler=SingletonHandler.Instance;
+      _singletonHandler = singletonHandler;
       bombPlaneParticle.gameObject.SetActive(false);
       _stop = false;
       mesh.SetActive(true);

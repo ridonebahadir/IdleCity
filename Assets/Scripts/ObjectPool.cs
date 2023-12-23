@@ -99,6 +99,7 @@ public enum ObjectType
     SoldierArrow=7,
     Coin=8,
     Bomb=9,
+    FreeWaterDrop=10,
 }
 
 }

@@ -1,12 +1,15 @@
 using System.Collections;
 using DG.Tweening;
+using JetBrains.Annotations;
 using LeonBrave;
 using UnityEngine;
 using UnityEngine.UI;
+using Vector3 = System.Numerics.Vector3;
 
 public class SkillManager : MonoBehaviour
 {
     private GameManager _gameManager;
+    private Domination.Domination _domination;
     private SingletonHandler _singletonHandler;
     public SOSkillSettings soSkillSettings;
     
@@ -56,6 +59,7 @@ public class SkillManager : MonoBehaviour
     {
         _gameManager = GameManager.Instance;
         _singletonHandler = SingletonHandler.Instance;
+        _domination = _gameManager.dominationArea;
         healAlliesButton.onClick.AddListener(HealAllies);
         slowEnemiesButton.onClick.AddListener(SlowEnemies);
         attackBuffButton.onClick.AddListener(AttackBuff);
@@ -83,7 +87,7 @@ public class SkillManager : MonoBehaviour
         _attackCoolTime = soSkillSettings.attackCoolTime;
 
         _dealDamagePercent = soSkillSettings.dealDamagePercent;
-        _dealDamageCoolTime = soSkillSettings.dealDamageActiveTime;
+        _dealDamageActiveTime = soSkillSettings.dealDamageActiveTime;
         _dealDamageCoolTime = soSkillSettings.dealDamageCoolTime;
         _bomb = soSkillSettings.bomb;
         _bombCount = soSkillSettings.bombCount;
@@ -93,7 +97,8 @@ public class SkillManager : MonoBehaviour
         _increaseGoldCoolTime = soSkillSettings.increaseGoldCoolTime;
         _increaseGoldActiveTime = soSkillSettings.increaseGoldActiveTime;
     }
-
+    
+    private WaitForSeconds _freezeWaterDropWait = new(0.3f);
     private void FreezeWater()
     {
         ButtonClicked(freezeWaterButton,_freezeWaterActiveTime);
@@ -102,11 +107,24 @@ public class SkillManager : MonoBehaviour
 
         IEnumerator FreezeWaterIe()
         {
-            //_gameManager.dominationArea.getSplineFollower.enabled = false;
-            _gameManager.dominationArea.enabled = false;
+            
+            _domination.GetSplineFollower.enabled = false;
+            _domination.enabled = false;
+
+            var splineComputer = _domination.GetSplineComputer;
+            var count = splineComputer.pointCount;
+            for (var i = 0; i < count; i++)
+            {
+                var target = splineComputer.GetPoint(i).position;
+                var obj = _singletonHandler.GetSingleton<ObjectPool>().TakeObject(ObjectType.FreeWaterDrop).GetComponent<FreeWaterDrop>();
+                obj.transform.position = target + (UnityEngine.Vector3.up * 50);
+                obj.gameObject.SetActive(true);
+                obj.Inıt(_singletonHandler);
+                yield return _freezeWaterDropWait;
+            }
             yield return new WaitForSeconds(_freezeWaterActiveTime);
-            _gameManager.dominationArea.enabled = true;
-            //_gameManager.dominationArea.getSplineFollower.enabled = true;
+            _domination.enabled = true;
+            _domination.GetSplineFollower.enabled = true;
             ButtonClickAfter(freezeWaterButton,_freezeWaterCoolTime);
         }
         
@@ -177,20 +195,25 @@ public class SkillManager : MonoBehaviour
         return;
 
         IEnumerator BombCreate()
-        { 
-            WaitForSeconds waitDealDamage = new(0.5f);
-            for (var i = 0; i < _bombCount; i++)
+        {
+            const float waitTime = 0.2f;
+            WaitForSeconds waitDealDamage = new(waitTime);
+            var elapsedTime = 0f;
+            var duration = _dealDamageActiveTime;
+            while (elapsedTime < duration)
             {
+                elapsedTime +=waitTime;
                 var randomPos = (_gameManager.dominationArea.transform.position)+Random.insideUnitSphere * 15;
                 randomPos.y = 50;
                 var obj = _singletonHandler.GetSingleton<ObjectPool>().TakeObject(ObjectType.Bomb).transform.GetComponent<Bomb>();
-                obj.Inıt();
+                obj.Inıt(_singletonHandler);
                 obj.transform.position = randomPos;
                 obj.gameObject.SetActive(true);
                 //Instantiate(_bomb, randomPos, Quaternion.identity);
                 yield return waitDealDamage;
+                
             }
-            yield return new WaitForSeconds(_dealDamageActiveTime); 
+            // return new WaitForSeconds(_dealDamageActiveTime)
             ButtonClickAfter(dealDamageButton,_dealDamageCoolTime);
         }
       

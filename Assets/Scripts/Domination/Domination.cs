@@ -16,7 +16,8 @@ namespace Domination
     }
     public class Domination : MonoBehaviour
     {
-        //public SplineFollower getSplineFollower => splineFollower;
+        public SplineFollower GetSplineFollower => splineFollower;
+        public SplineComputer GetSplineComputer => splineComputer;
         public DominationMoveDirect dominationMoveDirect; 
         public List<Transform> enemiesSlot = new List<Transform>(); 
         public List<Transform> alliesSlot = new List<Transform>();
@@ -25,7 +26,7 @@ namespace Domination
         
         //[SerializeField] private Transform sphere;
         [SerializeField] private SplineFollower splineFollower;
-        //[SerializeField] private SplineComputer splineComputer;
+        [SerializeField] private SplineComputer splineComputer;
         [SerializeField] private SplineMesh splineMesh;
         [SerializeField] private float speed;
         //[SerializeField] private float riverWidth;
