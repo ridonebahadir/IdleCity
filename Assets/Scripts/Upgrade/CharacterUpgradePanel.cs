@@ -27,6 +27,7 @@ public class CharacterUpgradePanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _ratioDamageText;
     
     [SerializeField] private Button button;
+    [SerializeField] private Button closeButton;
 
     private void Start()
     {
@@ -39,6 +40,7 @@ public class CharacterUpgradePanel : MonoBehaviour
         currentIcon.sprite = soAgentUpgrade.icon;
         nextIcon.sprite = soAgentUpgrade.nextIcon;
         button.onClick.AddListener(Clicked);
+        closeButton.onClick.AddListener(CloseButton);
     }
 
     private void SetCost()
@@ -109,7 +111,11 @@ public class CharacterUpgradePanel : MonoBehaviour
         SetSlider();
         nextIcon.sprite = soAgentUpgrade.nextIcon;
     }
-    
-
+    public delegate void OnClickClose();
+    public static OnClickClose onClickClose;
+    private void CloseButton()
+    {
+        onClickClose?.Invoke();
+    }
    
 }

@@ -47,4 +47,26 @@ public class Select : MonoBehaviour
       otherSelect.col.enabled = true;
       otherSelect2.col.enabled = true;
    }
+   private void OpenCollider()
+   {
+      StartCoroutine(OpenColliderIE());
+      IEnumerator OpenColliderIE()
+      {
+         yield return new WaitForSeconds(2);
+         col.enabled = true;
+         otherSelect.col.enabled = true;
+         otherSelect2.col.enabled = true;
+      }
+      
+   }
+
+   private void OnEnable()
+   {
+      CharacterUpgradePanel.onClickClose += OpenCollider;
+   }
+
+   private void OnDisable()
+   {
+      CharacterUpgradePanel.onClickClose -= OpenCollider;
+   }
 }
