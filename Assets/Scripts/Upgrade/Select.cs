@@ -14,6 +14,11 @@ public class Select : MonoBehaviour
 { 
    [SerializeField] private HomeType homeType;
    private SelectCharacterUpgrade selectCharacterUpgrade;
+   public Collider col;
+   
+   [SerializeField] private Select otherSelect;
+   [SerializeField] private Select otherSelect2;
+   
    private void Start()
    {
       selectCharacterUpgrade = transform.GetComponentInParent<SelectCharacterUpgrade>();
@@ -21,6 +26,7 @@ public class Select : MonoBehaviour
 
    private void OnMouseDown()
    {
+      CloseCollider();
       switch (homeType)
       {
          case HomeType.Melee:
@@ -33,5 +39,12 @@ public class Select : MonoBehaviour
             selectCharacterUpgrade.Digger();
             break;
       }
+   }
+
+   private void CloseCollider()
+   {
+      col.enabled = false;
+      otherSelect.col.enabled = true;
+      otherSelect2.col.enabled = true;
    }
 }

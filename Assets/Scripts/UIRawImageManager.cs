@@ -15,9 +15,15 @@ public class UIRawImageManager : MonoBehaviour
     }
     void Update()
     {
-        if (!moving) return;
+       
         if (selectCharacter != null)
         { 
+            if (!moving)
+            {
+                Quaternion currentRotation = selectCharacter.localRotation;
+                selectCharacter.localRotation = Quaternion.Lerp(currentRotation,  Quaternion.Euler(0,145,0), Time.deltaTime * _rotationSpeed);
+                return;
+            }
             var mouseX = Input.GetAxis("Mouse X");
             selectCharacter.Rotate(Vector3.up, mouseX * _rotationSpeed);
             
