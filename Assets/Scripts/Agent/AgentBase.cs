@@ -87,6 +87,9 @@ namespace Agent
             _navMeshStopDistance = soAgent.attackDistance;
             _startRotateSpeed = NavMeshAgent.angularSpeed;
             NavMeshAgent.speed = speed;
+
+            if (agentType==AgentType.Enemy) transform.rotation = Quaternion.LookRotation(_worldBackwardDirection, Vector3.up);
+            else transform.rotation = Quaternion.LookRotation(_worldForwardDirection, Vector3.up);
             
             col.enabled = true;
             agentState = AgentState.Walking;
