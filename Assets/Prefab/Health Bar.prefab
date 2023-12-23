@@ -332,6 +332,9 @@ MonoBehaviour:
   mediumColor: {r: 1, g: 0.4444934, b: 0, a: 1}
   highColor: {r: 0.07450981, g: 0.9333334, b: 0.9921569, a: 1}
   healthColor: {r: 0.022844076, g: 1, b: 0, a: 1}
+  enemyColor: {r: 1, g: 0, b: 0.76573944, a: 1}
+  isEnemyBar: 0
+  isHealth: 0
 --- !u!225 &119181038351876494
 CanvasGroup:
   m_ObjectHideFlags: 0

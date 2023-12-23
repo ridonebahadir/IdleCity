@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Agent;
 using Dreamteck.Splines;
@@ -40,17 +41,10 @@ namespace Domination
         [SerializeField] private bool isMove = true;
         [SerializeField] private List<SmallTrigger> enemies;
         [SerializeField] private List<SmallTrigger> allies;
+
         
         
         private bool _start;
-        //private float _sizeSpeed;
-        //private int _turn;
-        //private float _dist;
-        //private float _size;
-        //private float _goneRoad;
-        //private readonly WaitForSeconds _wait = new(0.01f);
-        //private SplinePoint[] _points;
-        //private IEnumerator _dominationMove; 
         private GameManager _gameManager;
         
         private void Start()
@@ -63,6 +57,8 @@ namespace Domination
             //StartCoroutine(_dominationMove);
             //StartCoroutine(SetupDomination());
             _gameManager = GameManager.Instance;
+
+            
 
         }
         private void Update()

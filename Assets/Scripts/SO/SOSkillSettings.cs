@@ -6,7 +6,8 @@ public class SOSkillSettings : ScriptableObject
     [Header("Freeze Water")] 
     public float freezeWaterActiveTime;
     public float freezeWaterCoolTime;
-
+    public GameObject freezeWaterPointObj;
+    
     [Header("Heal Allies")] 
     public float healAlliesActiveTime;
     public float healCoolTime;

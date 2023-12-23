@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   freezeWaterActiveTime: 5
   freezeWaterCoolTime: 3
+  freezeWaterPointObj: {fileID: 8626976797897960229, guid: c568dcdec05eb5040b5b8cfc5060820b, type: 3}
   healAlliesActiveTime: 10
   healCoolTime: 3
   angelObj: {fileID: 2993453493395546654, guid: fe0a5c97005df8e4d9defd9752d0e5da, type: 3}

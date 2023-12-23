@@ -16,6 +16,7 @@ public class SkillManager : MonoBehaviour
     [Header("Freeze Water")] 
     private float _freezeWaterActiveTime;
     private float _freezeWaterCoolTime;
+   
     
     [Header("Heal Allies")] 
     private float _healAlliesActiveTime;
@@ -111,15 +112,16 @@ public class SkillManager : MonoBehaviour
             _domination.GetSplineFollower.enabled = false;
             _domination.enabled = false;
 
+            
             var splineComputer = _domination.GetSplineComputer;
-            var count = splineComputer.pointCount;
-            for (var i = 0; i < count; i++)
+
+            var point = FreezeWaterDropPoint.Create(soSkillSettings.freezeWaterPointObj,splineComputer,_domination);
+            while (point!=null)
             {
-                var target = splineComputer.GetPoint(i).position;
                 var obj = _singletonHandler.GetSingleton<ObjectPool>().TakeObject(ObjectType.FreeWaterDrop).GetComponent<FreeWaterDrop>();
-                obj.transform.position = target + (UnityEngine.Vector3.up * 50);
+                obj.transform.position = point.transform.position + (UnityEngine.Vector3.up * 50);
                 obj.gameObject.SetActive(true);
-                obj.Inıt(_singletonHandler);
+                obj.Inıt(_singletonHandler,_freezeWaterActiveTime);
                 yield return _freezeWaterDropWait;
             }
             yield return new WaitForSeconds(_freezeWaterActiveTime);
