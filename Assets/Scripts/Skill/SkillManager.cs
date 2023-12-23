@@ -1,11 +1,13 @@
 using System.Collections;
 using DG.Tweening;
+using LeonBrave;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SkillManager : MonoBehaviour
 {
-    private GameManager _gameManager; 
+    private GameManager _gameManager;
+    private SingletonHandler _singletonHandler;
     public SOSkillSettings soSkillSettings;
     
     [Header("Freeze Water")] 
@@ -29,7 +31,7 @@ public class SkillManager : MonoBehaviour
     private float _attackActiveTime;
     private float _attackCoolTime;
     
-    [Header("Deal Damage")] 
+    [Header("Meteor")] 
     private float _dealDamagePercent;
     private int _bombCount;
     private float _dealDamageActiveTime;
@@ -53,10 +55,11 @@ public class SkillManager : MonoBehaviour
     private void Start()
     {
         _gameManager = GameManager.Instance;
+        _singletonHandler = SingletonHandler.Instance;
         healAlliesButton.onClick.AddListener(HealAllies);
         slowEnemiesButton.onClick.AddListener(SlowEnemies);
         attackBuffButton.onClick.AddListener(AttackBuff);
-        dealDamageButton.onClick.AddListener(DealDamage);
+        dealDamageButton.onClick.AddListener(Meteor);
         increaseGoldButton.onClick.AddListener(IncreaseGold);
         freezeWaterButton.onClick.AddListener(FreezeWater);
         InıtSoSkillSettings();
@@ -167,7 +170,7 @@ public class SkillManager : MonoBehaviour
        
     }
 
-    private void DealDamage()
+    private void Meteor()
     {
         ButtonClicked(dealDamageButton,_dealDamageActiveTime);
         StartCoroutine(BombCreate());
@@ -180,7 +183,11 @@ public class SkillManager : MonoBehaviour
             {
                 var randomPos = (_gameManager.dominationArea.transform.position)+Random.insideUnitSphere * 15;
                 randomPos.y = 50;
-                Instantiate(_bomb, randomPos, Quaternion.identity);
+                var obj = _singletonHandler.GetSingleton<ObjectPool>().TakeObject(ObjectType.Bomb).transform.GetComponent<Bomb>();
+                obj.Inıt();
+                obj.transform.position = randomPos;
+                obj.gameObject.SetActive(true);
+                //Instantiate(_bomb, randomPos, Quaternion.identity);
                 yield return waitDealDamage;
             }
             yield return new WaitForSeconds(_dealDamageActiveTime); 

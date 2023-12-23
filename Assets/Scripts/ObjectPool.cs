@@ -98,6 +98,7 @@ public enum ObjectType
     EnemyArrow=6,
     SoldierArrow=7,
     Coin=8,
+    Bomb=9,
 }
 
 }

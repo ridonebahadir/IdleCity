@@ -1,25 +1,41 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Agent;
-using DG.Tweening;
+using LeonBrave;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Bomb : MonoBehaviour
-{
-   [SerializeField] private SOSkillSettings _soSkillSettings;
+{ 
+   [SerializeField] private SOSkillSettings soSkillSettings;
    [SerializeField] private float moveSpeed;
    [SerializeField] private float lifeTime;
    [SerializeField] private ParticleSystem bombPlaneParticle;
+   [SerializeField] private GameObject mesh;
    
+   private SingletonHandler _singletonHandler;
+   private bool _stop;
+   private float _startLifeTime;
+   
+   public void Inıt()
+   {
+      _singletonHandler=SingletonHandler.Instance;
+      bombPlaneParticle.gameObject.SetActive(false);
+      _stop = false;
+      mesh.SetActive(true);
+      _startLifeTime = lifeTime;
+   }
+
    private void Update()
    {
       lifeTime -= Time.deltaTime;
       if (lifeTime<=0)
       {
-         Destroy(gameObject);
+         lifeTime = _startLifeTime;
+         _singletonHandler.GetSingleton<ObjectPool>().AddObject(gameObject,ObjectType.Bomb);
+         //Destroy(gameObject);
       }
-      Vector3 movement = new Vector3(0f, -1, 0f) * (moveSpeed * Time.deltaTime);
+      if (_stop) return;
+      var movement = new Vector3(0f, -1, 0f) * (moveSpeed * Time.deltaTime);
       transform.Translate(movement);
    }
 
@@ -27,9 +43,13 @@ public class Bomb : MonoBehaviour
    {
       if (other.TryGetComponent(out AgentBase agentBase))
       {
-         agentBase.SetPercentTakeDamage(_soSkillSettings.dealDamagePercent);
+         agentBase.SetPercentTakeDamage(soSkillSettings.dealDamagePercent);
       }
-      bombPlaneParticle.transform.SetParent(null);
+
+      _stop = true;
+      mesh.SetActive(false);
+     
+      //bombPlaneParticle.transform.SetParent(null);
       bombPlaneParticle.gameObject.SetActive(true);
       
    }
