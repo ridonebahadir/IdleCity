@@ -7,7 +7,7 @@ using UnityEngine.AI;
 
 public class Devil : MonoBehaviour
 {
-    public static Devil Create(GameObject angelObj,Transform angelSpawnPoint,AgentBase target,float lifeTime)
+    public static Devil Create(GameObject angelObj,Transform angelSpawnPoint,SmallTrigger target,float lifeTime)
     {
         var cloneAngel=Instantiate(angelObj,angelSpawnPoint.position,Quaternion.identity,angelSpawnPoint).transform;
         var devil = cloneAngel.GetComponent<Devil>();
@@ -16,9 +16,9 @@ public class Devil : MonoBehaviour
     }
     private float _lifeTime;
     private GameManager _gameManager;
-    private AgentBase _target;
+    private SmallTrigger _target;
     private NavMeshAgent _navMeshAgent;
-    private List<AgentBase> _closeAgentList = new List<AgentBase>();
+    private List<SmallTrigger> _closeAgentList = new List<SmallTrigger>();
     private readonly WaitForSeconds _wait = new(1);
     private IEnumerator _takeDamage;
 
@@ -32,28 +32,28 @@ public class Devil : MonoBehaviour
     void Update()
     {
         if (_target==null)return;
-        if (_target.GetHealth <= 0) if (_gameManager.enemies.Count>0) _target=_gameManager.GetFurhestEnemies();
+        if (_target.agentBase.GetHealth <= 0) if (_gameManager.enemies.Count>0) _target=_gameManager.GetFurhestEnemies();
         _navMeshAgent.SetDestination(_target.transform.position);
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.TryGetComponent(out AgentBase agentBase)) return;
-        if (!_closeAgentList.Contains(agentBase)) _closeAgentList.Add(agentBase);
+        if (!other.TryGetComponent(out SmallTrigger smallTrigger)) return;
+        if (!_closeAgentList.Contains(smallTrigger)) _closeAgentList.Add(smallTrigger);
         
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.TryGetComponent(out AgentBase agentBase)) return;
-        if (!_closeAgentList.Contains(agentBase))
+        if (!other.TryGetComponent(out SmallTrigger smallTrigger)) return;
+        if (!_closeAgentList.Contains(smallTrigger))
         {
-            _closeAgentList.Remove(agentBase);
-            agentBase.TakeHealOver();
+            _closeAgentList.Remove(smallTrigger);
+            smallTrigger.agentBase.TakeHealOver();
         }
        
     }
 
-    private void Setup(AgentBase target, float lifeTime)
+    private void Setup(SmallTrigger target, float lifeTime)
     {
         _target = target;
         _lifeTime = lifeTime;
@@ -67,7 +67,7 @@ public class Devil : MonoBehaviour
             {
                 foreach (var item in _closeAgentList)
                 {
-                    if (item.GetHealth>0)  item.SetPercentTakeDamage(50);
+                    if (item.agentBase.GetHealth>0)  item.agentBase.SetPercentTakeDamage(50);
                 }
                
             }

@@ -939,6 +939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _agentType: 0
+  agentBase: {fileID: 5095969895259833269}
 --- !u!1 &5583696883180557501
 GameObject:
   m_ObjectHideFlags: 0

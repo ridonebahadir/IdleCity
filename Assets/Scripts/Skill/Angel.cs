@@ -7,7 +7,7 @@ using UnityEngine.AI;
 
 public class Angel : MonoBehaviour
 {
-    public static Angel Create(GameObject angelObj,Transform angelSpawnPoint,AgentBase target,float lifeTime)
+    public static Angel Create(GameObject angelObj,Transform angelSpawnPoint,SmallTrigger target,float lifeTime)
     {
         var cloneAngel=Instantiate(angelObj,angelSpawnPoint.position,Quaternion.identity,angelSpawnPoint).transform;
         var angel = cloneAngel.GetComponent<Angel>();
@@ -17,9 +17,9 @@ public class Angel : MonoBehaviour
 
     private float _lifeTime;
     private GameManager _gameManager;
-    private AgentBase _target;
+    private SmallTrigger _target;
     private NavMeshAgent _navMeshAgent;
-    private List<AgentBase> _closeAgentList = new List<AgentBase>();
+    private List<SmallTrigger> _closeAgentList = new List<SmallTrigger>();
     private readonly WaitForSeconds _wait = new(1);
     private IEnumerator _takeHealIE;
     
@@ -34,11 +34,11 @@ public class Angel : MonoBehaviour
     void Update()
     {
         if (_target==null)return;
-        if (_target.GetHealth <= 0) if (_gameManager.soldiers.Count>0) _target=_gameManager.GetFurthestAllie();
+        if (_target.agentBase.GetHealth <= 0) if (_gameManager.soldiers.Count>0) _target=_gameManager.GetFurthestAllie();
         _navMeshAgent.SetDestination(_target.transform.position);
     }
 
-    private void Setup(AgentBase target,float lifeTime)
+    private void Setup(SmallTrigger target,float lifeTime)
     {
         _target = target;
         _lifeTime = lifeTime;
@@ -46,18 +46,18 @@ public class Angel : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.TryGetComponent(out AgentBase agentBase)) return;
-        if (!_closeAgentList.Contains(agentBase)) _closeAgentList.Add(agentBase);
+        if (!other.TryGetComponent(out SmallTrigger smallTrigger)) return;
+        if (!_closeAgentList.Contains(smallTrigger)) _closeAgentList.Add(smallTrigger);
         
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.TryGetComponent(out AgentBase agentBase)) return;
-        if (!_closeAgentList.Contains(agentBase))
+        if (!other.TryGetComponent(out SmallTrigger smallTrigger)) return;
+        if (!_closeAgentList.Contains(smallTrigger))
         {
-            _closeAgentList.Remove(agentBase);
-            agentBase.TakeHealOver();
+            _closeAgentList.Remove(smallTrigger);
+            smallTrigger.agentBase.TakeHealOver();
         }
        
     }
@@ -68,7 +68,7 @@ public class Angel : MonoBehaviour
         {
             if (_closeAgentList.Count > 0)
             {
-                foreach (var item in _closeAgentList) item.TakeHeal(3);
+                foreach (var item in _closeAgentList) item.agentBase.TakeHeal(3);
                
             }
             _lifeTime--;
@@ -81,7 +81,7 @@ public class Angel : MonoBehaviour
 
     private void Death()
     {
-        foreach (var item in _closeAgentList)  item.TakeHealOver();
+        foreach (var item in _closeAgentList)  item.agentBase.TakeHealOver();
         StopCoroutine(_takeHealIE);
         gameObject.SetActive(false);
     }

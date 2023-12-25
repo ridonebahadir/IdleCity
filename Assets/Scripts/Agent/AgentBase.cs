@@ -42,7 +42,7 @@ namespace Agent
         [SerializeField] private HealthBar healthBar;
         [SerializeField] private float firstAnimWait;
         [SerializeField] private float secondAnimWait;
-        [SerializeField] private SmallTrigger small;
+        public SmallTrigger small;
         [SerializeField] private Collider col;
         [SerializeField] public NavMeshAgent NavMeshAgent;
         

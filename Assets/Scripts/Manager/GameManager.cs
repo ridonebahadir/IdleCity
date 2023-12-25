@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
    public float GetGold => goldCount;
    public float GetGoldRate => goldRate;
 
-   public AgentBase GetFurthestAllie()
+   public SmallTrigger GetFurthestAllie()
    {
       if (soldiers == null || soldiers.Count == 0)  return null;
       var far = float.MinValue;
@@ -118,10 +118,10 @@ public class GameManager : MonoBehaviour
          far = zPoz;
          furthest = obj;
       }
-      return furthest;
+      return furthest.small;
    }
 
-   public AgentBase GetFurhestEnemies()
+   public SmallTrigger GetFurhestEnemies()
    {
       if (enemies == null || enemies.Count == 0)  return null;
       var far = float.MinValue;
@@ -134,6 +134,6 @@ public class GameManager : MonoBehaviour
          far = zPoz;
          furthest = obj;
       }
-      return furthest;
+      return furthest.small;
    }
 }

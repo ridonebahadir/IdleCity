@@ -1052,6 +1052,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _agentType: 1
+  agentBase: {fileID: 5077695223906588956}
 --- !u!135 &7284441747340529685
 SphereCollider:
   m_ObjectHideFlags: 0

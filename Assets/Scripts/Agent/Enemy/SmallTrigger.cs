@@ -6,5 +6,7 @@ using UnityEngine;
 public class SmallTrigger : MonoBehaviour
 {
     public AgentType _agentType;
+    public AgentBase agentBase;
     
+
 }
