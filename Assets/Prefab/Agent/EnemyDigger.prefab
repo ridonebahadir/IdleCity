@@ -805,7 +805,7 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 1000
   avoidancePriority: 50
-  m_AngularSpeed: 90
+  m_AngularSpeed: 0
   m_StoppingDistance: 4
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -860,7 +860,6 @@ MonoBehaviour:
   NavMeshAgent: {fileID: 5095969895259833274}
   isAttack: 0
   _oneTimeRun: 1
-  mesh: {fileID: 5095969895703100269}
 --- !u!54 &5471703482993662049
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -941,6 +940,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _agentType: 0
   agentBase: {fileID: 5095969895259833269}
+  reverseRotate: 0
+  isEnemy: 1
 --- !u!1 &5583696883180557501
 GameObject:
   m_ObjectHideFlags: 0

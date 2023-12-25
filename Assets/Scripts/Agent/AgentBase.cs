@@ -112,7 +112,6 @@ namespace Agent
             closeList.Add(otherAgentBase);
             if (closeList.Count != 1) return;
             animator.SetBool(Wait,false);
-            mesh.transform.localRotation = Quaternion.Euler(0,0,0);
             //NavMeshAgent.angularSpeed = _startRotateSpeed;
             if (agentState!=AgentState.Fighting) SlotTargetRemove();
             StartAttack();
@@ -135,7 +134,7 @@ namespace Agent
         [SerializeField] private bool isAttack;
         
         public bool _oneTimeRun = true;
-        [SerializeField] private Transform mesh;
+        
         private readonly Vector3 _worldForwardDirection = Vector3.forward;
         private readonly Vector3 _worldBackwardDirection = Vector3.back;
         private IEnumerator MoveTarget()
@@ -158,6 +157,7 @@ namespace Agent
                     { 
                         //Flee();
                         Attack();
+                        small.reverseRotate = false;
                     }
                     if (agentState==AgentState.Waiting)
                     {
@@ -165,13 +165,12 @@ namespace Agent
                         if (isAttack)
                         {
                             agentState = AgentState.Fighting;
-                            mesh.transform.localRotation = Quaternion.Euler(0,0,0);
+                           
                         }
                         else
                         {
-                            if (agentType==AgentType.Enemy) mesh.transform.rotation = Quaternion.LookRotation(_worldBackwardDirection, Vector3.up);
-                            else mesh.transform.rotation = Quaternion.LookRotation(_worldForwardDirection, Vector3.up);
 
+                            small.reverseRotate = true;
                             animator.SetBool(Wait,true);
                         }
                         
@@ -199,7 +198,6 @@ namespace Agent
         private void Attack()
         {
             animator.SetBool(Wait,false);
-            mesh.transform.localRotation = Quaternion.Euler(0,0,0);
             if (_attack==null)
             {
                 _attack = AttackCoroutine();
@@ -370,7 +368,7 @@ namespace Agent
                 }
                 else
                 {
-                    mesh.transform.localRotation = Quaternion.Euler(0,0,0);
+                  
                     target = Domination.transform;
                     attackDistance = 1f;
                     NavMeshAgent.stoppingDistance =  0f;
@@ -387,7 +385,7 @@ namespace Agent
                 }
                 else
                 {
-                    mesh.transform.localRotation = Quaternion.Euler(0,0,0);
+                    
                     target = Domination.transform;
                     attackDistance = 1f;
                     NavMeshAgent.stoppingDistance =  0f;
