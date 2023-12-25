@@ -1,5 +1,6 @@
 
 using System;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,8 +14,12 @@ public class UIManager : MonoBehaviour
     
     
     [Header("BATTLE")] 
-    [SerializeField] private Button battleButton;
+    [SerializeField] private GameObject cameraTransform;
+    [SerializeField] private Transform cameraEndTransform;
 
+    
+    [SerializeField] private Button battleButton;
+    
     [SerializeField] private GameObject mainMenuCanvas;
     [SerializeField] private GameObject mainArea;
     [SerializeField] private GameObject gameCanvas;
@@ -79,12 +84,14 @@ public class UIManager : MonoBehaviour
 
    private void BattleButton()
    {
-       mainMenuCanvas.SetActive(false);
-       mainArea.SetActive(false);
-       uIRawImageManager.SetActive(false);
-       
-       gameCanvas.SetActive(true);
        gameArea.SetActive(true);
-       spawnManager.SetActive(true);
+       uIRawImageManager.SetActive(false);
+       cameraTransform.transform.DOMoveZ(cameraEndTransform.position.z, 3f).OnComplete(() =>
+       {
+           mainArea.SetActive(false);
+           mainMenuCanvas.SetActive(false);
+           gameCanvas.SetActive(true);
+           spawnManager.SetActive(true);
+       });
    }
 }
