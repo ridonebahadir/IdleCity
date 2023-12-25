@@ -198,10 +198,12 @@ namespace Agent
             {
                 if (GetHealth>0)
                 {
+                    //yield return _firstAnimWaitForSeconds;
+                    
+                    //else TargetDeath();
                     yield return _firstAnimWaitForSeconds;
                     if (dist<=attackDistance) AttackType();
-                    else TargetDeath();
-                    yield return _secondAnimWaitForSeconds;
+                   
                 }
                 // if (TargetAgentBase.GetHealth<=0)
                 // {

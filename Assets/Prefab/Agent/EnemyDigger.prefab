@@ -853,7 +853,7 @@ MonoBehaviour:
   particleSystem: {fileID: 1730981043047057852}
   closeList: []
   healthBar: {fileID: 1862028628319108245}
-  firstAnimWait: 0.2
+  firstAnimWait: 1.2
   secondAnimWait: 1
   small: {fileID: 5312560610346337011}
   col: {fileID: 5095969895259833278}
