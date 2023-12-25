@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/SOSkillSettings", order = 1)]
 public class SOSkillSettings : ScriptableObject
@@ -13,10 +14,10 @@ public class SOSkillSettings : ScriptableObject
     public float healCoolTime;
     public GameObject angelObj;
     
-    [Header("Slow Enemies")] 
-    public float slowPercent;
-    public float slowActiveTime;
-    public float slowCoolTime;
+    [Header("Devil Create")] 
+    public float devilActiveTime; 
+    public float devilCoolTime;
+    public GameObject devilObj;
     
     [Header("Attack Buff")] 
     public float attackPercent;

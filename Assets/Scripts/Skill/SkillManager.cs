@@ -25,10 +25,12 @@ public class SkillManager : MonoBehaviour
     [SerializeField] private Transform angelSpawnPoint;
     
     
-    [Header("Slow Enemies")] 
-    private float _slowPercent;
-    private float _slowActiveTime;
-    private float _slowCoolTime;
+    [Header("Devil Create")] 
+    //private float _slowPercent;
+    private float _devilActiveTime;
+    private float _devilCoolTime;
+    private GameObject _devilObj;
+    [SerializeField] private Transform devilSpawnPoint;
     
     [Header("Attack Buff")] 
     private float _attackPercent;
@@ -50,7 +52,7 @@ public class SkillManager : MonoBehaviour
 
     [SerializeField] private Button freezeWaterButton;
     [SerializeField] private Button healAlliesButton; 
-    [SerializeField] private Button slowEnemiesButton;
+    [SerializeField] private Button devilCreateButton;
     [SerializeField] private Button attackBuffButton;
     [SerializeField] private Button dealDamageButton;
     [SerializeField] private Button increaseGoldButton;
@@ -62,7 +64,7 @@ public class SkillManager : MonoBehaviour
         _singletonHandler = SingletonHandler.Instance;
         _domination = _gameManager.dominationArea;
         healAlliesButton.onClick.AddListener(HealAllies);
-        slowEnemiesButton.onClick.AddListener(SlowEnemies);
+        devilCreateButton.onClick.AddListener(DevilCreate);
         attackBuffButton.onClick.AddListener(AttackBuff);
         dealDamageButton.onClick.AddListener(Meteor);
         increaseGoldButton.onClick.AddListener(IncreaseGold);
@@ -79,9 +81,10 @@ public class SkillManager : MonoBehaviour
         _healCoolTime = soSkillSettings.healCoolTime;
         _angelObj = soSkillSettings.angelObj;
 
-        _slowPercent = soSkillSettings.slowPercent;
-        _slowActiveTime = soSkillSettings.slowActiveTime;
-        _slowCoolTime = soSkillSettings.slowCoolTime;
+        //_slowPercent = soSkillSettings.slowPercent;
+        _devilActiveTime = soSkillSettings.devilActiveTime;
+        _devilCoolTime = soSkillSettings.devilCoolTime;
+        _devilObj = soSkillSettings.devilObj;
 
         _attackPercent = soSkillSettings.attackPercent;
         _attackActiveTime = soSkillSettings.attackActiveTime;
@@ -100,6 +103,12 @@ public class SkillManager : MonoBehaviour
     }
     
     private WaitForSeconds _freezeWaterDropWait = new(0.3f);
+
+    /*public SkillManager(float slowPercent)
+    {
+        _slowPercent = slowPercent;
+    }*/
+
     private void FreezeWater()
     {
         ButtonClicked(freezeWaterButton,_freezeWaterActiveTime);
@@ -146,10 +155,25 @@ public class SkillManager : MonoBehaviour
         }
         
     }
+    private void DevilCreate()
+    {
+        if (_gameManager.enemies.Count==0) return;
+        ButtonClicked(devilCreateButton,_devilActiveTime);
+        Devil.Create(_devilObj, devilSpawnPoint, _gameManager.GetFurhestEnemies(),_devilActiveTime);
+        StartCoroutine(ClickButton());
+        return;
+
+        IEnumerator ClickButton()
+        {
+            yield return new WaitForSeconds(_devilActiveTime);
+            ButtonClickAfter(devilCreateButton,_devilCoolTime);
+        }
+        
+    }
 
     private void SlowEnemies() 
     {
-        ButtonClicked(slowEnemiesButton,_slowActiveTime);
+        /*//ButtonClicked(slowEnemiesButton,_slowActiveTime);
         StartCoroutine(SlowEnemy());
         return;
 
@@ -165,8 +189,8 @@ public class SkillManager : MonoBehaviour
             {
                 item.SetPercentSpeed(100);
             }
-            ButtonClickAfter(slowEnemiesButton,_slowCoolTime);
-        }
+            //ButtonClickAfter(slowEnemiesButton,_slowCoolTime);
+        }*/
        
     }
 

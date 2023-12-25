@@ -120,4 +120,20 @@ public class GameManager : MonoBehaviour
       }
       return furthest;
    }
+
+   public AgentBase GetFurhestEnemies()
+   {
+      if (enemies == null || enemies.Count == 0)  return null;
+      var far = float.MinValue;
+      AgentBase furthest = null;
+      foreach (AgentBase obj in enemies)
+      {
+         if (obj == null) continue;
+         var zPoz = obj.transform.position.z;
+         if (!(zPoz > far)) continue;
+         far = zPoz;
+         furthest = obj;
+      }
+      return furthest;
+   }
 }

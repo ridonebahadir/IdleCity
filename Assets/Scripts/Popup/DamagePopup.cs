@@ -23,12 +23,13 @@ public class DamagePopup : MonoBehaviour
 
     private void Awake()
     {
-        transform.localScale = Vector3.zero;
-        _textMeshPro = transform.GetComponent<TextMeshProUGUI>();
+       
     }
 
     private void Setup(float damage)
     {
+        transform.localScale = Vector3.zero;
+        _textMeshPro = transform.GetComponent<TextMeshProUGUI>();
         _textMeshPro.text = "-"+ damage;
         transform.DOScale(Vector3.one, 0.5f).OnComplete(() =>
         {

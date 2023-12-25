@@ -18,9 +18,9 @@ MonoBehaviour:
   healAlliesActiveTime: 10
   healCoolTime: 3
   angelObj: {fileID: 2993453493395546654, guid: fe0a5c97005df8e4d9defd9752d0e5da, type: 3}
-  slowPercent: 50
-  slowActiveTime: 3
-  slowCoolTime: 3
+  devilActiveTime: 10
+  devilCoolTime: 3
+  devilObj: {fileID: 2993453493395546654, guid: 9d7445503f8530a46ba0b9f83c232497, type: 3}
   attackPercent: 30
   attackActiveTime: 10
   attackCoolTime: 3
