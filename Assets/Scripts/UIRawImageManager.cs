@@ -7,7 +7,7 @@ public class UIRawImageManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> characters;
     private readonly float _rotationSpeed = 15f;
-    public Transform selectCharacter;
+    private Transform selectCharacter;
     public bool moving;
     void Start()
     {
@@ -51,8 +51,9 @@ public class UIRawImageManager : MonoBehaviour
         SelectCharacterUpgrade.onClickArcher += Open;
         SelectCharacterUpgrade.onClickDigger += Open;
 
-        RawImageButton.onClickRawImageEnter += SetMovingBool;
-        RawImageButton.onClickRawImageExit += SetMovingBool;
+        RawImageButton.OnClickDown += SetMovingBool;
+        RawImageButton.OnClickUp += SetMovingBool;
+        
     }
 
     private void OnDisable()
@@ -61,8 +62,9 @@ public class UIRawImageManager : MonoBehaviour
         SelectCharacterUpgrade.onClickArcher -= Open;
         SelectCharacterUpgrade.onClickDigger -= Open;
         
-        RawImageButton.onClickRawImageEnter -= SetMovingBool;
-        RawImageButton.onClickRawImageExit -= SetMovingBool;
+        RawImageButton.OnClickDown -= SetMovingBool;
+        RawImageButton.OnClickUp -= SetMovingBool;
+    
     }
 
     private void Open(int a)

@@ -121,7 +121,7 @@ public class EnemySpawn : MonoBehaviour
     {
         var cloneObj = _singletonHandler.GetSingleton<ObjectPool>().TakeObject(objectType);
         //var cloneObj= Instantiate(obj, pos.position,Quaternion.identity,pos);
-        var rand = Random.Range(3, -3);
+        var rand = Random.Range(10, -10);
         cloneObj.transform.localPosition = new Vector3(rand, 0, 0);
         cloneObj.transform.localScale = new Vector3(1.75f, 1.75f, 1.75f);
         cloneObj.SetActive(true);

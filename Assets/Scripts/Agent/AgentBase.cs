@@ -129,10 +129,11 @@ namespace Agent
         protected abstract void SlotTarget();
         protected abstract void  SlotTargetRemove();
         protected abstract void  Flee();
+
+
+
+        [SerializeField] private bool isAttack;
         
-
-       
-
         public bool _oneTimeRun = true;
         [SerializeField] private Transform mesh;
         private readonly Vector3 _worldForwardDirection = Vector3.forward;
@@ -161,16 +162,30 @@ namespace Agent
                     if (agentState==AgentState.Waiting)
                     {
                         //NavMeshAgent.angularSpeed = 0;
-                        if (agentType==AgentType.Enemy) mesh.transform.rotation = Quaternion.LookRotation(_worldBackwardDirection, Vector3.up);
-                        else mesh.transform.rotation = Quaternion.LookRotation(_worldForwardDirection, Vector3.up);
+                        if (isAttack)
+                        {
+                            agentState = AgentState.Fighting;
+                            mesh.transform.localRotation = Quaternion.Euler(0,0,0);
+                        }
+                        else
+                        {
+                            if (agentType==AgentType.Enemy) mesh.transform.rotation = Quaternion.LookRotation(_worldBackwardDirection, Vector3.up);
+                            else mesh.transform.rotation = Quaternion.LookRotation(_worldForwardDirection, Vector3.up);
 
-                        animator.SetBool(Wait,true);
+                            animator.SetBool(Wait,true);
+                        }
+                        
+                       
                     }
 
                     if (agentState==AgentState.Walking)
                     {
                         //SlotTarget();
                         agentState = AgentState.Waiting;
+                        if (isAttack)
+                        {
+                            agentState = AgentState.Fighting;
+                        }
                     }
                     
                 }
@@ -234,6 +249,7 @@ namespace Agent
         }
         private void TargetDeath()
         {
+            isAttack = false;
             if (_attack!=null) StopCoroutine(_attack);
             animator.SetBool(Attack1,false);
             agentState = AgentState.Walking;
@@ -243,6 +259,7 @@ namespace Agent
             if (closeList.Count > 0)
             {
                 StartAttack();
+               
             }
             else SetStartTarget();
         }
@@ -253,7 +270,8 @@ namespace Agent
             NavMeshAgent.stoppingDistance =_navMeshStopDistance;
             TargetAgentBase = CloseAgent();
             target = TargetAgentBase.transform;
-            agentState = AgentState.Fighting;
+            isAttack = true;
+            //agentState = AgentState.Fighting;
             //_targetAgentBase = _target.transform.GetComponent<AgentBase>();
         }
         public void TakeDamage(float dmg)

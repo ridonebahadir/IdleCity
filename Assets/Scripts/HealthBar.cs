@@ -31,6 +31,11 @@ public class HealthBar : MonoBehaviour
         _healthBarCanvasGroup.alpha = 0;
     }
 
+    private void OnEnable()
+    {
+        content.color = isEnemyBar ? enemyColor : highColor;
+    }
+
     private void LateUpdate()
     {
         var rotation = _camera.transform.rotation;

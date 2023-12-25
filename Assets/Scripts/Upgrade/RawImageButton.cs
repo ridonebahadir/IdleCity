@@ -5,19 +5,32 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RawImageButton : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
+public class RawImageButton : MonoBehaviour,IPointerDownHandler,IPointerUpHandler
 {
     public delegate void OnClickRawImage();
     public static OnClickRawImage onClickRawImageEnter;
     public static OnClickRawImage onClickRawImageExit;
+    public static OnClickRawImage OnClickDown;
+    public static OnClickRawImage OnClickUp;
     
-    public void OnPointerEnter(PointerEventData eventData)
+    
+    // public void OnPointerEnter(PointerEventData eventData)
+    // {
+    //     //onClickRawImageEnter?.Invoke();
+    // }
+    //
+    // public void OnPointerExit(PointerEventData eventData)
+    // {
+    //     //onClickRawImageExit?.Invoke();
+    // }
+
+    public void OnPointerDown(PointerEventData eventData)
     {
-        onClickRawImageEnter?.Invoke();
+        OnClickDown?.Invoke();
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData)
     {
-        onClickRawImageExit?.Invoke();
+        OnClickUp?.Invoke();
     }
 }
