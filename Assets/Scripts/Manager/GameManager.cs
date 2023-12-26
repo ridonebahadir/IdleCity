@@ -94,8 +94,8 @@ public class GameManager : MonoBehaviour
    }
    private void SetText()
    {
-      uIManager.goldTextCount.text ="Gold =" +(int)goldCount;
-      uIManager.timeText.text ="Rate =" + goldRate;
+      uIManager.goldTextCount.text =Mathf.Floor(goldCount).ToString();
+      uIManager.timeText.text =goldRate.ToString()+"/s";
    }
    public void GetReward(float value)
    {

@@ -72,9 +72,9 @@ public class SoldierSpawn : MonoBehaviour
         _soldierArcherCost = soldierArcherSo.cost;
         _soldierDiggerCost = soldierDiggerSo.cost;
 
-        soldierCostText.text = _soldierCost + "G";
-        soldierArcherCostText.text = _soldierArcherCost + "G";
-        soldierDiggerCostText.text = _soldierDiggerCost + "G";
+        soldierCostText.text = Mathf.Floor(_soldierCost).ToString();
+        soldierArcherCostText.text =  Mathf.Floor(_soldierArcherCost).ToString();
+        soldierDiggerCostText.text = Mathf.Floor(_soldierDiggerCost).ToString();
         
         _soldierEnumerator = ControlGold(_soldierCost,spawnSoldierButton,soldierImage);
         _soldierEnumeratorArcher = ControlGold(_soldierArcherCost,spawnSoldierArcherButton,soldierArcherImage);
