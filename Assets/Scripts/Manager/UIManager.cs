@@ -21,6 +21,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button battleButton;
     
     [SerializeField] private GameObject mainMenuCanvas;
+    [SerializeField] private RectTransform gameCanvasBottom;
+    [SerializeField] private RectTransform gameCanvasTop;
     [SerializeField] private GameObject mainArea;
     [SerializeField] private GameObject gameCanvas;
     [SerializeField] private GameObject gameArea;
@@ -47,6 +49,9 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        gameCanvasTop.anchoredPosition = new Vector2(0,150);
+        gameCanvasBottom.anchoredPosition = new Vector2(0, -280);
+        
         battleButton.onClick.AddListener(BattleButton);
         restButton.onClick.AddListener(SceneRest);
         
@@ -81,9 +86,11 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     
-
+    public delegate void OnClickBattleButton();
+    public static OnClickBattleButton OnClickBattle;
    private void BattleButton()
    {
+       OnClickBattle?.Invoke();
        gameArea.SetActive(true);
        uIRawImageManager.SetActive(false);
        cameraTransform.transform.DOMoveZ(cameraEndTransform.position.z, 3f).OnComplete(() =>
@@ -92,6 +99,8 @@ public class UIManager : MonoBehaviour
            mainMenuCanvas.SetActive(false);
            gameCanvas.SetActive(true);
            spawnManager.SetActive(true);
+           gameCanvasTop.DOAnchorPos(new Vector2(0, 0), 0.35f);
+           gameCanvasBottom.DOAnchorPos(new Vector2(0, 0), 0.35f);
        });
    }
 }

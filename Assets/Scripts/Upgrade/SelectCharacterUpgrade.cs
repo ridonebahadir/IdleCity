@@ -76,13 +76,17 @@ public class SelectCharacterUpgrade : MonoBehaviour
     }
     private void OnEnable()
     {
+       UIManager.OnClickBattle += ClosePanel;
        CharacterUpgradePanel.onClickClose += ClosePanel;
        CharacterUpgradePanel.onClickClose += CloseButton;
+
     }
 
     private void OnDisable()
     {
+        UIManager.OnClickBattle -= ClosePanel;
         CharacterUpgradePanel.onClickClose -= ClosePanel;
         CharacterUpgradePanel.onClickClose -= CloseButton;
+        
     }
 }

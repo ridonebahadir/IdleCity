@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 [CreateAssetMenu(fileName = "SOAgentUpgrade", menuName = "Agent/SOAgentUpgrade")]
@@ -12,23 +13,23 @@ public class SOAgentUpgrade : ScriptableObject
     public Sprite nextIcon;
     public int cost;
     public List<int> levelBorders;
-    internal int multipher;
-    internal int levelCount;
+    public int level; 
+    public int stage;
     
     public DefaultValueUpgrade DefaultValueUpgrade;
     
     public void DefaultData()
     {
         cost = DefaultValueUpgrade.cost;
-        multipher = DefaultValueUpgrade.multipher;
-        levelCount = DefaultValueUpgrade.levelCount;
+        level = DefaultValueUpgrade.stage;
+        stage = DefaultValueUpgrade.level;
     }
 }
 [Serializable]
 public struct DefaultValueUpgrade
 {
-    public int cost;
-    public int multipher;
-    public int levelCount;
+    public int cost; 
+    public int stage; 
+    public int level;
    
 }

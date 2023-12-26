@@ -52,7 +52,7 @@ public class Select : MonoBehaviour
       StartCoroutine(OpenColliderIE());
       IEnumerator OpenColliderIE()
       {
-         yield return new WaitForSeconds(2);
+         yield return new WaitForSeconds(1);
          col.enabled = true;
          otherSelect.col.enabled = true;
          otherSelect2.col.enabled = true;

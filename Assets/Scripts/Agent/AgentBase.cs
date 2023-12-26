@@ -27,6 +27,8 @@ namespace Agent
     {
         [SerializeField] private AgentState agentState;
         [SerializeField] private ObjectType objectType;
+       
+        
         
         public SOAgent soAgent;
         public Transform target;
@@ -66,8 +68,23 @@ namespace Agent
         private static readonly int Death1 = Animator.StringToHash("Death");
         private static readonly int Attack1 = Animator.StringToHash("Attack");
         private static readonly int Wait = Animator.StringToHash("Wait");
+
+        [Space(10)]
+        [Header("UpGrade Only Allie")]
+        [SerializeField] private SOAgentUpgrade soAgentUpgrade;
+        [SerializeField] private Transform levelModelParent;
+        [SerializeField] private Transform stageBottomParent;
         
         
+        private void SetModel()
+        {
+            if (agentType==AgentType.Enemy) return;
+            foreach (Transform item in levelModelParent)  item.gameObject.SetActive(false);
+            foreach (Transform item in stageBottomParent)  item.gameObject.SetActive(false);
+            
+            levelModelParent.GetChild(soAgentUpgrade.level).gameObject.SetActive(true);
+            stageBottomParent.GetChild(soAgentUpgrade.stage).gameObject.SetActive(true);
+        }
         
         public void InıtAgent()
         {
@@ -103,6 +120,8 @@ namespace Agent
             
             _firstAnimWaitForSeconds = new WaitForSeconds(firstAnimWait);
             _secondAnimWaitForSeconds = new WaitForSeconds(secondAnimWait);
+
+            SetModel();
 
         }
         private void OnTriggerEnter(Collider other)

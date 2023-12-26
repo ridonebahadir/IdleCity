@@ -6,9 +6,11 @@ using UnityEngine;
 public class UIRawImageManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> characters;
+    [SerializeField] private List<SOAgentUpgrade> agentUpgrades;
     private readonly float _rotationSpeed = 15f;
     private Transform selectCharacter;
     public bool moving;
+    private int _turn;
     void Start()
     {
         Close();
@@ -21,7 +23,7 @@ public class UIRawImageManager : MonoBehaviour
             if (!moving)
             {
                 Quaternion currentRotation = selectCharacter.localRotation;
-                selectCharacter.localRotation = Quaternion.Lerp(currentRotation,  Quaternion.Euler(0,145,0), Time.deltaTime * _rotationSpeed);
+                selectCharacter.localRotation = Quaternion.Lerp(currentRotation,  Quaternion.Euler(0,0,0), Time.deltaTime * _rotationSpeed);
                 return;
             }
             var mouseX = Input.GetAxis("Mouse X");
@@ -41,7 +43,7 @@ public class UIRawImageManager : MonoBehaviour
         foreach (var item in characters)
         {
             item.SetActive(false);
-            item.transform.localRotation=Quaternion.Euler(0,145,0);
+            item.transform.localRotation=Quaternion.Euler(0,0,0);
         }
     }
 
@@ -54,6 +56,8 @@ public class UIRawImageManager : MonoBehaviour
         RawImageButton.OnClickDown += SetMovingBool;
         RawImageButton.OnClickUp += SetMovingBool;
         
+        CharacterUpgradePanel.onClickUpgrade += SetModel;
+        
     }
 
     private void OnDisable()
@@ -64,16 +68,31 @@ public class UIRawImageManager : MonoBehaviour
         
         RawImageButton.OnClickDown -= SetMovingBool;
         RawImageButton.OnClickUp -= SetMovingBool;
-    
+
+        CharacterUpgradePanel.onClickUpgrade -= SetModel;
+
     }
 
     private void Open(int a)
     {
+        _turn = a;
         Close();
         selectCharacter = characters[a].transform;
         characters[a].SetActive(true);
     }
 
+    private void SetModel()
+    {
+        foreach (Transform item in characters[_turn].transform)
+        {
+            foreach (Transform child in item)
+            {
+                child.transform.gameObject.SetActive(false);
+            }
+        }
+        characters[_turn].transform.GetChild(0).transform.GetChild(agentUpgrades[_turn].level).gameObject.SetActive(true);
+        characters[_turn].transform.GetChild(1).transform.GetChild(agentUpgrades[_turn].stage).gameObject.SetActive(true);
+    }
     private void SetMovingBool()
     {
         moving = !moving;

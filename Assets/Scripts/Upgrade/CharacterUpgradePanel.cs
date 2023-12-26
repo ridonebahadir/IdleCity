@@ -35,7 +35,7 @@ public class CharacterUpgradePanel : MonoBehaviour
         SetHealth(0);
         SetDamage(0);
         SetSlider();
-        levelText.SetText("Level = "+soAgentUpgrade.levelCount);
+        levelText.SetText("Level = "+soAgentUpgrade.stage);
         characterName.SetText(soAgentUpgrade.name);
         currentIcon.sprite = soAgentUpgrade.icon;
         nextIcon.sprite = soAgentUpgrade.nextIcon;
@@ -45,21 +45,21 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void SetCost()
     {
-        soAgentUpgrade.cost += ((soAgentUpgrade.levelCount+1)*(soAgentUpgrade.multipher+1));
+        soAgentUpgrade.cost += ((soAgentUpgrade.stage+1)*(soAgentUpgrade.level+1));
         costText.SetText(soAgentUpgrade.cost.ToString());
     }
 
     private void SetSlider()
     {
-        progressText.SetText(soAgentUpgrade.levelCount.ToString()+" / "+soAgentUpgrade.levelBorders[soAgentUpgrade.multipher]);
+        progressText.SetText(soAgentUpgrade.stage.ToString()+" / "+soAgentUpgrade.levelBorders[soAgentUpgrade.level]);
        
-        if (soAgentUpgrade.levelCount==0)
+        if (soAgentUpgrade.stage==0)
         {
             sliderFilled.fillAmount= 0;
         }
         else
         {
-            var a= (float)(soAgentUpgrade.levelCount)/(float)soAgentUpgrade.levelBorders[soAgentUpgrade.multipher];
+            var a= (float)(soAgentUpgrade.stage)/(float)soAgentUpgrade.levelBorders[soAgentUpgrade.level];
             sliderFilled.fillAmount= a;
            
         }
@@ -83,13 +83,13 @@ public class CharacterUpgradePanel : MonoBehaviour
     private void SetLevel()
     {
         //soAgent.level++;
-        soAgentUpgrade.levelCount++;
-        if (soAgentUpgrade.levelCount == soAgentUpgrade.levelBorders[soAgentUpgrade.multipher])
+        soAgentUpgrade.stage++;
+        if (soAgentUpgrade.stage == soAgentUpgrade.levelBorders[soAgentUpgrade.level])
         {
-            soAgentUpgrade.multipher++;
-            soAgentUpgrade.levelCount = 0;
+            soAgentUpgrade.level++;
+            soAgentUpgrade.stage = 0;
         }
-        levelText.SetText("Level = "+soAgentUpgrade.multipher);
+        levelText.SetText("Level = "+soAgentUpgrade.level);
     }
 
     private void Clicked()
@@ -99,7 +99,7 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void SetValue()
     {
-        if (soAgentUpgrade.multipher == soAgentUpgrade.levelBorders.Count - 1)
+        if (soAgentUpgrade.level == soAgentUpgrade.levelBorders.Count - 1)
         {
             sliderFilled.fillAmount = 1;
             return;
@@ -110,9 +110,11 @@ public class CharacterUpgradePanel : MonoBehaviour
         SetDamage(1);
         SetSlider();
         nextIcon.sprite = soAgentUpgrade.nextIcon;
+        onClickUpgrade?.Invoke();
     }
     public delegate void OnClickClose();
     public static OnClickClose onClickClose;
+    public static OnClickClose onClickUpgrade;
     private void CloseButton()
     {
         onClickClose?.Invoke();
