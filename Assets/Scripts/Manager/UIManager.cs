@@ -88,6 +88,7 @@ public class UIManager : MonoBehaviour
     
     public delegate void OnClickBattleButton();
     public static OnClickBattleButton OnClickBattle;
+    public static OnClickBattleButton OnClickedBattle;
    private void BattleButton()
    {
        OnClickBattle?.Invoke();
@@ -101,6 +102,7 @@ public class UIManager : MonoBehaviour
            spawnManager.SetActive(true);
            gameCanvasTop.DOAnchorPos(new Vector2(0, 0), 0.35f);
            gameCanvasBottom.DOAnchorPos(new Vector2(0, 0), 0.35f);
+           OnClickedBattle?.Invoke();
        });
    }
 }

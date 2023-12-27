@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 
 [CreateAssetMenu(fileName = "SOAgentUpgrade", menuName = "Agent/SOAgentUpgrade")]
@@ -16,9 +17,14 @@ public class SOAgentUpgrade : ScriptableObject
     public int level; 
     public int stage;
     public int stageCount;
+    public List<Sprite> Sprites;
     
     public DefaultValueUpgrade DefaultValueUpgrade;
-    
+
+    public Sprite SetSprite()
+    {
+        return Sprites[level-1];
+    }
     public void DefaultData()
     {
         cost = DefaultValueUpgrade.cost;
