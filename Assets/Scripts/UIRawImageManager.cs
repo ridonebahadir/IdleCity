@@ -56,7 +56,7 @@ public class UIRawImageManager : MonoBehaviour
         RawImageButton.OnClickDown += SetMovingBool;
         RawImageButton.OnClickUp += SetMovingBool;
         
-        CharacterUpgradePanel.onClickUpgrade += SetModel;
+        //CharacterUpgradePanel.onClickUpgrade += SetModel;
         
     }
 
@@ -69,7 +69,7 @@ public class UIRawImageManager : MonoBehaviour
         RawImageButton.OnClickDown -= SetMovingBool;
         RawImageButton.OnClickUp -= SetMovingBool;
 
-        CharacterUpgradePanel.onClickUpgrade -= SetModel;
+        //CharacterUpgradePanel.onClickUpgrade -= SetModel;
 
     }
 

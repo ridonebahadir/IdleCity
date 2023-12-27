@@ -29,6 +29,8 @@ namespace Domination
         [SerializeField] private SplineFollower splineFollower;
         [SerializeField] private SplineComputer splineComputer;
         [SerializeField] private SplineMesh splineMesh;
+        [SerializeField] private float speedEnemy;
+        [SerializeField] private float speedSoldier;
         [SerializeField] private float speed;
         //[SerializeField] private float riverWidth;
         [SerializeField] private TextMeshPro timeText;
@@ -42,13 +44,24 @@ namespace Domination
         [SerializeField] private List<SmallTrigger> enemies;
         [SerializeField] private List<SmallTrigger> allies;
 
-        
-        
         private bool _start;
         private GameManager _gameManager;
         
+        [Space(10)]
+        [Header("SO GIANT UPGRADE")] 
+        [SerializeField] private SOAgent SOAgentSoldierGiant;
+        [SerializeField] private SOAgent SOAgentEnemyGiant;
+        
+        [Space(10)]
+        [Header("GIANT")] 
+        [SerializeField] private GameObject alliysGiant;
+        [SerializeField] private GameObject enemyGiant;
+
+        
         private void Start()
         {
+            enemyGiant.SetActive(false);
+            alliysGiant.SetActive(false);
             ChangeParticleColor(Color.white);
             //splineComputer.SetPointSize(0,riverWidth);
             //_points = splineComputer.GetPoints();
@@ -95,17 +108,17 @@ namespace Domination
                 }
             }
 
-            var a = splineFollower.GetPercent();
-            if (!_start) return;
-            switch (a)
-            {
-                case 0f:
-                    GameManager.Instance.uIManager.FailPanelOpen();
-                    break;
-                case 1f:
-                    GameManager.Instance.uIManager.WinPanelOpen();
-                    break;
-            }
+            // var a = splineFollower.GetPercent();
+            // if (!_start) return;
+            // switch (a)
+            // {
+            //     case 0f:
+            //         GameManager.Instance.uIManager.FailPanelOpen();
+            //         break;
+            //     case 1f:
+            //         GameManager.Instance.uIManager.WinPanelOpen();
+            //         break;
+            // }
         }
         private void FixedUpdate()
         {
@@ -137,7 +150,9 @@ namespace Domination
         }
         private void EnemyMove()
         {
-            speed = 0.5f;
+            enemyGiant.SetActive(true);
+            alliysGiant.SetActive(false);
+            speed =SOAgentEnemyGiant.digSpeed;
             dominationMoveDirect = DominationMoveDirect.EnemyMove;
             _gameManager.GoDominationArea(true);
             // StopCoroutine(_dominationMove);
@@ -145,7 +160,9 @@ namespace Domination
         }
         private void SoldierMove()
         {
-            speed = 0.5f;
+            alliysGiant.SetActive(true);
+            enemyGiant.SetActive(false);
+            speed = SOAgentSoldierGiant.digSpeed;
             dominationMoveDirect = DominationMoveDirect.AlliesMove;
             _gameManager.GoDominationArea(false);
             // StopCoroutine(_dominationMove);

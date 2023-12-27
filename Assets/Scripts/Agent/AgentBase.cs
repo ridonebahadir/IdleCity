@@ -99,7 +99,7 @@ namespace Agent
             health = soAgent.health;
             _maxHealth = soAgent.health;
             damage = soAgent.damage;
-            _diggSpeed = soAgent.diggSpeed;
+            _diggSpeed = soAgent.digSpeed;
             attackDistance = soAgent.attackDistance;
             _navMeshStopDistance = soAgent.attackDistance;
             _startRotateSpeed = NavMeshAgent.angularSpeed;
@@ -121,7 +121,8 @@ namespace Agent
             _firstAnimWaitForSeconds = new WaitForSeconds(firstAnimWait);
             _secondAnimWaitForSeconds = new WaitForSeconds(secondAnimWait);
 
-            SetModel();
+            //SetModel();
+           
 
         }
         private void OnTriggerEnter(Collider other)
@@ -295,6 +296,7 @@ namespace Agent
         {
             DamagePopup.Create(healthBar.transform, dmg);
             healthBar.HealthBarCanvasGroupShow();
+            SetLevel();
             particleSystem.Play();
             health -= dmg;
             healthBar.SetHealthBar(_maxHealth,health,agentType);
@@ -455,7 +457,11 @@ namespace Agent
             healthBar.isHealth = false;
         }
 
-       
+        private void SetLevel()
+        {
+            if (agentType == AgentType.Enemy) return;
+            healthBar.SetLevel(soAgentUpgrade);
+        }
         
     }
 }

@@ -12,9 +12,10 @@ public class SOAgentUpgrade : ScriptableObject
     public Sprite icon;
     public Sprite nextIcon;
     public int cost;
-    public List<int> levelBorders;
+    //public List<int> levelBorders;
     public int level; 
     public int stage;
+    public int stageCount;
     
     public DefaultValueUpgrade DefaultValueUpgrade;
     

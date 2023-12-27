@@ -8,8 +8,7 @@ public class CheckPoints : MonoBehaviour
     private List<CheckPoint> checkPoints = new List<CheckPoint>();
     [SerializeField] private int homeTurn;
     [SerializeField] private SplineFollower splineFollower;
-    
-
+    public bool startSetup;
     private void Start()
     {
         foreach (Transform item in transform)
@@ -22,12 +21,14 @@ public class CheckPoints : MonoBehaviour
     {
         if (splineFollower.direction == Spline.Direction.Backward)
         {
+            if (homeTurn==1) GameManager.Instance.uIManager.FailPanelOpen();
             homeTurn--;
             checkPoints[homeTurn].SetActiveHome();
            
         }
         else
         {
+            if (homeTurn==checkPoints.Count-1) GameManager.Instance.uIManager.WinPanelOpen();
             checkPoints[homeTurn].SetActiveHome();
             homeTurn++;
         }

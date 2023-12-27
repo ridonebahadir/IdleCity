@@ -19,7 +19,7 @@ MonoBehaviour:
   health: 10
   damage: 1
   attackDistance: 3
-  cost: 1
+  cost: 5
   reward: 1
   DefaultValue:
     health: 10

@@ -4037,6 +4037,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StageBottom
       objectReference: {fileID: 0}
+    - target: {fileID: 854551065066591405, guid: 8e1b91490c2205e43970fd7f0b9d8689, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3508912297401415817, guid: 8e1b91490c2205e43970fd7f0b9d8689, type: 3}
       propertyPath: m_RootOrder
       value: 1

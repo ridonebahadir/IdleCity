@@ -19,6 +19,8 @@ public class SelectCharacterUpgrade : MonoBehaviour
     public static OnClickCharacter onClickMelee;
     public static OnClickCharacter onClickArcher;
     public static OnClickCharacter onClickDigger;
+    public static OnClickCharacter onClickGiant;
+    public static OnClickCharacter onClickVillageTown;
     
    
 
@@ -40,6 +42,18 @@ public class SelectCharacterUpgrade : MonoBehaviour
         onClickDigger?.Invoke(2);
         ClosePanel();
         OpenPanel(2);
+    }
+    public void Giant()
+    {
+        onClickDigger?.Invoke(3);
+        ClosePanel();
+        OpenPanel(3);
+    }
+    public void VillageTown()
+    {
+        onClickDigger?.Invoke(4);
+        ClosePanel();
+        OpenPanel(4);
     }
     
     private void ClosePanel()

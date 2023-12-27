@@ -22,19 +22,25 @@ public class CharacterUpgradePanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private TextMeshProUGUI damageText;
     [SerializeField] private TextMeshProUGUI costText;
-    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI levelText; 
+    [SerializeField] private TextMeshProUGUI digSpeedText;
     [SerializeField] private TextMeshProUGUI _ratioHealthText;
     [SerializeField] private TextMeshProUGUI _ratioDamageText;
+    [SerializeField] private TextMeshProUGUI _ratioDiggSpeedText;
     
     [SerializeField] private Button button;
     [SerializeField] private Button closeButton;
-
+     private int _stageCount;
+    
     private void Start()
     {
+        _stageCount = soAgentUpgrade.stageCount;
         SetCost();
         SetHealth(0);
         SetDamage(0);
         SetSlider();
+        SetDigSpeed(0);
+        digSpeedText.SetText("Digg Speed = "+soAgent.digSpeed);
         levelText.SetText("Level = "+soAgentUpgrade.stage);
         characterName.SetText(soAgentUpgrade.name);
         currentIcon.sprite = soAgentUpgrade.icon;
@@ -51,7 +57,7 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void SetSlider()
     {
-        progressText.SetText(soAgentUpgrade.stage.ToString()+" / "+soAgentUpgrade.levelBorders[soAgentUpgrade.level]);
+        progressText.SetText(soAgentUpgrade.stage.ToString()+" / "+_stageCount);
        
         if (soAgentUpgrade.stage==0)
         {
@@ -59,7 +65,7 @@ public class CharacterUpgradePanel : MonoBehaviour
         }
         else
         {
-            var a= (float)(soAgentUpgrade.stage)/(float)soAgentUpgrade.levelBorders[soAgentUpgrade.level];
+            var a= (float)(soAgentUpgrade.stage)/_stageCount;
             sliderFilled.fillAmount= a;
            
         }
@@ -84,14 +90,20 @@ public class CharacterUpgradePanel : MonoBehaviour
     {
         //soAgent.level++;
         soAgentUpgrade.stage++;
-        if (soAgentUpgrade.stage == soAgentUpgrade.levelBorders[soAgentUpgrade.level])
+        if (soAgentUpgrade.stage == _stageCount)
         {
             soAgentUpgrade.level++;
-            soAgentUpgrade.stage = 0;
+            soAgentUpgrade.stage = 1;
         }
         levelText.SetText("Level = "+soAgentUpgrade.level);
     }
 
+    private void SetDigSpeed(float value)
+    {
+        soAgent.digSpeed += value;
+        _ratioDiggSpeedText.SetText("+" + value);
+        digSpeedText.SetText("Digg Speed = "+soAgent.digSpeed);
+    }
     private void Clicked()
     {
        SetValue();
@@ -99,16 +111,17 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void SetValue()
     {
-        if (soAgentUpgrade.level == soAgentUpgrade.levelBorders.Count - 1)
-        {
-            sliderFilled.fillAmount = 1;
-            return;
-        }
+        // if (soAgentUpgrade.level == _stageCount)
+        // {
+        //     sliderFilled.fillAmount = 1;
+        //     return;
+        // }
         SetLevel();
         SetCost();
         SetHealth(1);
         SetDamage(1);
         SetSlider();
+        SetDigSpeed(0.5f);
         nextIcon.sprite = soAgentUpgrade.nextIcon;
         onClickUpgrade?.Invoke();
     }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Agent;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -13,6 +14,8 @@ public class HealthBar : MonoBehaviour
     private CanvasGroup _healthBarCanvasGroup;
     private readonly WaitForSeconds _waitCloseHealthBar = new(2f);
     private IEnumerator _healBarShow;
+    [SerializeField] private TextMeshProUGUI levelText;
+    
     [SerializeField] private Image content;
     [SerializeField] private Color lowColor;
     [SerializeField] private Color mediumColor;
@@ -95,6 +98,10 @@ public class HealthBar : MonoBehaviour
         
     }
 
+    public void SetLevel(SOAgentUpgrade soAgentUpgrade)
+    {
+        levelText.SetText(soAgentUpgrade.level.ToString());
+    }
     public bool isHealth;
    
     

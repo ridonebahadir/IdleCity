@@ -8,7 +8,9 @@ public enum HomeType
 {
    Melee,
    Archer,
-   Digger
+   Digger,
+   Giant,
+   VillageTown,
 }
 public class Select : MonoBehaviour
 { 
@@ -37,6 +39,12 @@ public class Select : MonoBehaviour
             break;
          case HomeType.Digger:
             selectCharacterUpgrade.Digger();
+            break;
+         case HomeType.Giant:
+            selectCharacterUpgrade.Giant();
+            break;
+         case HomeType.VillageTown:
+            selectCharacterUpgrade.VillageTown();
             break;
       }
    }
