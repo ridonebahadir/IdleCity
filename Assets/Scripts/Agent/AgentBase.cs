@@ -73,17 +73,17 @@ namespace Agent
         [Header("UpGrade Only Allie")]
         [SerializeField] private SOAgentUpgrade soAgentUpgrade;
         [SerializeField] private Transform levelModelParent;
-        [SerializeField] private Transform stageBottomParent;
+        //[SerializeField] private Transform stageBottomParent;
         
         
         private void SetModel()
         {
             if (agentType==AgentType.Enemy) return;
             foreach (Transform item in levelModelParent)  item.gameObject.SetActive(false);
-            foreach (Transform item in stageBottomParent)  item.gameObject.SetActive(false);
+            //foreach (Transform item in stageBottomParent)  item.gameObject.SetActive(false);
             
-            levelModelParent.GetChild(soAgentUpgrade.level).gameObject.SetActive(true);
-            stageBottomParent.GetChild(soAgentUpgrade.stage).gameObject.SetActive(true);
+            levelModelParent.GetChild(soAgentUpgrade.level-1).gameObject.SetActive(true);
+            //stageBottomParent.GetChild(soAgentUpgrade.stage).gameObject.SetActive(true);
         }
         
         public void InıtAgent()
@@ -104,7 +104,11 @@ namespace Agent
             _navMeshStopDistance = soAgent.attackDistance;
             _startRotateSpeed = NavMeshAgent.angularSpeed;
             NavMeshAgent.speed = speed;
-
+            if (agentType == AgentType.Soldier)
+            {
+                animator = levelModelParent.GetChild(soAgentUpgrade.level - 1).GetComponent<Animator>();
+                //animator.SetBool(Wait,false);
+            }
             if (agentType==AgentType.Enemy) transform.rotation = Quaternion.LookRotation(_worldBackwardDirection, Vector3.up);
             else transform.rotation = Quaternion.LookRotation(_worldForwardDirection, Vector3.up);
             
@@ -114,14 +118,14 @@ namespace Agent
             IsDeath = false;
             SetStartTarget();
             //SetPercentSpeed(100);
-            animator.SetBool(Wait,false);
+            
             _move = MoveTarget();
             StartCoroutine(_move);
             
             _firstAnimWaitForSeconds = new WaitForSeconds(firstAnimWait);
             _secondAnimWaitForSeconds = new WaitForSeconds(secondAnimWait);
 
-            //SetModel();
+            SetModel();
            
 
         }

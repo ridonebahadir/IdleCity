@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Digger 2
+  m_Controller: {fileID: 9100000, guid: 2e19910014b55ce429ed8f54e60f7402, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: -455277469124072959, guid: 1e71dd7c775d62c4e9c5a6336162ffd3, type: 3}
+    m_OverrideClip: {fileID: -3792118073147969794, guid: 3552296720ea4354cab1544ae918a163, type: 3}
+  - m_OriginalClip: {fileID: -1325874930220000129, guid: 5302e9d08a48f5f4684045ae0d420a14, type: 3}
+    m_OverrideClip: {fileID: 355296709716508292, guid: 761a1773e4ec08e4797e30c8014cfd65, type: 3}
+  - m_OriginalClip: {fileID: 6348108679356145595, guid: a1ac3a58d126a71438224b0322818d83, type: 3}
+    m_OverrideClip: {fileID: 8746536875874859477, guid: d0f225c6e2344644d8f77b3dea27bed4, type: 3}
+  - m_OriginalClip: {fileID: 5912970848507360842, guid: 0ba7ac94cff198542a05aa3db1cab5dc, type: 3}
+    m_OverrideClip: {fileID: 753300809802033945, guid: 0b56aeeb99efa2740bca1ea942b2eae2, type: 3}

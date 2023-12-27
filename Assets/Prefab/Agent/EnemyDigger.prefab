@@ -858,6 +858,8 @@ MonoBehaviour:
   small: {fileID: 5312560610346337011}
   col: {fileID: 5095969895259833278}
   NavMeshAgent: {fileID: 5095969895259833274}
+  soAgentUpgrade: {fileID: 0}
+  levelModelParent: {fileID: 0}
   isAttack: 0
   _oneTimeRun: 1
 --- !u!54 &5471703482993662049
@@ -1585,11 +1587,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5038966553753773688, guid: f1bf3963702ddc34284137c7c4e409e3, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5038966553753773688, guid: f1bf3963702ddc34284137c7c4e409e3, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0.3232
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5038966553753773688, guid: f1bf3963702ddc34284137c7c4e409e3, type: 3}
       propertyPath: m_LocalPosition.x

@@ -56,7 +56,7 @@ public class UIRawImageManager : MonoBehaviour
         RawImageButton.OnClickDown += SetMovingBool;
         RawImageButton.OnClickUp += SetMovingBool;
         
-        //CharacterUpgradePanel.onClickUpgrade += SetModel;
+        CharacterUpgradePanel.onClickUpgrade += SetModel;
         
     }
 
@@ -69,7 +69,7 @@ public class UIRawImageManager : MonoBehaviour
         RawImageButton.OnClickDown -= SetMovingBool;
         RawImageButton.OnClickUp -= SetMovingBool;
 
-        //CharacterUpgradePanel.onClickUpgrade -= SetModel;
+        CharacterUpgradePanel.onClickUpgrade -= SetModel;
 
     }
 
@@ -90,8 +90,8 @@ public class UIRawImageManager : MonoBehaviour
                 child.transform.gameObject.SetActive(false);
             }
         }
-        characters[_turn].transform.GetChild(0).transform.GetChild(agentUpgrades[_turn].level).gameObject.SetActive(true);
-        characters[_turn].transform.GetChild(1).transform.GetChild(agentUpgrades[_turn].stage).gameObject.SetActive(true);
+        characters[_turn].transform.GetChild(0).transform.GetChild(agentUpgrades[_turn].level-1).gameObject.SetActive(true);
+        //characters[_turn].transform.GetChild(1).transform.GetChild(agentUpgrades[_turn].stage).gameObject.SetActive(true);
     }
     private void SetMovingBool()
     {

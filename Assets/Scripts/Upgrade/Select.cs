@@ -18,8 +18,7 @@ public class Select : MonoBehaviour
    private SelectCharacterUpgrade selectCharacterUpgrade;
    public Collider col;
    
-   [SerializeField] private Select otherSelect;
-   [SerializeField] private Select otherSelect2;
+   [SerializeField] private List<Select> otherSelects;
    
    private void Start()
    {
@@ -52,18 +51,30 @@ public class Select : MonoBehaviour
    private void CloseCollider()
    {
       col.enabled = false;
-      otherSelect.col.enabled = true;
-      otherSelect2.col.enabled = true;
+      foreach (var t in otherSelects)
+      {
+         if (t != this)
+         {
+            t.col.enabled = true;
+         };
+        
+      }
+      // otherSelect.col.enabled = true;
+      // otherSelect2.col.enabled = true;
    }
    private void OpenCollider()
    {
       StartCoroutine(OpenColliderIE());
       IEnumerator OpenColliderIE()
       {
-         yield return new WaitForSeconds(1);
-         col.enabled = true;
-         otherSelect.col.enabled = true;
-         otherSelect2.col.enabled = true;
+         yield return new WaitForSeconds(0.5f);
+         foreach (var t in otherSelects)
+         {
+            t.col.enabled = true;
+         }
+         //col.enabled = true;
+         // otherSelect.col.enabled = true;
+         // otherSelect2.col.enabled = true;
       }
       
    }
