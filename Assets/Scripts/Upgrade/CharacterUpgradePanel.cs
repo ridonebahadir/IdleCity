@@ -106,7 +106,9 @@ public class CharacterUpgradePanel : MonoBehaviour
     }
     private void Clicked()
     {
-       SetValue();
+        if (soAgentUpgrade.level>=5 && soAgentUpgrade.stage>=4) return;
+        SetValue();
+      
     }
 
     private void SetValue()
