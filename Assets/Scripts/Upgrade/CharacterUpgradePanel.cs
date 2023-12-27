@@ -43,7 +43,7 @@ public class CharacterUpgradePanel : MonoBehaviour
         digSpeedText.SetText("Digg Speed = "+soAgent.digSpeed);
         levelText.SetText("Level = "+soAgentUpgrade.stage);
         characterName.SetText(soAgentUpgrade.name);
-        currentIcon.sprite = soAgentUpgrade.icon;
+        //currentIcon.sprite = soAgentUpgrade.icon;
         nextIcon.sprite = soAgentUpgrade.nextIcon;
         button.onClick.AddListener(Clicked);
         closeButton.onClick.AddListener(CloseButton);
