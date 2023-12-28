@@ -26,7 +26,6 @@ public class SoldierButtonsUpgrade : MonoBehaviour
 
     private void SetImage()
     {
-        Debug.Log("dkslgjll");
         images[0].sprite=melee.SetSprite();
         images[1].sprite=archer.SetSprite();
         images[2].sprite=digger.SetSprite();

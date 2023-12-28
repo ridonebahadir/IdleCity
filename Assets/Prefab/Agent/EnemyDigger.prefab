@@ -224,7 +224,7 @@ MonoBehaviour:
   soAgent: {fileID: 11400000, guid: e6e936c29b359184da023cfea7d83292, type: 2}
   target: {fileID: 0}
   dist: 0
-  animator: {fileID: 0}
+  animator: {fileID: 8249231130567863555}
   attackDistance: 0
   health: 0
   speed: 0
@@ -378,6 +378,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Golem_Enemy_lvl4_tpose
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 699534945f2d8524796657a80fb42959, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 699534945f2d8524796657a80fb42959, type: 3}
 --- !u!4 &366127453379072979 stripped
@@ -385,6 +389,31 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 699534945f2d8524796657a80fb42959, type: 3}
   m_PrefabInstance: {fileID: 188596514548937784}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1035667755964942697 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 699534945f2d8524796657a80fb42959, type: 3}
+  m_PrefabInstance: {fileID: 188596514548937784}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &9050413746794841074
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1035667755964942697}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 90dffca98e90ab84faf64a4b505fde82, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1001 &1630601896309571138
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -581,6 +610,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Golem_Enemy_lvl3_tpose
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4db29f1630af966419e18e16c19817d1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215920695297643237, guid: 4db29f1630af966419e18e16c19817d1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.52757114
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215920695297643237, guid: 4db29f1630af966419e18e16c19817d1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.25687447
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4db29f1630af966419e18e16c19817d1, type: 3}
 --- !u!4 &1197992837021845182 stripped
@@ -588,6 +629,31 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4db29f1630af966419e18e16c19817d1, type: 3}
   m_PrefabInstance: {fileID: 1669315241581420885}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2011966158954437636 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 4db29f1630af966419e18e16c19817d1, type: 3}
+  m_PrefabInstance: {fileID: 1669315241581420885}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &2245368318727470853
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2011966158954437636}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: cbcebc53de7508f488c5d2c405a59515, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1001 &3695687375510257815
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -776,8 +842,37 @@ PrefabInstance:
       propertyPath: m_Name
       value: Golem_Enemy_lvl5_tpose
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5bfa0a22126b36d4dbd59e9ce68557eb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5bfa0a22126b36d4dbd59e9ce68557eb, type: 3}
+--- !u!1 &6967445676684005628 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5bfa0a22126b36d4dbd59e9ce68557eb, type: 3}
+  m_PrefabInstance: {fileID: 7813814882072653229}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6255298613273663417
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6967445676684005628}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 23eccff2aac774f4780ed405dd3939f0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!4 &7780678920439106118 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5bfa0a22126b36d4dbd59e9ce68557eb, type: 3}
@@ -907,6 +1002,31 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8848065ef90c0f04bbe155911c0f2b56, type: 3}
   m_PrefabInstance: {fileID: 8354648298224409550}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &9165042451666298527 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8848065ef90c0f04bbe155911c0f2b56, type: 3}
+  m_PrefabInstance: {fileID: 8354648298224409550}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8249231130567863555
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9165042451666298527}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 0af2a6a4e149897418a88904e243244a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1001 &8819107311207015485
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -962,8 +1082,37 @@ PrefabInstance:
       propertyPath: m_Name
       value: Golem_Enemy_lvl2_tpose
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e777173ff926bdd4bab4efc740e9eb68, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e777173ff926bdd4bab4efc740e9eb68, type: 3}
+--- !u!1 &8548582571117009260 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e777173ff926bdd4bab4efc740e9eb68, type: 3}
+  m_PrefabInstance: {fileID: 8819107311207015485}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &4513751569438161696
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8548582571117009260}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 4890d798bd86ddb49b58f93e48592a91, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!4 &9072917214087480278 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e777173ff926bdd4bab4efc740e9eb68, type: 3}
