@@ -989,7 +989,7 @@ MonoBehaviour:
   soAgent: {fileID: 11400000, guid: 1a22f94f33596e349a7cf3e28c46d884, type: 2}
   target: {fileID: 0}
   dist: 0
-  animator: {fileID: 5294948281048847106}
+  animator: {fileID: 8095855386012489671}
   attackDistance: 0
   health: 0
   speed: 0
