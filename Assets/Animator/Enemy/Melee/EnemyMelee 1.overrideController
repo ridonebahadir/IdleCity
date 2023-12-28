@@ -6,14 +6,14 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Soldier 3
+  m_Name: EnemyMelee 1
   m_Controller: {fileID: 9100000, guid: 2e19910014b55ce429ed8f54e60f7402, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: -455277469124072959, guid: 1e71dd7c775d62c4e9c5a6336162ffd3, type: 3}
-    m_OverrideClip: {fileID: -2757961649774226014, guid: 52dc87202ad73aa4ca5b37607584d4c6, type: 3}
+    m_OverrideClip: {fileID: 7393597535799303241, guid: 9e8d04ea3db8cbb47b4ff2786e3be354, type: 3}
   - m_OriginalClip: {fileID: -1325874930220000129, guid: 5302e9d08a48f5f4684045ae0d420a14, type: 3}
-    m_OverrideClip: {fileID: -6817879909952459604, guid: 90d931b63565d1a4bb8fac24395f0577, type: 3}
+    m_OverrideClip: {fileID: 5959886528162621371, guid: b0086e25ec6ff9b4dacbe898e8acf9e5, type: 3}
   - m_OriginalClip: {fileID: 6348108679356145595, guid: a1ac3a58d126a71438224b0322818d83, type: 3}
-    m_OverrideClip: {fileID: -559915710767159634, guid: 3388b4d7b033c8f499f19af0843308c2, type: 3}
+    m_OverrideClip: {fileID: 818043020620914107, guid: 2aa60c55904164345a298ddf0132a96b, type: 3}
   - m_OriginalClip: {fileID: 5912970848507360842, guid: 0ba7ac94cff198542a05aa3db1cab5dc, type: 3}
-    m_OverrideClip: {fileID: 1240919375928251375, guid: 4ace548e32c8a484c97543fa3a2b8e71, type: 3}
+    m_OverrideClip: {fileID: 9065435637272425628, guid: d2e57301244e72f40a669f858964565d, type: 3}
