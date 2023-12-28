@@ -2,18 +2,19 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: RAM_Reserved_Graph
-  m_Shader: {fileID: 4800000, guid: bc65170c051b0724287a7f1636d87573, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
+  m_Name: ToonWater 1
+  m_Shader: {fileID: 4800000, guid: f24809d953f26f64b9c352c89807da80, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 4500
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -21,6 +22,10 @@ Material:
     m_TexEnvs:
     - _BumpMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DepthGradient:
+        m_Texture: {fileID: 2800000, guid: 74226c0f9b8ae5b448a0ff3216590eb1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -55,36 +60,45 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SurfaceDistortion:
+        m_Texture: {fileID: 2800000, guid: c53bb6b8c40b02141be3fdec5cc582e9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SurfaceNoise:
+        m_Texture: {fileID: 2800000, guid: e182ac5d3b797044fb29f3fa2acc3708, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
-    - FpsValues_Length: 120
-    - PixelSnap: 0
-    - ScrollSpeed: 0.2
-    - _AmazingThreshold: 0.72
     - _BumpScale: 1
-    - _CautionThreshold: 0
-    - _ColorMask: 15
     - _Cutoff: 0.5
+    - _DepthMaxDistance: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _FoamMaxDistance: 0.4
+    - _FoamMinDistance: 0.04
+    - _GlossMapScale: 1
     - _Glossiness: 0.5
-    - _GoodThreshold: 0.6
+    - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _ShorelineMaxDistance: 0.4
+    - _ShorelineMinDistance: 0.04
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
+    - _SurfaceDistortionAmount: 0.186
+    - _SurfaceNoiseCutoff: 0.516
     - _UVSec: 0
-    - _UseUIAlphaClip: 0
     - _ZWrite: 1
     m_Colors:
-    - _AmazingColor: {r: 0, g: 1, b: 1, a: 1}
-    - _CautionColor: {r: 0.99607843, g: 0.89411765, b: 0.2509804, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _CriticalColor: {r: 0.99607843, g: 0.89411765, b: 0.2509804, a: 1}
+    - _DepthGradientDeep: {r: 0.086274505, g: 0.6862881, b: 1, a: 0.7490196}
+    - _DepthGradientShallow: {r: 0, g: 0.93218184, b: 1, a: 0.9882353}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GoodColor: {r: 0.99607843, g: 0.89411765, b: 0.2509804, a: 1}
+    - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShorelineColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SurfaceNoiseScroll: {r: 0.03, g: 0.03, b: 0, a: 0}
+  m_BuildTextureStacks: []
