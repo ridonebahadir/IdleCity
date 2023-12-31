@@ -21,11 +21,15 @@ public class MainAreaAgentBase : MonoBehaviour
     {
         SetLevelMesh();
         _navMeshAgent = GetComponent<NavMeshAgent>();
-      SetTarget();
+        SetTarget();
     }
 
     private void SetLevelMesh()
     {
+        foreach (Transform item in levelParent)
+        {
+            item.gameObject.SetActive(false);
+        }
         var obj = levelParent.GetChild(soAgentUpgrade.level-1);
         obj.gameObject.SetActive(true);
         _animator = obj.GetComponent<Animator>();
@@ -101,6 +105,16 @@ public class MainAreaAgentBase : MonoBehaviour
     protected virtual void Attack()
     {
         
+    }
+
+    private void OnEnable()
+    {
+        CharacterUpgradePanel.onClickUpgrade += SetLevelMesh;
+    }
+
+    private void OnDisable()
+    {
+        CharacterUpgradePanel.onClickUpgrade -= SetLevelMesh;
     }
 }
 [Serializable]

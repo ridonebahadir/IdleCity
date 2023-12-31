@@ -94,6 +94,8 @@ public class CharacterUpgradePanel : MonoBehaviour
         {
             soAgentUpgrade.level++;
             soAgentUpgrade.stage = 1;
+            nextIcon.sprite = soAgentUpgrade.nextIcon;
+            onClickUpgrade?.Invoke();
         }
         levelText.SetText("Level = "+soAgentUpgrade.level);
     }
@@ -107,6 +109,7 @@ public class CharacterUpgradePanel : MonoBehaviour
     private void Clicked()
     {
         if (soAgentUpgrade.level>=5 && soAgentUpgrade.stage>=4) return;
+        
         SetValue();
       
     }
@@ -124,12 +127,12 @@ public class CharacterUpgradePanel : MonoBehaviour
         SetDamage(1);
         SetSlider();
         SetDigSpeed(0.5f);
-        nextIcon.sprite = soAgentUpgrade.nextIcon;
-        onClickUpgrade?.Invoke();
+       
     }
     public delegate void OnClickClose();
     public static OnClickClose onClickClose;
     public static OnClickClose onClickUpgrade;
+    
     private void CloseButton()
     {
         onClickClose?.Invoke();
