@@ -2,6 +2,7 @@ Shader "Custom/ForwardShader" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
         _Speed ("Speed", Range(0.1, 10)) = 1.0
+        _Alpha ("Alpha", Range(0.0, 1.0)) = 1.0
     }
 
     SubShader {
@@ -14,13 +15,14 @@ Shader "Custom/ForwardShader" {
         sampler2D _MainTex;
         fixed4 _Color;
         float _Speed;
+        float _Alpha;
 
         struct Input {
             float2 uv_MainTex;
         };
 
         void surf(Input IN, inout SurfaceOutput o) {
-            // Örnek olarak texture'dan renk alınabilir
+            // Texture'dan renk alın
             fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
 
             // Zamanı kullanarak sadece ileri doğru hareket ettirme (z ekseni boyunca)
@@ -35,7 +37,9 @@ Shader "Custom/ForwardShader" {
 
             // Son renk
             o.Albedo = finalColor.rgb;
-            o.Alpha = finalColor.a;
+            
+            // Alpha değerini kullanıcı tanımlı uniform'dan alın
+            o.Alpha = _Alpha;
         }
         ENDCG
     }

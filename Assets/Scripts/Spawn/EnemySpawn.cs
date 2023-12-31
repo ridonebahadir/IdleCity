@@ -14,10 +14,7 @@ public class EnemySpawn : MonoBehaviour
     private GameManager _gameManager;
     private Domination.Domination _domination;
 
-    [SerializeField] private GameObject enemy;
-    [SerializeField] private GameObject enemyDigger;
-    [SerializeField] private GameObject enemyArcher;
-    [SerializeField] private Transform spawnPointEnemy;
+   
     
     [Space(10)]
     [Header("SPAWN TIME")]
@@ -25,11 +22,7 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField] private int spawnEnemyArcherTime;
     [SerializeField] private int spawnEnemyDiggerTime;
 
-    [Space(10)]
-    [Header("SPAWN TIME")]
-    [SerializeField] private Image enemyImage;
-    [SerializeField] private Image enemyArcherImage;
-    [SerializeField] private Image enemyDiggerImage;
+   
 
     private SingletonHandler _singletonHandler;
     
@@ -43,47 +36,44 @@ public class EnemySpawn : MonoBehaviour
     private IEnumerator SpawnOrder()
     {
         yield return new WaitForSeconds(1);
-        StartCoroutine(SpawnEnemyRoutine(1,spawnEnemyTime,enemyImage));
+        StartCoroutine(SpawnEnemyRoutine(1,spawnEnemyTime));
         //yield return new WaitForSeconds(spawnEnemyTime);
-        StartCoroutine(SpawnEnemyRoutine(2,spawnEnemyArcherTime,enemyArcherImage));
+        StartCoroutine(SpawnEnemyRoutine(2,spawnEnemyArcherTime));
         //yield return new WaitForSeconds(spawnEnemyArcherTime);
-        StartCoroutine(SpawnEnemyRoutine(3,spawnEnemyDiggerTime,enemyDiggerImage));
+        StartCoroutine(SpawnEnemyRoutine(3,spawnEnemyDiggerTime));
     }
-    private IEnumerator SpawnEnemyRoutine(int turn,int time,Image image)
+    private IEnumerator SpawnEnemyRoutine(int turn,int time)
     {
         WaitForSeconds waitForSeconds = new(time);
         while (true)
         {
-            image.DOFillAmount(0, time).OnComplete(()=>
-            {
-                switch (turn)
-                {
-                    case 1 :
-                        for (int i = 0; i < 3; i++)
-                        {
-                            SpawnEnemy();
-                        }
-                        
-                        break;
-                    case 2:
-                        for (int i = 0; i < 3; i++)
-                        {
-                            SpawnEnemyArcher();
-                        }
-                        
-                        break;
-                    case 3:
-                        for (int i = 0; i < 3; i++)
-                        {
-                            SpawnEnemyDigger();
-                        }
-                       
-                        break;
-                }
-                image.fillAmount = 1;
-            });
-            
             yield return waitForSeconds;
+            switch (turn)
+            {
+                case 1 :
+                    for (int i = 0; i < 3; i++)
+                    {
+                        SpawnEnemy();
+                    }
+                        
+                    break;
+                case 2:
+                    for (int i = 0; i < 3; i++)
+                    {
+                        SpawnEnemyArcher();
+                    }
+                        
+                    break;
+                case 3:
+                    for (int i = 0; i < 3; i++)
+                    {
+                        SpawnEnemyDigger();
+                    }
+                       
+                    break;
+            }
+            
+          
         }
     }
     private void SpawnEnemy()

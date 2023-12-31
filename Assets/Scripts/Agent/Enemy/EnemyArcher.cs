@@ -63,6 +63,7 @@ public class EnemyArcher : AgentBase
             arrow.transform.SetParent(transform);
             arrow.transform.localPosition = Vector3.zero;
             if (TargetAgentBase!=null) TargetAgentBase.TakeDamage(damage);
+            SingletonHandler.GetSingleton<ObjectPool>().AddObject(arrow.gameObject,arrowType);
             //_targetAgentBase = null;
         });
     }
