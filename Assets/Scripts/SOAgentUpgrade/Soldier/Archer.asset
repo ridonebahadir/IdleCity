@@ -15,10 +15,23 @@ MonoBehaviour:
   name: Archer
   icon: {fileID: 21300000, guid: ce8637774427361428d758c6c49d138b, type: 3}
   nextIcon: {fileID: 0}
-  cost: 208
-  level: 5
+  cost: 0
+  level: 1
   stage: 1
   stageCount: 5
+  totalLevel: 1
+  multipherHealth:
+    a: 0.1
+    b: 1.1
+    c: 9
+  multipherDamage:
+    a: 0.07
+    b: 0.8
+    c: 6
+  multipherCost:
+    a: 1.55
+    b: 4
+    c: 44
   Sprites:
   - {fileID: 21300000, guid: 979c65d62bcb5594e986493a9e00fb6b, type: 3}
   - {fileID: 21300000, guid: 6011de9aebddd0546843d2f5bb4c2f1c, type: 3}
@@ -29,3 +42,4 @@ MonoBehaviour:
     cost: 0
     stage: 1
     level: 1
+    totalLevel: 1

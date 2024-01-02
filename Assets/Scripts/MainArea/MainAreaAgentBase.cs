@@ -7,6 +7,8 @@ using UnityEngine.AI;
 
 public class MainAreaAgentBase : MonoBehaviour
 {
+    [SerializeField] private CharactersType _charactersType;
+    
      private NavMeshAgent _navMeshAgent;
      private Transform _target;
      [SerializeField]  private float _waitTime;
@@ -109,12 +111,38 @@ public class MainAreaAgentBase : MonoBehaviour
 
     private void OnEnable()
     {
-        CharacterUpgradePanel.onClickUpgrade += SetLevelMesh;
+        switch (_charactersType)
+        {
+            case CharactersType.Melee:
+                CharacterUpgradePanel.onClickUpgradeMelee += SetLevelMesh;
+                break;
+            case CharactersType.Archer:
+                CharacterUpgradePanel.onClickUpgradeArcher += SetLevelMesh;
+                break;
+            case CharactersType.Digger:
+                CharacterUpgradePanel.onClickUpgradeDigger += SetLevelMesh;
+                break;
+        }
+        
     }
 
     private void OnDisable()
     {
-        CharacterUpgradePanel.onClickUpgrade -= SetLevelMesh;
+        switch (_charactersType)
+        {
+            case CharactersType.Melee:
+                CharacterUpgradePanel.onClickUpgradeMelee -= SetLevelMesh;
+                break;
+            case CharactersType.Archer:
+                CharacterUpgradePanel.onClickUpgradeArcher -= SetLevelMesh;
+                break;
+            case CharactersType.Digger:
+                CharacterUpgradePanel.onClickUpgradeDigger -= SetLevelMesh;
+                break;
+            case CharactersType.Giant:
+                CharacterUpgradePanel.onClickUpgradeDigger -= SetLevelMesh;
+                break;
+        }
     }
 }
 [Serializable]
@@ -123,4 +151,12 @@ public struct Targets
     public Transform targetTrans;
     public float waitTime;
 
+}
+
+public enum CharactersType
+{
+    Melee,
+    Archer,
+    Digger,
+    Giant
 }

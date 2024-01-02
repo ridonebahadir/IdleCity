@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class CharacterUpgradePanel : MonoBehaviour
 {
-   
+    public CharactersType CharactersType;
     public SOAgent soAgent;
     public SOAgentUpgrade soAgentUpgrade;
     [SerializeField] private TextMeshProUGUI characterName;
@@ -31,13 +31,13 @@ public class CharacterUpgradePanel : MonoBehaviour
     [SerializeField] private Button button;
     [SerializeField] private Button closeButton;
      private int _stageCount;
-    
+     
     private void Start()
     {
         _stageCount = soAgentUpgrade.stageCount;
         SetCost();
-        SetHealth(0);
-        SetDamage(0);
+        SetHealth();
+        SetDamage();
         SetSlider();
         SetDigSpeed(0);
         digSpeedText.SetText("Digg Speed = "+soAgent.digSpeed);
@@ -51,7 +51,7 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void SetCost()
     {
-        soAgentUpgrade.cost += ((soAgentUpgrade.stage+1)*(soAgentUpgrade.level+1));
+        soAgentUpgrade.cost = Formula(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c);
         costText.SetText(soAgentUpgrade.cost.ToString());
     }
 
@@ -72,17 +72,18 @@ public class CharacterUpgradePanel : MonoBehaviour
        
     }
 
-    private void SetHealth(int value)
+    private void SetHealth()
     {
-        soAgent.health += value;
-        _ratioHealthText.SetText("+" + value);
+        soAgent.health = Formula(soAgentUpgrade.multipherHealth.a, soAgentUpgrade.multipherHealth.b,
+            soAgentUpgrade.multipherHealth.c);
+        //_ratioHealthText.SetText("+" + value);
         healthText.SetText("Health = "+soAgent.health.ToString());
     }
 
-    private void SetDamage(int value)
+    private void SetDamage()
     {
-        soAgent.damage += value;
-        _ratioDamageText.SetText("+" + value);
+        soAgent.damage = Formula(soAgentUpgrade.multipherDamage.a,soAgentUpgrade.multipherDamage.b,soAgentUpgrade.multipherDamage.c);
+        //_ratioDamageText.SetText("+" + value);
         damageText.SetText("Damage = "+soAgent.damage.ToString());
     }
 
@@ -90,14 +91,39 @@ public class CharacterUpgradePanel : MonoBehaviour
     {
         //soAgent.level++;
         soAgentUpgrade.stage++;
-        if (soAgentUpgrade.stage == _stageCount)
+        if (soAgentUpgrade.stage == _stageCount+1)
         {
             soAgentUpgrade.level++;
             soAgentUpgrade.stage = 1;
             nextIcon.sprite = soAgentUpgrade.nextIcon;
-            onClickUpgrade?.Invoke();
+            UpgradeType();
+            
         }
         levelText.SetText("Level = "+soAgentUpgrade.level);
+    }
+    private void SetTotalLevel()
+    {
+        soAgentUpgrade.totalLevel++;
+    }
+
+    private void UpgradeType()
+    {
+        onClickUpgrade?.Invoke();
+        switch (CharactersType)
+        {
+            case CharactersType.Melee:
+                onClickUpgradeMelee?.Invoke();
+                break;
+            case CharactersType.Archer:
+                onClickUpgradeArcher?.Invoke();
+                break;
+            case CharactersType.Digger:
+                onClickUpgradeDigger?.Invoke();
+                break;
+            case CharactersType.Giant:
+                onClickUpgradeGiant?.Invoke();
+                break;
+        }
     }
 
     private void SetDigSpeed(float value)
@@ -114,6 +140,16 @@ public class CharacterUpgradePanel : MonoBehaviour
       
     }
 
+    
+
+    private int Formula(float a, float b, float c)
+    {
+        // math.ceil((a*(i**2)+b*i+c)*(1.2**((i-1)//5)))
+        var formula = Math.Ceiling(
+            (a * Mathf.Pow(soAgentUpgrade.totalLevel, 2) + (b * soAgentUpgrade.totalLevel) + c)
+            * Math.Pow(1.2,(soAgentUpgrade.totalLevel-1)/5));
+        return (int)formula;
+    }
     private void SetValue()
     {
         // if (soAgentUpgrade.level == _stageCount)
@@ -122,16 +158,25 @@ public class CharacterUpgradePanel : MonoBehaviour
         //     return;
         // }
         SetLevel();
-        SetCost();
-        SetHealth(1);
-        SetDamage(1);
+        SetTotalLevel();
         SetSlider();
         SetDigSpeed(0.5f);
-       
+        SetHealth();
+        SetCost();
+        SetDamage();
+
     }
+
+   
+
     public delegate void OnClickClose();
     public static OnClickClose onClickClose;
+    
     public static OnClickClose onClickUpgrade;
+    public static OnClickClose onClickUpgradeMelee;
+    public static OnClickClose onClickUpgradeArcher;
+    public static OnClickClose onClickUpgradeDigger;
+    public static OnClickClose onClickUpgradeGiant;
     
     private void CloseButton()
     {
@@ -139,3 +184,4 @@ public class CharacterUpgradePanel : MonoBehaviour
     }
    
 }
+

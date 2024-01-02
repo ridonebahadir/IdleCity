@@ -19,6 +19,19 @@ MonoBehaviour:
   level: 2
   stage: 1
   stageCount: 5
+  totalLevel: 19
+  multipherHealth:
+    a: 0.2
+    b: 2
+    c: 17
+  multipherDamage:
+    a: 0.05
+    b: 0.6
+    c: 4
+  multipherCost:
+    a: 1.5
+    b: 3
+    c: 35
   Sprites:
   - {fileID: 21300000, guid: 2a3b7634181863349995924cc6b18836, type: 3}
   - {fileID: 21300000, guid: 01827611637d86c439b3ea5edc87e19f, type: 3}
@@ -29,3 +42,4 @@ MonoBehaviour:
     cost: 0
     stage: 1
     level: 1
+    totalLevel: 1
