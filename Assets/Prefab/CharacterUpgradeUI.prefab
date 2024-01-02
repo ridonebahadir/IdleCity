@@ -1837,7 +1837,7 @@ MonoBehaviour:
   progressText: {fileID: 4076654541836435307}
   sliderFilled: {fileID: 4076654540745593384}
   nextIcon: {fileID: 4076654540822392547}
-  currentIcon: {fileID: 0}
+  currentIcon: {fileID: 3263135715198977372}
   healthText: {fileID: 4076654542062396752}
   damageText: {fileID: 4076654541944542875}
   costText: {fileID: 4076654542008516747}

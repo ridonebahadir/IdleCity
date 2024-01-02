@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Melee
   m_EditorClassIdentifier: 
   name: Melee
-  icon: {fileID: 21300000, guid: e019cd8c6a958a74bb226a0fd85030d6, type: 3}
+  icon: {fileID: 21300000, guid: 268c8912921d7ba428771e9a3f0d7444, type: 3}
   nextIcon: {fileID: 0}
-  cost: 34
-  level: 2
+  cost: 0
+  level: 1
   stage: 1
   stageCount: 5
-  totalLevel: 19
+  totalLevel: 1
   multipherHealth:
     a: 0.2
     b: 2

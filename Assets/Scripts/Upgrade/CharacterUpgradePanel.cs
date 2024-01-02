@@ -39,11 +39,11 @@ public class CharacterUpgradePanel : MonoBehaviour
         SetHealth();
         SetDamage();
         SetSlider();
-        SetDigSpeed(0);
+        SetDigSpeed(0.25f);
         digSpeedText.SetText("Digg Speed = "+soAgent.digSpeed);
         levelText.SetText("Level = "+soAgentUpgrade.stage);
         characterName.SetText(soAgentUpgrade.name);
-        //currentIcon.sprite = soAgentUpgrade.icon;
+        currentIcon.sprite = soAgentUpgrade.icon;
         nextIcon.sprite = soAgentUpgrade.nextIcon;
         button.onClick.AddListener(Clicked);
         closeButton.onClick.AddListener(CloseButton);
@@ -51,7 +51,7 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void SetCost()
     {
-        soAgentUpgrade.cost = Formula(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c);
+        soAgentUpgrade.cost = FormulaCost(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c);
         costText.SetText(soAgentUpgrade.cost.ToString());
     }
 
@@ -74,7 +74,7 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void SetHealth()
     {
-        soAgent.health = Formula(soAgentUpgrade.multipherHealth.a, soAgentUpgrade.multipherHealth.b,
+        soAgent.health =(int)Formula(soAgentUpgrade.multipherHealth.a, soAgentUpgrade.multipherHealth.b,
             soAgentUpgrade.multipherHealth.c);
         //_ratioHealthText.SetText("+" + value);
         healthText.SetText("Health = "+soAgent.health.ToString());
@@ -82,7 +82,7 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void SetDamage()
     {
-        soAgent.damage = Formula(soAgentUpgrade.multipherDamage.a,soAgentUpgrade.multipherDamage.b,soAgentUpgrade.multipherDamage.c);
+        soAgent.damage = (int)Formula(soAgentUpgrade.multipherDamage.a,soAgentUpgrade.multipherDamage.b,soAgentUpgrade.multipherDamage.c);
         //_ratioDamageText.SetText("+" + value);
         damageText.SetText("Damage = "+soAgent.damage.ToString());
     }
@@ -128,7 +128,7 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void SetDigSpeed(float value)
     {
-        soAgent.digSpeed += value;
+        soAgent.digSpeed = value;
         _ratioDiggSpeedText.SetText("+" + value);
         digSpeedText.SetText("Digg Speed = "+soAgent.digSpeed);
     }
@@ -145,9 +145,15 @@ public class CharacterUpgradePanel : MonoBehaviour
     private int Formula(float a, float b, float c)
     {
         // math.ceil((a*(i**2)+b*i+c)*(1.2**((i-1)//5)))
-        var formula = Math.Ceiling(
-            (a * Mathf.Pow(soAgentUpgrade.totalLevel, 2) + (b * soAgentUpgrade.totalLevel) + c)
-            * Math.Pow(1.2,(soAgentUpgrade.totalLevel-1)/5));
+        var i = soAgentUpgrade.totalLevel;
+        var formula=Math.Ceiling((a * Math.Pow(i, 2) + b * i + c) * Math.Pow(1.2, (i - 1) / 5));
+        return (int)formula;
+    }
+    private int FormulaCost(float a, float b, float c)
+    {
+        //math.ceil((a**i+b*i+c)*(1.2**((i)//5)))
+        var i = soAgentUpgrade.totalLevel;
+        var formula=Math.Ceiling((Math.Pow(a, i) + b * i + c) * Math.Pow(1.2, i / 5));
         return (int)formula;
     }
     private void SetValue()
@@ -160,7 +166,7 @@ public class CharacterUpgradePanel : MonoBehaviour
         SetLevel();
         SetTotalLevel();
         SetSlider();
-        SetDigSpeed(0.5f);
+        SetDigSpeed(0.25f);
         SetHealth();
         SetCost();
         SetDamage();

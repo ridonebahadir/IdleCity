@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 public class SelectCharacterUpgrade : MonoBehaviour
 {
-   
-
     [SerializeField] private List<GameObject> characterUpgradePanels;
 
     public RectTransform currentPanel;
@@ -93,7 +91,6 @@ public class SelectCharacterUpgrade : MonoBehaviour
        UIManager.OnClickBattle += ClosePanel;
        CharacterUpgradePanel.onClickClose += ClosePanel;
        CharacterUpgradePanel.onClickClose += CloseButton;
-
     }
 
     private void OnDisable()
