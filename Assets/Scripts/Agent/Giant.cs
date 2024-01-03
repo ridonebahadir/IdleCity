@@ -11,7 +11,6 @@ public class Giant : MonoBehaviour
     private void Start()
     {
         foreach (Transform item in levelParent)  item.gameObject.SetActive(false);
-        Debug.Log("Level = "+soAgentUpgrade.level);
         levelParent.GetChild(soAgentUpgrade.level-1).gameObject.SetActive(true);
     }
 }

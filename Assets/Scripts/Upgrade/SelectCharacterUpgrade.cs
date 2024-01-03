@@ -58,7 +58,7 @@ public class SelectCharacterUpgrade : MonoBehaviour
     {
         if (currentPanel==null) return;
         oldPanel = currentPanel;
-        oldPanel.DOAnchorPos(new Vector2(0, -850), 0.35f).OnComplete(() =>
+        oldPanel.DOAnchorPos(new Vector2(-1300, 0), 0.35f).OnComplete(() =>
             {
                 oldPanel.gameObject.SetActive(false);
             }

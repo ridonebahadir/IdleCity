@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
    private void Start()
    {
       Vector3 pos = Camera.main.ViewportToWorldPoint(goldCountPos.position);
-      coinTarget.position = Camera.main.WorldToViewportPoint(pos);
+      //coinTarget.position = Camera.main.WorldToViewportPoint(pos);
    }
 
    public void RemoveList(AgentBase agentBase,AgentType agentType)
