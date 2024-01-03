@@ -14,6 +14,7 @@ public class EnemySpawn : MonoBehaviour
     private Domination.Domination _domination;
     [SerializeField] private int waveCount;
     private SingletonHandler _singletonHandler;
+    private int gameLevel;
     
     [Space(10)]
     [Header("Wave")]
@@ -27,11 +28,8 @@ public class EnemySpawn : MonoBehaviour
     {
         _gameManager = GameManager.Instance;
         _singletonHandler = SingletonHandler.Instance;
+        gameLevel = _gameManager.soGameSettings.level;
         SetSlider();
-        
-        // StartCoroutine(SpawnEnemyRoutine(1));
-        // StartCoroutine(SpawnEnemyRoutine(2));
-        // StartCoroutine(SpawnEnemyRoutine(3));
     }
 
     private void SetSlider()
@@ -41,16 +39,16 @@ public class EnemySpawn : MonoBehaviour
         waveSlider.DOFillAmount(0, waveTime).OnComplete(() =>
         {
             // m = 2+(w-1)*w/2
-            var meleeCount = 2 + (waveCount - 1) * waveCount / 2;
+            var meleeCount = (2+gameLevel) + (waveCount - 1) * waveCount / 2;
             Debug.Log("Melee = " + meleeCount);
             Spawn(ObjectType.Enemy,meleeCount);
             
             //r = (w-1)*2-1
-            var rangeCount = (waveCount - 1) * 2 - 1;
+            var rangeCount = (waveCount - 1) * 2 - 1 + gameLevel;
             Spawn(ObjectType.EnemyArcher,rangeCount);
             Debug.Log("Range = " + rangeCount);
             //g = w - 5
-            var diggerCount = waveCount - 5;
+            var diggerCount = waveCount - 5+gameLevel;
             Spawn(ObjectType.EnemyDigger,diggerCount);
             Debug.Log("Giant = " + diggerCount);
             
@@ -59,35 +57,6 @@ public class EnemySpawn : MonoBehaviour
           
         });
     }
-
-    // private IEnumerator SpawnEnemyRoutine(int turn)
-    // {
-    //     WaitForSeconds waitForSeconds = new(waveTime);
-    //     while (true)
-    //     {
-    //         yield return waitForSeconds;
-    //         switch (turn)
-    //         {
-    //             case 1 :
-    //                 // m = 2+(w-1)*w/2
-    //                 var meleeCount = 2 + (waveCount - 1) * waveCount / 2;
-    //                 Spawn(ObjectType.Enemy,meleeCount);
-    //                 break;
-    //             case 2:
-    //                 //r = (w-1)*2-1
-    //                 var rangeCount = (waveCount - 1) * 2 - 1;
-    //                 Spawn(ObjectType.EnemyArcher,rangeCount);
-    //                 break;
-    //             case 3:
-    //                 //g = w - 5
-    //                 var diggerCount = waveCount - 5;
-    //                 Spawn(ObjectType.EnemyDigger,diggerCount);
-    //                 break;
-    //         }
-    //         
-    //       
-    //     }
-    // }
     private void Spawn(ObjectType objectType,int count)
     {
         if (count<=0) return;

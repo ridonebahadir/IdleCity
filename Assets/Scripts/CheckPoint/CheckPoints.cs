@@ -21,14 +21,14 @@ public class CheckPoints : MonoBehaviour
     {
         if (splineFollower.direction == Spline.Direction.Backward)
         {
-            if (homeTurn==1) GameManager.Instance.uIManager.FailPanelOpen();
+            if (homeTurn==1) GameManager.Instance.FailPanelOpen();
             homeTurn--;
             checkPoints[homeTurn].SetActiveHome();
            
         }
         else
         {
-            if (homeTurn==checkPoints.Count-1) GameManager.Instance.uIManager.WinPanelOpen();
+            if (homeTurn==checkPoints.Count-1) GameManager.Instance.WinPanelOpen();
             checkPoints[homeTurn].SetActiveHome();
             homeTurn++;
         }

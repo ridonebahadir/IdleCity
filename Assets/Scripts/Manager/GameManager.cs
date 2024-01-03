@@ -7,11 +7,15 @@ using Agent;
 using LeonBrave;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 
 public class GameManager : MonoBehaviour
 {
+   public SOGameSettings soGameSettings;
+   
    public GameObject damageTextPrefab;
    public static GameManager Instance;
   
@@ -22,17 +26,22 @@ public class GameManager : MonoBehaviour
    public List<AgentBase> enemies;
    public List<AgentBase> soldiers;
    
-   
-
-   
-   
-   
    [Space(10)]
    [Header("REWARD")]
    [SerializeField] private float goldCount;
    [SerializeField] private float goldRate;
    [SerializeField] private RectTransform goldCountPos;
    public Transform coinTarget;
+   
+   [Header("PANELS")] 
+   [SerializeField] GameObject winPanel;
+   [SerializeField] GameObject failPanel;
+   [SerializeField] private Button restWin;
+   [SerializeField] private Button restFail;
+   [SerializeField] private Button restButton;
+   
+   
+   
    
    private void Awake()
    {
@@ -47,7 +56,10 @@ public class GameManager : MonoBehaviour
 
    private void Start()
    {
-      Vector3 pos = Camera.main.ViewportToWorldPoint(goldCountPos.position);
+      restWin.onClick.AddListener(SceneRest);
+      restFail.onClick.AddListener(SceneRest);
+      restButton.onClick.AddListener(SceneRest);
+      //Vector3 pos = Camera.main.ViewportToWorldPoint(goldCountPos.position);
       //coinTarget.position = Camera.main.WorldToViewportPoint(pos);
    }
 
@@ -95,7 +107,7 @@ public class GameManager : MonoBehaviour
    private void SetText()
    {
       uIManager.goldTextCount.text =Mathf.Floor(goldCount).ToString();
-      uIManager.timeText.text =goldRate.ToString()+"/s";
+      uIManager.timeText.text =goldRate.ToString("f1")+"/s";
    }
    public void GetReward(float value)
    {
@@ -135,5 +147,21 @@ public class GameManager : MonoBehaviour
          furthest = obj;
       }
       return furthest.small;
+   }
+   
+   public void WinPanelOpen()
+   {
+      soGameSettings.level++;
+      winPanel.SetActive(true);
+   }
+
+   public void FailPanelOpen()
+   {
+      failPanel.SetActive(true);
+   }
+   private void SceneRest()
+   {
+      var activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
+      SceneManager.LoadScene(activeSceneIndex);
    }
 }

@@ -107,18 +107,7 @@ namespace Domination
                     speed = 0;
                 }
             }
-
-            // var a = splineFollower.GetPercent();
-            // if (!_start) return;
-            // switch (a)
-            // {
-            //     case 0f:
-            //         GameManager.Instance.uIManager.FailPanelOpen();
-            //         break;
-            //     case 1f:
-            //         GameManager.Instance.uIManager.WinPanelOpen();
-            //         break;
-            // }
+            
         }
         private void FixedUpdate()
         {
@@ -306,101 +295,5 @@ namespace Domination
                 else   _turnAlliesArcher = 0;
             }
         }
-        
-        
-        
-        
-        
-        // private IEnumerator SetupDomination()
-        // {
-        //     while (!_start)
-        //     {
-        //
-        //         if (_turn == 3)
-        //         {
-        //             speed = 0;
-        //             StopCoroutine(_dominationMove);
-        //             splineFollower.followSpeed = 0;
-        //             dominationMoveDirect = DominationMoveDirect.None;
-        //             _start = true;
-        //             
-        //         }
-        //         yield return _wait;
-        //        
-        //     }
-        // }
-        // private IEnumerator DominationMove()
-        // {
-        //     while (true)
-        //     {
-        //         if (dominationMoveDirect == DominationMoveDirect.AlliesMove)
-        //         {
-        //             //_currentDistance += Time.deltaTime*speed;
-        //             bridgeMesh.transform.Rotate(Vector3.right * rotationSpeed * Time.deltaTime);
-        //             splineFollower.followSpeed = speed;
-        //             // _goneRoad += Time.deltaTime*speed;
-        //             // if (_size<=riverWidth) _size += Time.deltaTime * _sizeSpeed; 
-        //             // if (_goneRoad>=_dist)
-        //             // {
-        //             //     _size = 0.1f;
-        //             //     _goneRoad = 0;
-        //             //     if (_turn == _points.Length - 3)
-        //             //     {
-        //             //         Debug.Log("WIN");
-        //             //         GameManager.Instance.uIManager.WinPanelOpen();
-        //             //         break;
-        //             //     }
-        //             //     _turn++;
-        //             //     Calculate();
-        //             // }
-        //         }
-        //         if(dominationMoveDirect == DominationMoveDirect.EnemyMove)
-        //         {
-        //             //_currentDistance -= Time.deltaTime*speed;
-        //             bridgeMesh.transform.Rotate(-Vector3.right * rotationSpeed * Time.deltaTime);
-        //             splineFollower.followSpeed = -speed;
-        //             // _goneRoad -= Time.deltaTime*speed;
-        //             // if (_size>=0.1f) _size -= (Time.deltaTime * _sizeSpeed);
-        //             //
-        //             // if (_goneRoad<=0)
-        //             // {
-        //             //     if (_turn == 1)
-        //             //     {
-        //             //         Debug.Log("LOSE");
-        //             //         GameManager.Instance.uIManager.FailPanelOpen();
-        //             //         break;
-        //             //     }
-        //             //     _size = riverWidth;
-        //             //     _turn--;
-        //             //     Calculate();
-        //             //     _goneRoad = _dist;
-        //             //
-        //             //
-        //             // }
-        //         }
-        //         //splinePositioner.SetDistance(_currentDistance); 
-        //         //splineComputer.SetPointSize(_turn,_size);
-        //         var a = splineFollower.GetPercent();
-        //         splineMesh.SetClipRange(0,a);
-        //         yield return _wait;
-        //     }
-        //
-        // }
-        // private void Calculate()
-        // {
-        //     if ( dominationMoveDirect == DominationMoveDirect.AlliesMove)
-        //     {
-        //         _dist = Vector3.Distance(sphere.position, _points[_turn+1].position);
-        //         _sizeSpeed = (riverWidth-(splineComputer.GetPoint(_turn).size)) / (_dist / speed);
-        //     }
-        //     else
-        //     {
-        //         _dist = Vector3.Distance(sphere.position, _points[_turn].position);
-        //         _sizeSpeed = (splineComputer.GetPoint(_turn).size) / (_dist / speed);
-        //     }
-        //
-        //  
-        // }
-       
     }
 }

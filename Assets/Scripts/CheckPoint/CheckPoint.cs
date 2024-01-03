@@ -8,7 +8,7 @@ public class CheckPoint : MonoBehaviour
    public GameObject solidHome;
    public GameObject ruinHome;
    private bool _active;
-   private int _rate = 1;
+   private float _rate = 0.3f;
    private void Start()
    {
       _gameManager = GameManager.Instance;
