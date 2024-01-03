@@ -39,9 +39,8 @@ public class CharacterUpgradePanel : MonoBehaviour
         SetHealth();
         SetDamage();
         SetSlider();
-        SetDigSpeed(0.25f);
-        digSpeedText.SetText("Digg Speed = "+soAgent.digSpeed);
-        levelText.SetText("Level = "+soAgentUpgrade.stage);
+        SetDigSpeed();
+        levelText.SetText("Level "+soAgentUpgrade.stage);
         characterName.SetText(soAgentUpgrade.name);
         currentIcon.sprite = soAgentUpgrade.icon;
         nextIcon.sprite = soAgentUpgrade.nextIcon;
@@ -51,7 +50,7 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void SetCost()
     {
-        soAgentUpgrade.cost = FormulaCost(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c);
+        soAgentUpgrade.cost = FormulaCost(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c,0);
         costText.SetText(soAgentUpgrade.cost.ToString());
     }
 
@@ -75,15 +74,19 @@ public class CharacterUpgradePanel : MonoBehaviour
     private void SetHealth()
     {
         soAgent.health =(int)Formula(soAgentUpgrade.multipherHealth.a, soAgentUpgrade.multipherHealth.b,
-            soAgentUpgrade.multipherHealth.c);
-        //_ratioHealthText.SetText("+" + value);
+            soAgentUpgrade.multipherHealth.c,0);
+        var ratio = Formula(soAgentUpgrade.multipherHealth.a, soAgentUpgrade.multipherHealth.b,
+            soAgentUpgrade.multipherHealth.c, 1)-soAgent.health;
+        _ratioHealthText.SetText("+" + ratio);
         healthText.SetText("Health = "+soAgent.health.ToString());
     }
 
     private void SetDamage()
     {
-        soAgent.damage = (int)Formula(soAgentUpgrade.multipherDamage.a,soAgentUpgrade.multipherDamage.b,soAgentUpgrade.multipherDamage.c);
-        //_ratioDamageText.SetText("+" + value);
+        soAgent.damage = (int)Formula(soAgentUpgrade.multipherDamage.a,soAgentUpgrade.multipherDamage.b,soAgentUpgrade.multipherDamage.c,0);
+        var ratio = Formula(soAgentUpgrade.multipherDamage.a, soAgentUpgrade.multipherDamage.b,
+            soAgentUpgrade.multipherDamage.c, 1)-soAgent.damage;
+        _ratioDamageText.SetText("+" + ratio);
         damageText.SetText("Damage = "+soAgent.damage.ToString());
     }
 
@@ -99,7 +102,7 @@ public class CharacterUpgradePanel : MonoBehaviour
             UpgradeType();
             
         }
-        levelText.SetText("Level = "+soAgentUpgrade.level);
+        levelText.SetText("Level "+soAgentUpgrade.level);
     }
     private void SetTotalLevel()
     {
@@ -126,11 +129,13 @@ public class CharacterUpgradePanel : MonoBehaviour
         }
     }
 
-    private void SetDigSpeed(float value)
+    private void SetDigSpeed()
     {
-        soAgent.digSpeed = value;
-        _ratioDiggSpeedText.SetText("+" + value);
-        digSpeedText.SetText("Digg Speed = "+soAgent.digSpeed);
+        soAgent.digSpeed = (soAgentUpgrade.totalLevel*0.15f)+0.1f; //0.25f first value
+        var dig = soAgent.digSpeed * 20;
+        var ratio=(((soAgentUpgrade.totalLevel+1)*0.15f+0.1f)*20)-dig;
+        _ratioDiggSpeedText.SetText("+" + Math.Round(ratio));
+        digSpeedText.SetText("Digg Speed = "+(int)dig);
     }
     private void Clicked()
     {
@@ -142,17 +147,17 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     
 
-    private int Formula(float a, float b, float c)
+    private int Formula(float a, float b, float c,int levelPlus)
     {
         // math.ceil((a*(i**2)+b*i+c)*(1.2**((i-1)//5)))
-        var i = soAgentUpgrade.totalLevel;
+        var i = soAgentUpgrade.totalLevel+levelPlus;
         var formula=Math.Ceiling((a * Math.Pow(i, 2) + b * i + c) * Math.Pow(1.2, (i - 1) / 5));
         return (int)formula;
     }
-    private int FormulaCost(float a, float b, float c)
+    private int FormulaCost(float a, float b, float c,int levelPlus)
     {
         //math.ceil((a**i+b*i+c)*(1.2**((i)//5)))
-        var i = soAgentUpgrade.totalLevel;
+        var i = soAgentUpgrade.totalLevel+levelPlus;
         var formula=Math.Ceiling((Math.Pow(a, i) + b * i + c) * Math.Pow(1.2, i / 5));
         return (int)formula;
     }
@@ -166,7 +171,7 @@ public class CharacterUpgradePanel : MonoBehaviour
         SetLevel();
         SetTotalLevel();
         SetSlider();
-        SetDigSpeed(0.25f);
+        SetDigSpeed();
         SetHealth();
         SetCost();
         SetDamage();
