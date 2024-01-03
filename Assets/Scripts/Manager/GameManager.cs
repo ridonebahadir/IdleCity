@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 
 using Agent;
-
+using DG.Tweening;
 using LeonBrave;
-
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
    [Space(10)]
    [Header("REWARD")]
    [SerializeField] private float goldCount;
+   [SerializeField] private float xpCount;
+   [SerializeField] private float diamondCount;
    [SerializeField] private float goldRate;
    [SerializeField] private RectTransform goldCountPos;
    public Transform coinTarget;
@@ -43,6 +45,12 @@ public class GameManager : MonoBehaviour
    [SerializeField] private Button restButton;
    
    
+   [Space(10)] [Header("REWARD")] 
+   public TextMeshProUGUI goldTextCount;
+   public TextMeshProUGUI xpTextCount;
+   public TextMeshProUGUI diamondTextCount;
+   public TextMeshProUGUI timeText;
+
    
    
    private void Awake()
@@ -66,8 +74,8 @@ public class GameManager : MonoBehaviour
       {
          randomEnemyTurnList.Add(Random.Range(1, 5));
       }
-      uIManager.xpTextCount.text =soGameSettings.xp.ToString();
-      uIManager.diamondTextCount.text =soGameSettings.diamond.ToString();
+      xpTextCount.text =soGameSettings.xp.ToString();
+      diamondTextCount.text =soGameSettings.diamond.ToString();
       //Vector3 pos = Camera.main.ViewportToWorldPoint(goldCountPos.position);
       //coinTarget.position = Camera.main.WorldToViewportPoint(pos);
    }
@@ -134,9 +142,13 @@ public class GameManager : MonoBehaviour
    }
    private void Update()
    {
+      if (Input.GetKeyDown(KeyCode.A))
+      {
+         GetXpReward(1);
+      }
       SetText();
       goldCount += goldRate * Time.deltaTime;
-      soGameSettings.xp += (int)(goldRate * Time.deltaTime);
+      xpCount +=goldRate * Time.deltaTime;
    }
    public void SetGoldRate(float a)
    {
@@ -144,10 +156,10 @@ public class GameManager : MonoBehaviour
    }
    private void SetText()
    {
-      uIManager.goldTextCount.text =Mathf.Floor(goldCount).ToString();
-      uIManager.timeText.text =goldRate.ToString("f1")+"/s";
-      uIManager.xpTextCount.text =soGameSettings.xp.ToString();
-      uIManager.diamondTextCount.text =soGameSettings.diamond.ToString();
+      goldTextCount.text =Mathf.Floor(goldCount).ToString();
+      timeText.text =goldRate.ToString("f1")+"/s";
+      xpTextCount.text =Mathf.Floor(xpCount).ToString();
+      diamondTextCount.text =diamondCount.ToString();
    }
    public void GetReward(float value)
    {
@@ -156,17 +168,31 @@ public class GameManager : MonoBehaviour
       
    }
 
+   private Tween _tweenXp;
+   private Tween _tweenDiamond;
    public void GetXpReward(int value)
    {
-      soGameSettings.xp += value;
-      
+      xpCount += value;
+      if (_tweenXp!=null) return;
+      xpTextCount.color = Color.yellow;
+      _tweenXp=xpTextCount.rectTransform.DOPunchScale(Vector3.one*0.75f,0.25f).OnComplete(() =>
+      {
+         xpTextCount.color = Color.white;
+         _tweenXp = null;
+      });
       
    }
 
    public void GetDiamondReward(int value)
    {
-      soGameSettings.diamond += value;
-     
+      diamondCount += value;
+      if (_tweenDiamond!=null) return;
+      diamondTextCount.color = Color.yellow;
+      _tweenDiamond=diamondTextCount.rectTransform.DOPunchScale(Vector3.one*0.75f,0.25f).OnComplete(() =>
+      {
+         diamondTextCount.color = Color.white;
+         _tweenDiamond = null;
+      });
    }
    public float GetGold => goldCount;
    public float GetGoldRate => goldRate;
@@ -217,5 +243,10 @@ public class GameManager : MonoBehaviour
    {
       var activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
       SceneManager.LoadScene(activeSceneIndex);
+   }
+   private void OnApplicationQuit()
+   {
+      soGameSettings.DefaultData();
+        
    }
 }

@@ -15,3 +15,7 @@ MonoBehaviour:
   level: 0
   xp: 0
   diamond: 0
+  DefaultGameSettings:
+    level: 0
+    xp: 0
+    diamond: 0

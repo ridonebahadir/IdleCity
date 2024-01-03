@@ -35,8 +35,8 @@ public class EnemySpawn : MonoBehaviour
     private void SetSlider()
     {
         waveText.SetText("Wave "+(waveCount).ToString());
-        waveSlider.fillAmount = 1;
-        waveSlider.DOFillAmount(0, waveTime).OnComplete(() =>
+        waveSlider.fillAmount = 0;
+        waveSlider.DOFillAmount(1, waveTime).OnComplete(() =>
         {
             // m = 2+(w-1)*w/2
             var meleeCount = (2+gameLevel) + (waveCount - 1) * waveCount / 2;

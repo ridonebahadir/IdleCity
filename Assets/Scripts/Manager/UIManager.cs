@@ -28,16 +28,13 @@ public class UIManager : MonoBehaviour
     [Header("UPGRADE")] 
     //public GameObject characterUpgradeUI;
     public RectTransform selectedTransform;
+    
+    [Header("Rewards")] 
+    public SOGameSettings soGameSettings;
+    public TextMeshProUGUI xpTextCountMainMenu;
+    public TextMeshProUGUI diamondTextCountMainMenu;
 
     
-    
-    [Space(10)]
-    [Header("REWARD")]
-    public TextMeshProUGUI goldTextCount;
-    public TextMeshProUGUI xpTextCount;
-    public TextMeshProUGUI diamondTextCount;
-    public TextMeshProUGUI timeText;
-
     private void Awake()
     {
         mainBottom.anchoredPosition = new Vector2(0, -850);
@@ -59,7 +56,9 @@ public class UIManager : MonoBehaviour
         gameCanvas.SetActive(false);
         gameArea.SetActive(false);
         spawnManager.SetActive(false);
-        
+
+        SetText();
+
     }
 
     
@@ -83,5 +82,11 @@ public class UIManager : MonoBehaviour
            gameCanvasBottom.DOAnchorPos(new Vector2(0, 0), 0.35f);
            OnClickedBattle?.Invoke();
        });
+   }
+
+   private void SetText()
+   {
+       xpTextCountMainMenu.SetText(soGameSettings.xp.ToString());
+       diamondTextCountMainMenu.SetText(soGameSettings.diamond.ToString());
    }
 }

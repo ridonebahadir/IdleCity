@@ -34,18 +34,17 @@ public class Coin : MonoBehaviour
     private void GoCanvas(float rewardValue,Transform target,bool isCoin)
     {
         _sequenceSecond = DOTween.Sequence();
-        if (isCoin)
-        {
-            gameManager.GetReward(rewardValue);
-            gameManager.GetXpReward((int)rewardValue);
-        }
-        
-        if (!isCoin) gameManager.GetDiamondReward(1);
         _sequenceSecond.SetDelay(1f).Append(transform.DOMove(target.position, 1f).OnComplete(() =>
         {
-            if (isCoin) singletonHandler.GetSingleton<ObjectPool>().AddObject(gameObject, ObjectType.Coin);
+            if (isCoin)
+            {
+                gameManager.GetReward(rewardValue);
+                gameManager.GetXpReward((int)rewardValue);
+                singletonHandler.GetSingleton<ObjectPool>().AddObject(gameObject, ObjectType.Coin);
+            }
             else
             {
+                gameManager.GetDiamondReward(1);
                 gameObject.SetActive(false);
             }
         }));
