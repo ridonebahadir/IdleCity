@@ -7,4 +7,7 @@ using UnityEngine;
 public class SOGameSettings : ScriptableObject
 {
     public int level;
+    public int xp;
+    public int diamond;
+
 }

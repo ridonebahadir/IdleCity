@@ -34,6 +34,8 @@ public class UIManager : MonoBehaviour
     [Space(10)]
     [Header("REWARD")]
     public TextMeshProUGUI goldTextCount;
+    public TextMeshProUGUI xpTextCount;
+    public TextMeshProUGUI diamondTextCount;
     public TextMeshProUGUI timeText;
 
     private void Awake()

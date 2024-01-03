@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: SOGameSettings
   m_EditorClassIdentifier: 
   level: 0
+  xp: 0
+  diamond: 0

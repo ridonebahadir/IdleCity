@@ -14,15 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agentType: 1
   speed: 10
-  diggSpeed: 0.5
   attackRate: 0
   health: 20
   damage: 2
   attackDistance: 3
   cost: 10
   reward: 3
-  digSpeed: 0.5
+  digSpeed: 0.2
   DefaultValue:
     health: 20
     damage: 2
-    digSpeed: 0.5
+    digSpeed: 0.2

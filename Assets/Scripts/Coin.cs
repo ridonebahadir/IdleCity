@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using LeonBrave;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Sequence = DG.Tweening.Sequence;
 
 public class Coin : MonoBehaviour
 {
@@ -12,7 +14,7 @@ public class Coin : MonoBehaviour
      private Sequence _sequence;
      private Sequence _sequenceSecond;
 
-    public void Inıt(Vector3 startPos,float rewardValue)
+    public void Inıt(Vector3 startPos,float rewardValue,Transform endPoint,bool isCoin)
     {
 
         _sequence = DOTween.Sequence();
@@ -24,17 +26,28 @@ public class Coin : MonoBehaviour
         gameObject.SetActive(true);
         _sequence.Append(transform.DOJump(target, 5, 0, 0.5f).OnComplete(() =>
         {
-            GoCanvas(rewardValue);
+            GoCanvas(rewardValue,endPoint,isCoin);
             
         }).SetEase(Ease.OutExpo));
     }
 
-    private void GoCanvas(float rewardValue)
+    private void GoCanvas(float rewardValue,Transform target,bool isCoin)
     {
         _sequenceSecond = DOTween.Sequence();
-        var target = gameManager.coinTarget.position;
-        gameManager.GetReward(rewardValue);
-        _sequenceSecond.SetDelay(1f).Append(transform.DOMove(target, 1f).OnComplete(() =>
-            singletonHandler.GetSingleton<ObjectPool>().AddObject(gameObject, ObjectType.Coin)));
+        if (isCoin)
+        {
+            gameManager.GetReward(rewardValue);
+            gameManager.GetXpReward((int)rewardValue);
+        }
+        
+        if (!isCoin) gameManager.GetDiamondReward(1);
+        _sequenceSecond.SetDelay(1f).Append(transform.DOMove(target.position, 1f).OnComplete(() =>
+        {
+            if (isCoin) singletonHandler.GetSingleton<ObjectPool>().AddObject(gameObject, ObjectType.Coin);
+            else
+            {
+                gameObject.SetActive(false);
+            }
+        }));
     }
 }

@@ -357,7 +357,9 @@ namespace Agent
             var coin=  SingletonHandler.GetSingleton<ObjectPool>().TakeObject(ObjectType.Coin).transform.GetComponent<Coin>();
             coin.gameManager = _gameManager;
             coin.singletonHandler = SingletonHandler;
-            coin.Inıt(transform.position,soAgent.reward);
+            coin.Inıt(transform.position,soAgent.reward,_gameManager.coinTarget,true);
+            
+            
         }
         // public void SetPercentHealth(float value)
         // {
