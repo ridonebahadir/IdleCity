@@ -66,7 +66,15 @@ public class EnemySpawn : MonoBehaviour
             //var cloneObj= Instantiate(obj, pos.position,Quaternion.identity,pos);
             var rand = Random.Range(10, -10);
             cloneObj.transform.localPosition = new Vector3(rand, 0, 0);
-            cloneObj.transform.localScale = new Vector3(1.75f, 1.75f, 1.75f);
+            if (objectType==ObjectType.EnemyDigger)
+            {
+                cloneObj.transform.localScale = Vector3.one*2f;
+            }
+            else
+            {
+                cloneObj.transform.localScale = Vector3.one*1.75f;
+            }
+           
             cloneObj.SetActive(true);
             AgentBase agentBase = cloneObj.GetComponent<AgentBase>();
             agentBase.InıtAgent();

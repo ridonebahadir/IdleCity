@@ -47,20 +47,38 @@ public class MainAreaAgentBase : MonoBehaviour
         _animator.SetBool("Attack",false);
         _animator.SetBool("Wait",false);
         
+        if (_one==null)
+        {
+            _one = One();
+            StartCoroutine(_one);
+        }
         if (_turn >= targets.Count-1)
         {
+            
             _turn = 0;
             return;
         }
        
         _turn++;
     }
+
+    private IEnumerator _zero;
+    private IEnumerator _one;
     private void Update()
     {
         var posTarget = _target.position;
         _navMeshAgent.SetDestination(posTarget);
         var dist = Vector3.Distance(transform.position, posTarget);
         if (!(dist <= 2)) return;
+        if (_turn==1)
+        {
+            if (_zero==null)
+            {
+                _zero = Zero();
+                StartCoroutine(_zero);
+            }
+            
+        }
         _waitTime -= Time.deltaTime;
         
         if (_waitTime<=0)
@@ -71,7 +89,23 @@ public class MainAreaAgentBase : MonoBehaviour
         SetAnim();
 
     }
-    
+
+    private IEnumerator Zero()
+    {
+        transform.DOScale(Vector3.zero, 0.5f).OnComplete(() =>
+        {
+            _zero = null;
+        });
+        yield return null;
+    }
+    private IEnumerator One()
+    {
+        transform.DOScale(Vector3.one, 0.5f).OnComplete(() =>
+        {
+            _one = null;
+        });
+        yield return null;
+    }
 
     private IEnumerator _coroutine;
     
