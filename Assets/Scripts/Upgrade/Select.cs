@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 
 public enum HomeType
 {
@@ -18,6 +18,8 @@ public class Select : MonoBehaviour
    [SerializeField] private HomeType homeType;
    [SerializeField] private Transform levelParent;
    [SerializeField] private SOAgentUpgrade soTownUpgrade;
+   [SerializeField] private ParticleSystem cloud;
+   
    
    private SelectCharacterUpgrade selectCharacterUpgrade;
    public Collider col;
@@ -92,8 +94,20 @@ public class Select : MonoBehaviour
    
    private void LevelParentHome()
    {
-      foreach (Transform item in levelParent)  item.gameObject.SetActive(false);
-      levelParent.GetChild(soTownUpgrade.level-1).gameObject.SetActive(true);
+      StartCoroutine(ChangeMesh());
+
+      IEnumerator ChangeMesh()
+      {
+        
+         var startScale = levelParent.localScale;
+         yield return new WaitForSeconds(0.25f);
+         levelParent.localScale = Vector3.zero;
+         levelParent.DOScale(startScale, 1f).SetEase(Ease.OutBounce);
+         cloud.Play();
+         foreach (Transform item in levelParent)  item.gameObject.SetActive(false);
+         levelParent.GetChild(soTownUpgrade.level-1).gameObject.SetActive(true);
+      }
+     
    }
    
    private void OnEnable()

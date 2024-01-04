@@ -168,9 +168,14 @@ public class CharacterUpgradePanel : MonoBehaviour
                 return;
             }
         }
+       
       
         
         SetValue();
+        if (CharactersType==CharactersType.Town)
+        {
+            CloseButton();
+        }
       
     }
 
