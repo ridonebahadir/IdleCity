@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 public enum HomeType
@@ -29,6 +30,7 @@ public class Select : MonoBehaviour
 
    private void OnMouseDown()
    {
+      if (EventSystem.current.IsPointerOverGameObject()) return;
       CloseCollider();
       switch (homeType)
       {

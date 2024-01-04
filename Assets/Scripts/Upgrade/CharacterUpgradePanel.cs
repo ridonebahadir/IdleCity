@@ -31,6 +31,8 @@ public class CharacterUpgradePanel : MonoBehaviour
     [SerializeField] private Button button;
     [SerializeField] private Button closeButton;
      private int _stageCount;
+     [SerializeField] private EventSystem _eventSystem;
+     
      
     private void Start()
     {
@@ -137,6 +139,7 @@ public class CharacterUpgradePanel : MonoBehaviour
         _ratioDiggSpeedText.SetText("+" + Math.Round(ratio));
         digSpeedText.SetText("Digg Speed = "+(int)dig);
     }
+
     private void Clicked()
     {
         if (soAgentUpgrade.level>=5 && soAgentUpgrade.stage>=4) return;
