@@ -17,7 +17,8 @@ public class Select : MonoBehaviour
 { 
    [SerializeField] private HomeType homeType;
    [SerializeField] private Transform levelParent;
-   [SerializeField] private SOTownVillage soTownVillage;
+   [SerializeField] private SOAgentUpgrade soTownUpgrade;
+   
    private SelectCharacterUpgrade selectCharacterUpgrade;
    public Collider col;
    
@@ -92,54 +93,26 @@ public class Select : MonoBehaviour
    private void LevelParentHome()
    {
       foreach (Transform item in levelParent)  item.gameObject.SetActive(false);
-      levelParent.GetChild(soTownVillage.townLevel-1).gameObject.SetActive(true);
+      levelParent.GetChild(soTownUpgrade.level-1).gameObject.SetActive(true);
    }
    
    private void OnEnable()
    {
       CharacterUpgradePanel.onClickClose += OpenCollider;
-      switch (homeType)
+      CharacterUpgradePanel.onClickUpgradeTown += LevelParentHome;
+      if (homeType==HomeType.VillageTown)
       {
-         case HomeType.Melee:
-            CharacterUpgradePanel.onClickUpgradeMelee += LevelParentHome;
-            break;
-         case HomeType.Archer:
-            CharacterUpgradePanel.onClickUpgradeArcher += LevelParentHome;
-            break;
-         case HomeType.Digger:
-            CharacterUpgradePanel.onClickUpgradeDigger += LevelParentHome;
-            break;
-         case HomeType.Giant:
-            CharacterUpgradePanel.onClickUpgradeGiant += LevelParentHome;
-            break;
-         case HomeType.VillageTown:
-            CharacterUpgradePanel.onClickUpgradeGiant += LevelParentHome;
-            CharacterUpgradePanel.OnClickTownRequirement += Selected;
-            break;
+         CharacterUpgradePanel.OnClickTownRequirement += Selected;
       }
    }
 
    private void OnDisable()
    {
       CharacterUpgradePanel.onClickClose -= OpenCollider;
-      switch (homeType)
+      CharacterUpgradePanel.onClickUpgradeTown -= LevelParentHome;
+      if (homeType==HomeType.VillageTown)
       {
-         case HomeType.Melee:
-            CharacterUpgradePanel.onClickUpgradeMelee -= LevelParentHome;
-            break;
-         case HomeType.Archer:
-            CharacterUpgradePanel.onClickUpgradeArcher -= LevelParentHome;
-            break;
-         case HomeType.Digger:
-            CharacterUpgradePanel.onClickUpgradeDigger -= LevelParentHome;
-            break;
-         case HomeType.Giant:
-            CharacterUpgradePanel.onClickUpgradeGiant -= LevelParentHome;
-            break;
-         case HomeType.VillageTown:
-            CharacterUpgradePanel.onClickUpgradeTown -= LevelParentHome;
-            CharacterUpgradePanel.OnClickTownRequirement -= Selected;
-            break;
+         CharacterUpgradePanel.OnClickTownRequirement -= Selected;
       }
    }
    
