@@ -43,13 +43,13 @@ public class SelectCharacterUpgrade : MonoBehaviour
     }
     public void Giant()
     {
-        onClickDigger?.Invoke(3);
+        onClickGiant?.Invoke(3);
         ClosePanel();
         OpenPanel(3);
     }
     public void VillageTown()
     {
-        onClickDigger?.Invoke(4);
+        onClickVillageTown?.Invoke(4);
         ClosePanel();
         OpenPanel(4);
     }

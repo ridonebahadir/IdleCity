@@ -158,5 +158,6 @@ public enum CharactersType
     Melee,
     Archer,
     Digger,
-    Giant
+    Giant,
+    Town
 }

@@ -52,6 +52,7 @@ public class UIRawImageManager : MonoBehaviour
         SelectCharacterUpgrade.onClickMelee += Open;
         SelectCharacterUpgrade.onClickArcher += Open;
         SelectCharacterUpgrade.onClickDigger += Open;
+        SelectCharacterUpgrade.onClickGiant += Open;
 
         RawImageButton.OnClickDown += SetMovingBool;
         RawImageButton.OnClickUp += SetMovingBool;
@@ -65,6 +66,7 @@ public class UIRawImageManager : MonoBehaviour
         SelectCharacterUpgrade.onClickMelee -= Open;
         SelectCharacterUpgrade.onClickArcher -= Open;
         SelectCharacterUpgrade.onClickDigger -= Open;
+        SelectCharacterUpgrade.onClickGiant -= Open;
         
         RawImageButton.OnClickDown -= SetMovingBool;
         RawImageButton.OnClickUp -= SetMovingBool;

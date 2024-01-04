@@ -14,6 +14,7 @@ public class CharacterUpgradePanel : MonoBehaviour
     public CharactersType CharactersType;
     public SOAgent soAgent;
     public SOAgentUpgrade soAgentUpgrade;
+    public SOAgentUpgrade soTownUpgrade;
     [SerializeField] private TextMeshProUGUI characterName;
     [SerializeField] private TextMeshProUGUI progressText;
     [SerializeField] private Image sliderFilled;
@@ -29,12 +30,24 @@ public class CharacterUpgradePanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _ratioDiggSpeedText;
     
     [SerializeField] private Button button;
+    [SerializeField] private Button buttonRequiment;
     [SerializeField] private Button closeButton;
+
+    
+    
      private int _stageCount;
-     [SerializeField] private EventSystem _eventSystem;
-     
-     
-    private void Start()
+
+     private void OnEnable()
+     {
+         if (soAgentUpgrade.stage == _stageCount && (soAgentUpgrade.level != soTownUpgrade.level))
+         {
+             buttonRequiment.gameObject.SetActive(false);
+             button.gameObject.SetActive(true);
+         }
+        
+     }
+
+     private void Start()
     {
         _stageCount = soAgentUpgrade.stageCount;
         SetCost();
@@ -47,6 +60,7 @@ public class CharacterUpgradePanel : MonoBehaviour
         currentIcon.sprite = soAgentUpgrade.icon;
         nextIcon.sprite = soAgentUpgrade.nextIcon;
         button.onClick.AddListener(Clicked);
+        buttonRequiment.onClick.AddListener(ClickedGoTown);
         closeButton.onClick.AddListener(CloseButton);
     }
 
@@ -94,7 +108,6 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void SetLevel()
     {
-        //soAgent.level++;
         soAgentUpgrade.stage++;
         if (soAgentUpgrade.stage == _stageCount+1)
         {
@@ -128,6 +141,9 @@ public class CharacterUpgradePanel : MonoBehaviour
             case CharactersType.Giant:
                 onClickUpgradeGiant?.Invoke();
                 break;
+            case CharactersType.Town:
+                onClickUpgradeTown?.Invoke();
+                break;
         }
     }
 
@@ -143,9 +159,24 @@ public class CharacterUpgradePanel : MonoBehaviour
     private void Clicked()
     {
         if (soAgentUpgrade.level>=5 && soAgentUpgrade.stage>=4) return;
+        if (CharactersType!=CharactersType.Town)
+        {
+            if (soAgentUpgrade.stage == _stageCount && (soAgentUpgrade.level == soTownUpgrade.level))
+            {
+                buttonRequiment.gameObject.SetActive(true);
+                button.gameObject.SetActive(false);
+                return;
+            }
+        }
+      
         
         SetValue();
       
+    }
+
+    private void ClickedGoTown()
+    {
+        OnClickTownRequirement?.Invoke();
     }
 
     
@@ -191,7 +222,11 @@ public class CharacterUpgradePanel : MonoBehaviour
     public static OnClickClose onClickUpgradeArcher;
     public static OnClickClose onClickUpgradeDigger;
     public static OnClickClose onClickUpgradeGiant;
-    
+    public static OnClickClose onClickUpgradeTown;
+
+    public delegate void OnClickRequirement();
+
+    public static OnClickRequirement OnClickTownRequirement;
     private void CloseButton()
     {
         onClickClose?.Invoke();

@@ -17,7 +17,7 @@ public class Select : MonoBehaviour
 { 
    [SerializeField] private HomeType homeType;
    [SerializeField] private Transform levelParent;
-   [SerializeField] private SOAgentUpgrade soAgentUpgrade;
+   [SerializeField] private SOTownVillage soTownVillage;
    private SelectCharacterUpgrade selectCharacterUpgrade;
    public Collider col;
    
@@ -31,6 +31,11 @@ public class Select : MonoBehaviour
    private void OnMouseDown()
    {
       if (EventSystem.current.IsPointerOverGameObject()) return;
+      Selected();
+   }
+
+   private void Selected()
+   {
       CloseCollider();
       switch (homeType)
       {
@@ -51,7 +56,6 @@ public class Select : MonoBehaviour
             break;
       }
    }
-
    private void CloseCollider()
    {
       col.enabled = false;
@@ -88,7 +92,7 @@ public class Select : MonoBehaviour
    private void LevelParentHome()
    {
       foreach (Transform item in levelParent)  item.gameObject.SetActive(false);
-      levelParent.GetChild(soAgentUpgrade.level-1).gameObject.SetActive(true);
+      levelParent.GetChild(soTownVillage.townLevel-1).gameObject.SetActive(true);
    }
    
    private void OnEnable()
@@ -107,6 +111,10 @@ public class Select : MonoBehaviour
             break;
          case HomeType.Giant:
             CharacterUpgradePanel.onClickUpgradeGiant += LevelParentHome;
+            break;
+         case HomeType.VillageTown:
+            CharacterUpgradePanel.onClickUpgradeGiant += LevelParentHome;
+            CharacterUpgradePanel.OnClickTownRequirement += Selected;
             break;
       }
    }
@@ -128,6 +136,11 @@ public class Select : MonoBehaviour
          case HomeType.Giant:
             CharacterUpgradePanel.onClickUpgradeGiant -= LevelParentHome;
             break;
+         case HomeType.VillageTown:
+            CharacterUpgradePanel.onClickUpgradeTown -= LevelParentHome;
+            CharacterUpgradePanel.OnClickTownRequirement -= Selected;
+            break;
       }
    }
+   
 }
