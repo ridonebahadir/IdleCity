@@ -68,8 +68,15 @@ public class MainAreaAgentBase : MonoBehaviour
     {
         var posTarget = _target.position;
         _navMeshAgent.SetDestination(posTarget);
+        
         var dist = Vector3.Distance(transform.position, posTarget);
         if (!(dist <= 2)) return;
+        
+        var targetRotation = _target.rotation;
+        targetRotation.x = 0f;
+        targetRotation.z = 0f;
+        
+        levelParent.rotation = targetRotation;
         if (_turn==1)
         {
             if (_zero==null)
@@ -79,6 +86,7 @@ public class MainAreaAgentBase : MonoBehaviour
             }
             
         }
+        
         _waitTime -= Time.deltaTime;
         
         if (_waitTime<=0)
@@ -100,6 +108,7 @@ public class MainAreaAgentBase : MonoBehaviour
     }
     private IEnumerator One()
     {
+        levelParent.transform.DOLocalRotate(Vector3.zero, 0.25f);
         transform.DOScale(Vector3.one, 0.5f).OnComplete(() =>
         {
             _one = null;
@@ -140,7 +149,7 @@ public class MainAreaAgentBase : MonoBehaviour
 
     protected virtual void Attack()
     {
-        
+       
     }
 
     private void OnEnable()

@@ -18,7 +18,7 @@ MonoBehaviour:
   health: 20
   damage: 2
   attackDistance: 3
-  cost: 1
+  cost: 8
   reward: 3
   digSpeed: 0
   DefaultValue:

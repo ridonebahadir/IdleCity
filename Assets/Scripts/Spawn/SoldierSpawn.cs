@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections;
 using Agent;
 using DG.Tweening;
@@ -6,6 +7,7 @@ using LeonBrave;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 
 public class SoldierSpawn : MonoBehaviour
@@ -52,7 +54,11 @@ public class SoldierSpawn : MonoBehaviour
     public Button spawnSoldierArcherButton;
     public Button spawnSoldierDiggerButton;
 
-
+    [Space(10)] [Header("CLOSE")] 
+    public Image meleeImage;    
+    public Image archerImage;    
+    public Image diggerImage;    
+    
     private IEnumerator _soldierEnumerator;
     private IEnumerator _soldierEnumeratorArcher;
     private IEnumerator _soldierEnumeratorDigger;
@@ -84,7 +90,18 @@ public class SoldierSpawn : MonoBehaviour
         StartCoroutine(_soldierEnumeratorArcher);
         StartCoroutine(_soldierEnumeratorDigger);
     }
-    
+
+    private void Update()
+    {
+       CostControl(_soldierCost,meleeImage);
+       CostControl(_soldierArcherCost,archerImage);
+       CostControl(_soldierDiggerCost,diggerImage);
+    }
+
+    private void CostControl(float cost,Image image)
+    {
+        image.gameObject.SetActive(_gameManager.GetGold < cost);
+    }
     IEnumerator ControlGold(float cost,Button button,Image image)
     {
         WaitForSeconds waitForSeconds = new(0.5f);
