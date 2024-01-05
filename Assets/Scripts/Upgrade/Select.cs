@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.EventSystems;
+
 
 public enum HomeType
 {
@@ -13,7 +13,7 @@ public enum HomeType
    Giant,
    VillageTown,
 }
-public class Select : MonoBehaviour
+public class Select : MonoBehaviour,ISelectable
 { 
    [SerializeField] private HomeType homeType;
    [SerializeField] private Transform levelParent;
@@ -25,19 +25,23 @@ public class Select : MonoBehaviour
    public Collider col;
    
    [SerializeField] private List<Select> otherSelects;
-   
    private void Start()
    {
       selectCharacterUpgrade = transform.GetComponentInParent<SelectCharacterUpgrade>();
    }
 
-   private void OnMouseDown()
+   private void Update()
    {
-      if (EventSystem.current.IsPointerOverGameObject()) return;
-      Selected();
+     
    }
 
-   private void Selected()
+   /*private void OnMouseDown()
+   {
+      //if (EventSystem.current.IsPointerOverGameObject()) return;
+      Selected();
+   }*/
+
+   public void Selected()
    {
       CloseCollider();
       switch (homeType)
@@ -109,11 +113,13 @@ public class Select : MonoBehaviour
       }
      
    }
-   
+
+  
    private void OnEnable()
    {
       CharacterUpgradePanel.onClickClose += OpenCollider;
       CharacterUpgradePanel.onClickUpgradeTown += LevelParentHome;
+      
       if (homeType==HomeType.VillageTown)
       {
          CharacterUpgradePanel.OnClickTownRequirement += Selected;
@@ -124,6 +130,7 @@ public class Select : MonoBehaviour
    {
       CharacterUpgradePanel.onClickClose -= OpenCollider;
       CharacterUpgradePanel.onClickUpgradeTown -= LevelParentHome;
+     
       if (homeType==HomeType.VillageTown)
       {
          CharacterUpgradePanel.OnClickTownRequirement -= Selected;
@@ -131,3 +138,8 @@ public class Select : MonoBehaviour
    }
    
 }
+
+public interface ISelectable
+{
+   public void Selected();
+} 

@@ -51,6 +51,11 @@ public class GameManager : MonoBehaviour
    public TextMeshProUGUI diamondTextCount;
    public TextMeshProUGUI timeText;
 
+   [Space(10)] [Header("SO ENEMY UPGRADE")] 
+   [SerializeField] private SOAgentUpgrade enemyMeleeUpgrade;
+   [SerializeField] private SOAgentUpgrade enemyArcherUpgrade;
+   [SerializeField] private SOAgentUpgrade enemyDiggerUpgrade;
+
    
    
    private void Awake()
@@ -237,6 +242,9 @@ public class GameManager : MonoBehaviour
    }
    private void SceneRest()
    {
+      enemyMeleeUpgrade.DefaultData();
+      enemyArcherUpgrade.DefaultData();
+      enemyDiggerUpgrade.DefaultData();
       var activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
       SceneManager.LoadScene(activeSceneIndex);
    }

@@ -54,7 +54,7 @@ public class EnemySpawn : MonoBehaviour
         waveSlider.fillAmount = 0;
         waveSlider.DOFillAmount(1, waveTime).OnComplete(() =>
         {
-            if (waveCount>=2&& waveCount<10)
+            if (waveCount>=2 && waveCount<10)
             {
                 if (waveCount % 2 == 1)
                 {
@@ -105,14 +105,6 @@ public class EnemySpawn : MonoBehaviour
            
             cloneObj.SetActive(true);
             AgentBase agentBase = cloneObj.GetComponent<AgentBase>();
-            // if (waveCount!=1)
-            // {
-            //     if (waveCount % 2 == 1)
-            //     {
-            //         SetValue(soAgentUpgrade,soAgent);
-            //     }  
-            // }
-           
             agentBase.InıtAgent();
             _gameManager.enemies.Add(agentBase);
         }

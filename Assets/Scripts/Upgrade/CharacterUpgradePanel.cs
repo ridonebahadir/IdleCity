@@ -217,7 +217,7 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     }
 
-   
+    
 
     public delegate void OnClickClose();
     public static OnClickClose onClickClose;
@@ -230,12 +230,13 @@ public class CharacterUpgradePanel : MonoBehaviour
     public static OnClickClose onClickUpgradeTown;
 
     public delegate void OnClickRequirement();
-
     public static OnClickRequirement OnClickTownRequirement;
+    
     private void CloseButton()
     {
         onClickClose?.Invoke();
     }
+    
    
 }
 
