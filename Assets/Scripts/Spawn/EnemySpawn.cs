@@ -54,7 +54,7 @@ public class EnemySpawn : MonoBehaviour
         waveSlider.fillAmount = 0;
         waveSlider.DOFillAmount(1, waveTime).OnComplete(() =>
         {
-            if (waveCount>=2)
+            if (waveCount>=2&& waveCount<10)
             {
                 if (waveCount % 2 == 1)
                 {
