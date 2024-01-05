@@ -142,10 +142,6 @@ public class GameManager : MonoBehaviour
    }
    private void Update()
    {
-      if (Input.GetKeyDown(KeyCode.A))
-      {
-         GetXpReward(1);
-      }
       SetText();
       goldCount += goldRate * Time.deltaTime;
       xpCount +=goldRate * Time.deltaTime;

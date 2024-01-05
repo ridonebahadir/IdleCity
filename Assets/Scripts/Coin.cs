@@ -38,7 +38,6 @@ public class Coin : MonoBehaviour
         {
             if (isCoin)
             {
-                gameManager.GetReward(rewardValue);
                 gameManager.GetXpReward((int)rewardValue);
                 singletonHandler.GetSingleton<ObjectPool>().AddObject(gameObject, ObjectType.Coin);
             }
