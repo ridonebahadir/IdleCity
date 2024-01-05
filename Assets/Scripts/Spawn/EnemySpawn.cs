@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections;
 using Agent;
 using DG.Tweening;
@@ -15,6 +16,21 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField] private int waveCount;
     private SingletonHandler _singletonHandler;
     private int gameLevel;
+    
+    [Space(10)]
+    [Header("Enemy Upgrade")]
+    [SerializeField] private SOAgentUpgrade enemyMelee;
+    [SerializeField] private SOAgentUpgrade enemyArcher;
+    [SerializeField] private SOAgentUpgrade enemyDigger;
+    
+    [Space(10)]
+    [Header("Enemy")]
+    [SerializeField] private SOAgent enemyMeleeAgent;
+    [SerializeField] private SOAgent enemyArcherAgent;
+    [SerializeField] private SOAgent enemyDiggerAgent;
+
+    
+    
     
     [Space(10)]
     [Header("Wave")]
@@ -38,26 +54,38 @@ public class EnemySpawn : MonoBehaviour
         waveSlider.fillAmount = 0;
         waveSlider.DOFillAmount(1, waveTime).OnComplete(() =>
         {
+            if (waveCount>=2)
+            {
+                if (waveCount % 2 == 1)
+                {
+                    enemyMelee.stage++;
+                    enemyArcher.stage++;
+                    enemyDigger.stage++;
+                    SetValue(enemyMelee,enemyMeleeAgent);
+                    SetValue(enemyArcher,enemyArcherAgent);
+                    SetValue(enemyDigger,enemyDiggerAgent);
+                }
+            }
+            
+            
             // m = 2+(w-1)*w/2
             var meleeCount = (2+gameLevel) + (waveCount - 1) * waveCount / 2;
-            Debug.Log("Melee = " + meleeCount);
-            Spawn(ObjectType.Enemy,meleeCount);
+            Spawn(ObjectType.Enemy,meleeCount,enemyMelee,enemyMeleeAgent);
             
             //r = (w-1)*2-1
             var rangeCount = (waveCount - 1) * 2 - 1 + gameLevel;
-            Spawn(ObjectType.EnemyArcher,rangeCount);
-            Debug.Log("Range = " + rangeCount);
+            Spawn(ObjectType.EnemyArcher,rangeCount,enemyArcher,enemyArcherAgent);
+            
             //g = w - 5
             var diggerCount = waveCount - 5+gameLevel;
-            Spawn(ObjectType.EnemyDigger,diggerCount);
-            Debug.Log("Giant = " + diggerCount);
+            Spawn(ObjectType.EnemyDigger,diggerCount,enemyDigger,enemyDiggerAgent);
             
             waveCount++;
             SetSlider();
           
         });
     }
-    private void Spawn(ObjectType objectType,int count)
+    private void Spawn(ObjectType objectType,int count,SOAgentUpgrade soAgentUpgrade,SOAgent soAgent)
     {
         if (count<=0) return;
         for (var i = 0; i < count; i++)
@@ -77,9 +105,42 @@ public class EnemySpawn : MonoBehaviour
            
             cloneObj.SetActive(true);
             AgentBase agentBase = cloneObj.GetComponent<AgentBase>();
+            // if (waveCount!=1)
+            // {
+            //     if (waveCount % 2 == 1)
+            //     {
+            //         SetValue(soAgentUpgrade,soAgent);
+            //     }  
+            // }
+           
             agentBase.InıtAgent();
             _gameManager.enemies.Add(agentBase);
         }
       
     }
+
+    private void SetValue(SOAgentUpgrade soAgentUpgrade,SOAgent soAgent)
+    {
+        soAgent.health=Formula(soAgentUpgrade.multipherHealth.a,soAgentUpgrade.multipherHealth.b,soAgentUpgrade.multipherHealth.c,0,soAgentUpgrade);
+        soAgent.damage=Formula(soAgentUpgrade.multipherDamage.a,soAgentUpgrade.multipherDamage.b,soAgentUpgrade.multipherDamage.c,0,soAgentUpgrade);
+    }
+    
+    private int Formula(float a, float b, float c,int levelPlus,SOAgentUpgrade soAgentUpgrade)
+    {
+        // math.ceil((a*(i**2)+b*i+c)*(1.2**((i-1)//5)))
+        var i = soAgentUpgrade.stage+levelPlus;
+        var formula=Math.Ceiling((a * Math.Pow(i, 2) + b * i + c) * Math.Pow(1.2, (i - 1) / 5));
+        return (int)formula;
+    }
+    private void OnApplicationQuit()
+    {
+        enemyMeleeAgent.DefaultData();
+        enemyArcherAgent.DefaultData();
+        enemyDiggerAgent.DefaultData();
+        
+        enemyMelee.DefaultData();
+        enemyArcher.DefaultData();
+        enemyDigger.DefaultData();
+    }
+    
 }

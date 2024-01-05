@@ -1002,7 +1002,7 @@ MonoBehaviour:
   small: {fileID: 5188022415019964907}
   col: {fileID: 6449831550102716616}
   NavMeshAgent: {fileID: 6449831550102716620}
-  soAgentUpgrade: {fileID: 11400000, guid: 19d6e1356c24c3e479db2e69eb9499ee, type: 2}
+  soAgentUpgrade: {fileID: 11400000, guid: b483176d35ff6294fb6cd3f295070ae9, type: 2}
   levelModelParent: {fileID: 664564626755932741}
   isAttack: 0
   _oneTimeRun: 1

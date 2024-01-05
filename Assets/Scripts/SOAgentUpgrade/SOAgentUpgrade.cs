@@ -32,8 +32,8 @@ public class SOAgentUpgrade : ScriptableObject
     public void DefaultData()
     {
         cost = DefaultValueUpgrade.cost;
-        level = DefaultValueUpgrade.stage;
-        stage = DefaultValueUpgrade.level;
+        level = DefaultValueUpgrade.level;
+        stage = DefaultValueUpgrade.stage;
         totalLevel = DefaultValueUpgrade.totalLevel;
     }
 }

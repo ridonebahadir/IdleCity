@@ -100,7 +100,7 @@ public class HealthBar : MonoBehaviour
 
     public void SetLevel(SOAgentUpgrade soAgentUpgrade)
     {
-        levelText.SetText(soAgentUpgrade.level.ToString());
+        levelText.SetText(soAgentUpgrade.stage.ToString());
     }
     public bool isHealth;
    

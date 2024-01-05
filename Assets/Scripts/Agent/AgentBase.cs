@@ -88,6 +88,7 @@ namespace Agent
         
         public void InıtAgent()
         {
+            SetLevel();
             _gameManager=GameManager.Instance;
             SingletonHandler = SingletonHandler.Instance;
             Domination = _gameManager.dominationArea;
@@ -104,11 +105,7 @@ namespace Agent
             _navMeshStopDistance = soAgent.attackDistance;
             _startRotateSpeed = NavMeshAgent.angularSpeed;
             NavMeshAgent.speed = speed;
-            if (agentType == AgentType.Soldier)
-            {
-                animator = levelModelParent.GetChild(soAgentUpgrade.level - 1).GetComponent<Animator>();
-                //animator.SetBool(Wait,false);
-            }
+            animator = levelModelParent.GetChild(soAgentUpgrade.level - 1).GetComponent<Animator>();
             if (agentType==AgentType.Enemy) transform.rotation = Quaternion.LookRotation(_worldBackwardDirection, Vector3.up);
             else transform.rotation = Quaternion.LookRotation(_worldForwardDirection, Vector3.up);
             
@@ -300,7 +297,6 @@ namespace Agent
         {
             DamagePopup.Create(healthBar.transform, dmg);
             healthBar.HealthBarCanvasGroupShow();
-            SetLevel();
             particleSystem.Play();
             health -= dmg;
             healthBar.SetHealthBar(_maxHealth,health,agentType);
@@ -465,7 +461,6 @@ namespace Agent
 
         private void SetLevel()
         {
-            if (agentType == AgentType.Enemy) return;
             healthBar.SetLevel(soAgentUpgrade);
         }
         
