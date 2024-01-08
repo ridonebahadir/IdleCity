@@ -25,6 +25,7 @@ public class SOAchievement : ScriptableObject
 
     public bool ControlMission()
     {
+        if (did) return false;
         return value>=maxValue;
     }
     

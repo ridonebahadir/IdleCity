@@ -28,6 +28,7 @@ public class AchievementSlot : MonoBehaviour
         Inıt();
     }
 
+    public static Action SlotButtonClick;
     private void Inıt()
     {
         if (soAchievement.did)
@@ -45,6 +46,7 @@ public class AchievementSlot : MonoBehaviour
         _gameManager.SetTotalXp(soAchievement.reward);
         soAchievement.did = true;
         _button.interactable = false;
+        SlotButtonClick?.Invoke();
     }
 
     private void SetSlider()

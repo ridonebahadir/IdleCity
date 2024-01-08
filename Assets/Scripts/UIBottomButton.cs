@@ -12,13 +12,14 @@ public class UIBottomButton : MonoBehaviour
     [SerializeField] private List<Button> closeButtons;
     [SerializeField] private List<RectTransform> panels;
 
-    [SerializeField] private Image backGround;
+     private Image _backGround;
     
     public RectTransform currentPanel;
     public RectTransform oldPanel;
     private void Start()
     {
-        backGround.raycastTarget = false;
+        _backGround = GetComponent<Image>();
+        _backGround.raycastTarget = false;
         foreach (var item in panels)
         {
             item.gameObject.SetActive(false);
@@ -68,7 +69,7 @@ public class UIBottomButton : MonoBehaviour
             ClosePanel();
         }
         OnBottomButton?.Invoke();
-        backGround.raycastTarget = true;
+        _backGround.raycastTarget = true;
         buttons[a].interactable = false;
         _newButtonIdx = a;
         currentPanel = panels[a].transform.GetComponent<RectTransform>();
@@ -79,7 +80,7 @@ public class UIBottomButton : MonoBehaviour
     private void CloseButton()
     {
         ClosePanel();
-        backGround.raycastTarget = false;
+        _backGround.raycastTarget = false;
         currentPanel = null; 
     }
     private void OnEnable()

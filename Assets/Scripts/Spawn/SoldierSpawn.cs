@@ -111,7 +111,7 @@ public class SoldierSpawn : MonoBehaviour
             {
                 button.interactable = false;
                 var value =(_gameManager.GetGold/cost);
-                image.DOFillAmount(value, 0.5f);
+                image.DOFillAmount(value, 0.5f).SetEase(Ease.Linear);
                 //image.fillAmount = value;
             }
             else
@@ -120,7 +120,7 @@ public class SoldierSpawn : MonoBehaviour
                 {
                     button.interactable = true;
                
-                });
+                }).SetEase(Ease.Linear);
             }
 
             yield return waitForSeconds;
