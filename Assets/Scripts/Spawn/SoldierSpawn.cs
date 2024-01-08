@@ -179,5 +179,4 @@ public class SoldierSpawn : MonoBehaviour
         StartCoroutine(_soldierEnumeratorDigger);
     }
     
-   
 }

@@ -287,6 +287,7 @@ public class GameManager : MonoBehaviour
    
    private void SceneRest()
    {
+      OnSceneRest?.Invoke();
       enemyMeleeUpgrade.DefaultData();
       enemyArcherUpgrade.DefaultData();
       enemyDiggerUpgrade.DefaultData();
@@ -305,4 +306,5 @@ public class GameManager : MonoBehaviour
 
    public Action OnXpChange;
    public Action OnDiamondChange;
+   public Action OnSceneRest;
 }
