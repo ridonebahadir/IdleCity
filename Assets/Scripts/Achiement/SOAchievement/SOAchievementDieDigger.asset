@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04fc96f6bbdf634fbd079d84a1e36f9, type: 3}
+  m_Name: SOAchievementDieDigger
+  m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: 1bd3e120538772d40841561777eb91a6, type: 3}
+  missionInfo: 10 Enemy Giant Die
+  value: 0
+  maxValue: 3
+  reward: 300
+  did: 0
+  DefaultAchievement:
+    value: 0
+    did: 0

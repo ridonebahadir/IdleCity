@@ -27,6 +27,7 @@ namespace Agent
     {
         [SerializeField] private AgentState agentState;
         [SerializeField] private ObjectType objectType;
+        [SerializeField] private SOAchievement soAchievement;
        
         
         
@@ -354,6 +355,7 @@ namespace Agent
             coin.gameManager = _gameManager;
             coin.singletonHandler = SingletonHandler;
             coin.Inıt(transform.position,soAgent.reward,_gameManager.coinTarget,true);
+            soAchievement.SetValue(1);
             
             
         }

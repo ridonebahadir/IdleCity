@@ -58,7 +58,7 @@ public class SelectCharacterUpgrade : MonoBehaviour
     {
         if (currentPanel==null) return;
         oldPanel = currentPanel;
-        oldPanel.DOAnchorPos(new Vector2(-1300, 0), 0.35f).OnComplete(() =>
+        oldPanel.DOAnchorPos(new Vector2(-1300, 0), 0.15f).OnComplete(() =>
             {
                 oldPanel.gameObject.SetActive(false);
             }
@@ -69,7 +69,7 @@ public class SelectCharacterUpgrade : MonoBehaviour
     {
         currentPanel = characterUpgradePanels[a].transform.GetComponent<RectTransform>();
         currentPanel.gameObject.SetActive(true);
-        currentPanel.DOAnchorPos(new Vector2(0, 0), 0.35f);
+        currentPanel.DOAnchorPos(new Vector2(0, 0), 0.15f);
     }
     private void OnApplicationQuit()
     {
@@ -91,6 +91,7 @@ public class SelectCharacterUpgrade : MonoBehaviour
        UIManager.OnClickBattle += ClosePanel;
        CharacterUpgradePanel.onClickClose += ClosePanel;
        CharacterUpgradePanel.onClickClose += CloseButton;
+       UIBottomButton.OnBottomButton += ClosePanel;
     }
 
     private void OnDisable()
@@ -98,6 +99,7 @@ public class SelectCharacterUpgrade : MonoBehaviour
         UIManager.OnClickBattle -= ClosePanel;
         CharacterUpgradePanel.onClickClose -= ClosePanel;
         CharacterUpgradePanel.onClickClose -= CloseButton;
+        UIBottomButton.OnBottomButton -= ClosePanel;
         
     }
 }

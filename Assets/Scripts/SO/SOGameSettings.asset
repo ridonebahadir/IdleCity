@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: SOGameSettings
   m_EditorClassIdentifier: 
   level: 0
-  totalXp: 100
+  totalXp: 0
   totalDiamond: 0
   DefaultGameSettings:
     level: 0
-    totalXp: 100
+    totalXp: 0
     totalDiamond: 0

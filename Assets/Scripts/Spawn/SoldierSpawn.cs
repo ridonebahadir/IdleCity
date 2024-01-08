@@ -104,7 +104,7 @@ public class SoldierSpawn : MonoBehaviour
     }
     IEnumerator ControlGold(float cost,Button button,Image image)
     {
-        WaitForSeconds waitForSeconds = new(0.5f);
+        WaitForSeconds waitForSeconds = new(0.1f);
         while (true)
         {
             if (_gameManager.GetGold<cost)

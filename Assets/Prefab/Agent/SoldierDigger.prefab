@@ -272,6 +272,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agentState: 0
   objectType: 5
+  soAchievement: {fileID: 11400000, guid: 215480544f0ff3941b15defd1ef507ff, type: 2}
   soAgent: {fileID: 11400000, guid: 47a5a8c6d5a91a642b4c3aac68dd39a8, type: 2}
   target: {fileID: 0}
   dist: 0

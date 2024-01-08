@@ -29,10 +29,13 @@ public class Select : MonoBehaviour,ISelectable
    private int _cost;
    private void Start()
    {
-      ControlWarning();
+      if (homeType != HomeType.VillageTown) ControlWarning();
+      else ControlTownWarning();
+
+     
       selectCharacterUpgrade = transform.GetComponentInParent<SelectCharacterUpgrade>();
       LevelParentHome();
-      GameManager.Instance.OnXpChange += ControlWarning;
+     
    }
    
 
@@ -48,9 +51,27 @@ public class Select : MonoBehaviour,ISelectable
       }
    }
 
+   private void ControlTownWarning()
+   {
+      if (soGameSettings.totalXp>=SetCost()||(soGameSettings.totalXp>=SetRateUpgradeCost()))
+      {
+         warning.SetActive(true);
+      }
+      else
+      {
+         warning.SetActive(false);
+      }
+   }
+
    private int SetCost()
    {
-      var cost = characterUpgradePanel.FormulaCost(characterUpgradePanel.soAgentUpgrade.multipherCost.a,characterUpgradePanel.soAgentUpgrade.multipherCost.b,characterUpgradePanel.soAgentUpgrade.multipherCost.c,0,characterUpgradePanel.soAgentUpgrade.totalLevel);
+      var cost = characterUpgradePanel.FormulaCost(characterUpgradePanel.soAgentUpgrade.multipherCost.a,characterUpgradePanel.soAgentUpgrade.multipherCost.b,characterUpgradePanel.soAgentUpgrade.multipherCost.c,1,characterUpgradePanel.soAgentUpgrade.totalLevel);
+      return cost;
+   }
+
+   private int SetRateUpgradeCost()
+   {
+      var cost = characterUpgradePanel.FormulaCost(characterUpgradePanel.soAgentUpgrade.multipherRateCost.a,characterUpgradePanel.soAgentUpgrade.multipherRateCost.b,characterUpgradePanel.soAgentUpgrade.multipherRateCost.c,1,characterUpgradePanel.soAgentUpgrade.totalLevel);
       return cost;
    }
    public void Selected()
@@ -131,24 +152,35 @@ public class Select : MonoBehaviour,ISelectable
    {
       CharacterUpgradePanel.onClickClose += OpenCollider;
       CharacterUpgradePanel.onClickUpgradeTown += LevelParentHome;
-      
+      UIBottomButton.OnBottomButtonClose += OpenCollider;
       if (homeType==HomeType.VillageTown)
       {
          CharacterUpgradePanel.OnClickTownRequirement += Selected;
+         GameManager.Instance.OnXpChange += ControlTownWarning;
       }
+      else
+      {
+         GameManager.Instance.OnXpChange += ControlWarning;
+      }
+     
    }
 
    private void OnDisable()
    {
       CharacterUpgradePanel.onClickClose -= OpenCollider;
       CharacterUpgradePanel.onClickUpgradeTown -= LevelParentHome;
-     
+      UIBottomButton.OnBottomButtonClose -= OpenCollider;
       if (homeType==HomeType.VillageTown)
       {
          CharacterUpgradePanel.OnClickTownRequirement -= Selected;
+         GameManager.Instance.OnXpChange -= ControlTownWarning;
       }
-
-      GameManager.Instance.OnXpChange -= ControlWarning;
+      else
+      {
+         GameManager.Instance.OnXpChange -= ControlWarning;
+      }
+      
+      
    }
    
 }

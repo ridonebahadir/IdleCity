@@ -16,6 +16,7 @@ using Random = UnityEngine.Random;
 public class GameManager : MonoBehaviour
 {
    public SOGameSettings soGameSettings;
+   public List<SOAchievement> SoAchievements;
    
    public GameObject damageTextPrefab;
    public static GameManager Instance;
@@ -27,6 +28,8 @@ public class GameManager : MonoBehaviour
    public List<AgentBase> enemies;
    public List<AgentBase> soldiers;
    private bool _isGame = true;
+   
+   
    [Space(10)]
    [Header("REWARD")]
    [SerializeField] private float goldCount;
@@ -44,7 +47,9 @@ public class GameManager : MonoBehaviour
    [Header("PANELS")] 
    [SerializeField] GameObject winPanel; 
    [SerializeField] TextMeshProUGUI xpEarnText;
+   [SerializeField] TextMeshProUGUI xpEarnFailText;
    [SerializeField] TextMeshProUGUI diemondEarnText;
+   [SerializeField] TextMeshProUGUI diemondEarnFailText;
    [SerializeField] GameObject failPanel;
    [SerializeField] private Button restWin;
    [SerializeField] private Button restFail;
@@ -88,7 +93,8 @@ public class GameManager : MonoBehaviour
          randomEnemyTurnList.Add(Random.Range(1, 5));
       }
 
-      SetSoGameSettings();
+      SetTotalXp((int)xpCount);
+      SetTotalDiamond((int)diamondCount);
       //Vector3 pos = Camera.main.ViewportToWorldPoint(goldCountPos.position);
       //coinTarget.position = Camera.main.WorldToViewportPoint(pos);
    }
@@ -168,15 +174,12 @@ public class GameManager : MonoBehaviour
    private void SetText()
    {
       goldTextCount.text =Mathf.Floor(goldCount).ToString();
+      xpTextCount.text =Mathf.Floor(xpCount).ToString();
+      diamondTextCount.text =Mathf.Floor(diamondCount).ToString();
       timeText.text =goldRate.ToString("f2")+"/s";
       
    }
-
-   public void SetSoGameSettings()
-   {
-      totalXpTextCount.SetText(soGameSettings.totalXp.ToString());
-      totalDiamondTextCount.SetText(soGameSettings.totalDiamond.ToString());
-   }
+   
    public void GetReward(float value)
    {
       goldCount += value;
@@ -252,22 +255,36 @@ public class GameManager : MonoBehaviour
       winPanel.SetActive(true);
       xpEarnText.SetText(Mathf.Floor(xpCount).ToString());
       diemondEarnText.SetText(Mathf.Floor(diamondCount).ToString());
-      SetReward();
+      SetTotalXp((int)xpCount);
+      SetTotalDiamond((int)diamondCount);
    }
 
    public void FailPanelOpen()
    {
       _isGame = false;
       failPanel.SetActive(true);
-      SetReward();
+      xpEarnFailText.SetText(Mathf.Floor(xpCount).ToString());
+      diemondEarnFailText.SetText(Mathf.Floor(diamondCount).ToString());
+      SetTotalXp((int)xpCount);
+      SetTotalDiamond((int)diamondCount);
    }
 
-   private void SetReward()
+   public void SetTotalXp(int value)
    {
-      soGameSettings.totalXp += (int)xpCount;
-      soGameSettings.totalDiamond += (int)diamondCount;
+      soGameSettings.totalXp += value;
+      totalXpTextCount.SetText(soGameSettings.totalXp.ToString());
+     
       OnXpChange?.Invoke();
    }
+
+   public void SetTotalDiamond(int value)
+   {
+      soGameSettings.totalDiamond += value;
+      totalDiamondTextCount.SetText(soGameSettings.totalDiamond.ToString());
+      
+      OnDiamondChange?.Invoke();
+   }
+   
    private void SceneRest()
    {
       enemyMeleeUpgrade.DefaultData();
@@ -279,8 +296,13 @@ public class GameManager : MonoBehaviour
    private void OnApplicationQuit()
    {
       soGameSettings.DefaultData();
-        
+      foreach (var item in SoAchievements)
+      {
+       item.DefaultData();  
+      }
+
    }
 
    public Action OnXpChange;
+   public Action OnDiamondChange;
 }

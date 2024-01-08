@@ -47,14 +47,10 @@ public class CharacterUpgradePanel : MonoBehaviour
              buttonRequiment.gameObject.SetActive(false);
              button.gameObject.SetActive(true);
          }
-         ControlXp();
+         
      }
 
-     private void OnDisable()
-     {
-         ControlXp();
-     }
-
+     
      private void Start()
     {
         _gameManager=GameManager.Instance;
@@ -66,7 +62,6 @@ public class CharacterUpgradePanel : MonoBehaviour
         ClickRateUpgrade();
         soAgentUpgrade.cost = FormulaCost(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c,0,soAgentUpgrade.totalLevel);
         costText.SetText(soAgentUpgrade.cost.ToString());
-        ControlXp();
         
         levelText.SetText("Level "+soAgentUpgrade.level);
         characterName.SetText(soAgentUpgrade.name);
@@ -76,7 +71,8 @@ public class CharacterUpgradePanel : MonoBehaviour
         buttonRate.onClick.AddListener(ButtonRate);
         buttonRequiment.onClick.AddListener(ClickedGoTown);
         closeButton.onClick.AddListener(CloseButton);
-        
+        ControlXp();
+        ControlXpRate();
     }
 
     private void ControlXp()
@@ -94,24 +90,21 @@ public class CharacterUpgradePanel : MonoBehaviour
     }
     private void ControlXpRate()
     {
-        if (soGameSettings.totalXp>=soAgentUpgrade.checkPointRateCost)
+        if (soGameSettings.totalXp>=FormulaCost(soAgentUpgrade.multipherRateCost.a, soAgentUpgrade.multipherRateCost.b,
+                soAgentUpgrade.multipherRateCost.c, 1,soAgentUpgrade.checkPointRateLevel))
         {
-           
             buttonRate.interactable = true;
         }
         else
         {
-           
             buttonRate.interactable = false;
         }
     }
 
     private void SetCost()
     {
-        
         soAgentUpgrade.cost = FormulaCost(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c,0,soAgentUpgrade.totalLevel);
         costText.SetText(soAgentUpgrade.cost.ToString());
-        _gameManager.SetSoGameSettings();
     }
 
     private void SetSlider()
@@ -202,9 +195,8 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void Clicked()
     {
-        var cost=FormulaCost(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c,1,soAgentUpgrade.totalLevel);
-        soGameSettings.totalXp -= soAgentUpgrade.cost;
-        _gameManager.OnXpChange?.Invoke();
+        var cost=FormulaCost(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c,0,soAgentUpgrade.totalLevel);
+        _gameManager.SetTotalXp(-cost);
         if (soGameSettings.totalXp>=cost)
         {
             if (soAgentUpgrade.level>=5 && soAgentUpgrade.stage>=4) return;
@@ -218,11 +210,7 @@ public class CharacterUpgradePanel : MonoBehaviour
                 }
             }
         }
-       
-        
-       
-      
-        
+
         SetValue();
         if (CharactersType==CharactersType.Town)
         {
@@ -235,11 +223,10 @@ public class CharacterUpgradePanel : MonoBehaviour
     {
        
             soAgentUpgrade.checkPointRateLevel++;
+             _gameManager.SetTotalXp(-soAgentUpgrade.checkPointRateCost);
             ClickRateUpgrade();
-            soGameSettings.totalXp -= soAgentUpgrade.checkPointRateCost;
-            _gameManager.OnXpChange?.Invoke();
-            _gameManager.SetSoGameSettings();
             ControlXpRate();
+            ControlXp();
             soAgentUpgrade.checkPointRate += 0.01f;
 
     }
@@ -274,11 +261,6 @@ public class CharacterUpgradePanel : MonoBehaviour
     }
     private void SetValue()
     {
-        // if (soAgentUpgrade.level == _stageCount)
-        // {
-        //     sliderFilled.fillAmount = 1;
-        //     return;
-        // }
         SetLevel();
         SetTotalLevel();
         SetSlider();
@@ -287,8 +269,7 @@ public class CharacterUpgradePanel : MonoBehaviour
         SetCost();
         SetDamage();
         ControlXp();
-       
-
+        ControlXpRate();
     }
 
     
