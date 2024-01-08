@@ -158,7 +158,7 @@ public class GameManager : MonoBehaviour
    private void SetText()
    {
       goldTextCount.text =Mathf.Floor(goldCount).ToString();
-      timeText.text =goldRate.ToString("f1")+"/s";
+      timeText.text =goldRate.ToString("f2")+"/s";
       xpTextCount.text =Mathf.Floor(xpCount).ToString();
       diamondTextCount.text =diamondCount.ToString();
    }

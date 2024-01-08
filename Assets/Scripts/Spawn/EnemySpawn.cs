@@ -83,7 +83,7 @@ public class EnemySpawn : MonoBehaviour
             waveCount++;
             SetSlider();
           
-        });
+        }).SetEase(Ease.Linear);
     }
     private void Spawn(ObjectType objectType,int count,SOAgentUpgrade soAgentUpgrade,SOAgent soAgent)
     {

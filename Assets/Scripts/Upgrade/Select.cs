@@ -28,18 +28,8 @@ public class Select : MonoBehaviour,ISelectable
    private void Start()
    {
       selectCharacterUpgrade = transform.GetComponentInParent<SelectCharacterUpgrade>();
+      LevelParentHome();
    }
-
-   private void Update()
-   {
-     
-   }
-
-   /*private void OnMouseDown()
-   {
-      //if (EventSystem.current.IsPointerOverGameObject()) return;
-      Selected();
-   }*/
 
    public void Selected()
    {

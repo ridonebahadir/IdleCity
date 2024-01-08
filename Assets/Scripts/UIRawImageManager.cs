@@ -14,6 +14,13 @@ public class UIRawImageManager : MonoBehaviour
     void Start()
     {
         Close();
+        
+        for (var i = 0; i < 4; i++)
+        {
+            Open(i);
+            SetModel();
+        }
+       
     }
     void Update()
     {

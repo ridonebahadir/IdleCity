@@ -58,7 +58,7 @@ public class CharacterUpgradePanel : MonoBehaviour
         SetSlider();
         SetDigSpeed();
         ButtonRate();
-        levelText.SetText("Level "+soAgentUpgrade.stage);
+        levelText.SetText("Level "+soAgentUpgrade.level);
         characterName.SetText(soAgentUpgrade.name);
         currentIcon.sprite = soAgentUpgrade.icon;
         nextIcon.sprite = soAgentUpgrade.nextIcon;
@@ -153,7 +153,7 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void SetDigSpeed()
     {
-        soAgent.digSpeed = (soAgentUpgrade.totalLevel*0.02f)+0.1f; //0.25f first value
+        soAgent.digSpeed = (soAgentUpgrade.totalLevel*0.02f)+0.18f; //0.25f first value
         var dig = soAgent.digSpeed * 20;
         var ratio=(((soAgentUpgrade.totalLevel+1)*0.02f+0.1f)*20)-dig;
         _ratioDiggSpeedText.SetText("+" + Math.Round(ratio));
