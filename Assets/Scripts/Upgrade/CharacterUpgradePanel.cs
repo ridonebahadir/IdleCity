@@ -22,7 +22,8 @@ public class CharacterUpgradePanel : MonoBehaviour
     [SerializeField] private Image currentIcon;
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private TextMeshProUGUI damageText;
-    [SerializeField] private TextMeshProUGUI costText;
+    [SerializeField] private TextMeshProUGUI costText; 
+    [SerializeField] private TextMeshProUGUI checkPointRateTextCost;
     [SerializeField] private TextMeshProUGUI levelText; 
     [SerializeField] private TextMeshProUGUI digSpeedText;
     [SerializeField] private TextMeshProUGUI _ratioHealthText;
@@ -30,6 +31,7 @@ public class CharacterUpgradePanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _ratioDiggSpeedText;
     
     [SerializeField] private Button button;
+    [SerializeField] private Button buttonRate;
     [SerializeField] private Button buttonRequiment;
     [SerializeField] private Button closeButton;
 
@@ -55,18 +57,20 @@ public class CharacterUpgradePanel : MonoBehaviour
         SetDamage();
         SetSlider();
         SetDigSpeed();
+        ButtonRate();
         levelText.SetText("Level "+soAgentUpgrade.stage);
         characterName.SetText(soAgentUpgrade.name);
         currentIcon.sprite = soAgentUpgrade.icon;
         nextIcon.sprite = soAgentUpgrade.nextIcon;
         button.onClick.AddListener(Clicked);
+        buttonRate.onClick.AddListener(ButtonRate);
         buttonRequiment.onClick.AddListener(ClickedGoTown);
         closeButton.onClick.AddListener(CloseButton);
     }
 
     private void SetCost()
     {
-        soAgentUpgrade.cost = FormulaCost(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c,0);
+        soAgentUpgrade.cost = FormulaCost(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c,0,soAgentUpgrade.totalLevel);
         costText.SetText(soAgentUpgrade.cost.ToString());
     }
 
@@ -179,6 +183,16 @@ public class CharacterUpgradePanel : MonoBehaviour
       
     }
 
+    private void ButtonRate()
+    {
+            soAgentUpgrade.checkPointRateLevel++;
+            soAgentUpgrade.checkPointRateCost = FormulaCost(soAgentUpgrade.multipherRateCost.a, soAgentUpgrade.multipherRateCost.b,
+                soAgentUpgrade.multipherRateCost.c, 0,soAgentUpgrade.checkPointRateLevel);
+            checkPointRateTextCost.SetText(soAgentUpgrade.checkPointRateCost.ToString());
+            soAgentUpgrade.checkPointRate += 0.01f;
+
+    }
+
     private void ClickedGoTown()
     {
         OnClickTownRequirement?.Invoke();
@@ -193,10 +207,10 @@ public class CharacterUpgradePanel : MonoBehaviour
         var formula=Math.Ceiling((a * Math.Pow(i, 2) + b * i + c) * Math.Pow(1.2, (i - 1) / 5));
         return (int)formula;
     }
-    private int FormulaCost(float a, float b, float c,int levelPlus)
+    private int FormulaCost(float a, float b, float c,int levelPlus,int level)
     {
         //math.ceil((a**i+b*i+c)*(1.2**((i)//5)))
-        var i = soAgentUpgrade.totalLevel+levelPlus;
+        var i = level+levelPlus;
         var formula=Math.Ceiling((Math.Pow(a, i) + b * i + c) * Math.Pow(1.2, i / 5));
         return (int)formula;
     }

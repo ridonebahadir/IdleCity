@@ -18,9 +18,13 @@ public class SOAgentUpgrade : ScriptableObject
     public int stage;
     public int stageCount;
     public int totalLevel;
+    public float checkPointRateCost;
+    public float checkPointRate;
+    public int checkPointRateLevel;
     public Multipher multipherHealth;
     public Multipher multipherDamage;
     public Multipher multipherCost;
+    public Multipher multipherRateCost;
     public List<Sprite> Sprites;
     
     public DefaultValueUpgrade DefaultValueUpgrade;
@@ -35,6 +39,9 @@ public class SOAgentUpgrade : ScriptableObject
         level = DefaultValueUpgrade.level;
         stage = DefaultValueUpgrade.stage;
         totalLevel = DefaultValueUpgrade.totalLevel;
+        checkPointRateCost = DefaultValueUpgrade.checkPointRateCost;
+        checkPointRate = DefaultValueUpgrade.checkPointRate;
+        checkPointRateLevel = DefaultValueUpgrade.checkPointRateLevel;
     }
 }
 [Serializable]
@@ -44,6 +51,9 @@ public struct DefaultValueUpgrade
     public int stage; 
     public int level;
     public int totalLevel;
+    public float checkPointRateCost;
+    public float checkPointRate;
+    public int checkPointRateLevel;
 
 }
 [Serializable]

@@ -20,6 +20,9 @@ MonoBehaviour:
   stage: 1
   stageCount: 1
   totalLevel: 1
+  checkPointRateCost: 0
+  checkPointRate: 0.3
+  checkPointRateLevel: 0
   multipherHealth:
     a: 0
     b: 0
@@ -32,9 +35,16 @@ MonoBehaviour:
     a: 1.4
     b: 3
     c: 55
+  multipherRateCost:
+    a: 1.2
+    b: 2
+    c: 26
   Sprites: []
   DefaultValueUpgrade:
     cost: 0
     stage: 1
     level: 1
     totalLevel: 1
+    checkPointRateCost: 0
+    checkPointRate: 0.3
+    checkPointRateLevel: 0

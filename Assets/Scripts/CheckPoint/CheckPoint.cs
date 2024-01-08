@@ -8,12 +8,15 @@ public class CheckPoint : MonoBehaviour
    public GameObject solidHome;
    public GameObject ruinHome;
    private bool _active;
-   private float _rate = 0.3f;
+   private float _rate;
+   [SerializeField] private SOAgentUpgrade soAgentUpgrade;
+   
    private void Start()
    {
       _gameManager = GameManager.Instance;
       ruinHome.SetActive(true);
       solidHome.SetActive(false);
+      _rate = soAgentUpgrade.checkPointRate;
    }
 
    
