@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
    public List<AgentBase> enemies;
    public List<AgentBase> soldiers;
-   
+   private bool _isGame = true;
    [Space(10)]
    [Header("REWARD")]
    [SerializeField] private float goldCount;
@@ -34,11 +34,17 @@ public class GameManager : MonoBehaviour
    [SerializeField] private float diamondCount;
    [SerializeField] private float goldRate;
    [SerializeField] private RectTransform goldCountPos;
+
+   [SerializeField] private float totalGold;
+   [SerializeField] private float totalDiemond;
+   
    public Transform coinTarget;
    public Transform diamondTarget;
    
    [Header("PANELS")] 
-   [SerializeField] GameObject winPanel;
+   [SerializeField] GameObject winPanel; 
+   [SerializeField] TextMeshProUGUI xpEarnText;
+   [SerializeField] TextMeshProUGUI diemondEarnText;
    [SerializeField] GameObject failPanel;
    [SerializeField] private Button restWin;
    [SerializeField] private Button restFail;
@@ -56,7 +62,9 @@ public class GameManager : MonoBehaviour
    [SerializeField] private SOAgentUpgrade enemyArcherUpgrade;
    [SerializeField] private SOAgentUpgrade enemyDiggerUpgrade;
 
-   
+   [Space(10)] [Header("MainMenuReward")]
+   public TextMeshProUGUI totalXpTextCount;
+   public TextMeshProUGUI totalDiamondTextCount;
    
    private void Awake()
    {
@@ -79,8 +87,8 @@ public class GameManager : MonoBehaviour
       {
          randomEnemyTurnList.Add(Random.Range(1, 5));
       }
-      xpTextCount.text =soGameSettings.xp.ToString();
-      diamondTextCount.text =soGameSettings.diamond.ToString();
+
+      SetSoGameSettings();
       //Vector3 pos = Camera.main.ViewportToWorldPoint(goldCountPos.position);
       //coinTarget.position = Camera.main.WorldToViewportPoint(pos);
    }
@@ -147,10 +155,12 @@ public class GameManager : MonoBehaviour
    }
    private void Update()
    {
+      if (!_isGame) return;
       SetText();
       goldCount += goldRate * Time.deltaTime;
       xpCount +=goldRate * Time.deltaTime;
    }
+      
    public void SetGoldRate(float a)
    {
       goldRate += a;
@@ -159,8 +169,13 @@ public class GameManager : MonoBehaviour
    {
       goldTextCount.text =Mathf.Floor(goldCount).ToString();
       timeText.text =goldRate.ToString("f2")+"/s";
-      xpTextCount.text =Mathf.Floor(xpCount).ToString();
-      diamondTextCount.text =diamondCount.ToString();
+      
+   }
+
+   public void SetSoGameSettings()
+   {
+      totalXpTextCount.SetText(soGameSettings.totalXp.ToString());
+      totalDiamondTextCount.SetText(soGameSettings.totalDiamond.ToString());
    }
    public void GetReward(float value)
    {
@@ -232,13 +247,26 @@ public class GameManager : MonoBehaviour
    
    public void WinPanelOpen()
    {
+      _isGame = false;
       soGameSettings.level++;
       winPanel.SetActive(true);
+      xpEarnText.SetText(Mathf.Floor(xpCount).ToString());
+      diemondEarnText.SetText(Mathf.Floor(diamondCount).ToString());
+      SetReward();
    }
 
    public void FailPanelOpen()
    {
+      _isGame = false;
       failPanel.SetActive(true);
+      SetReward();
+   }
+
+   private void SetReward()
+   {
+      soGameSettings.totalXp += (int)xpCount;
+      soGameSettings.totalDiamond += (int)diamondCount;
+      OnXpChange?.Invoke();
    }
    private void SceneRest()
    {
@@ -253,4 +281,6 @@ public class GameManager : MonoBehaviour
       soGameSettings.DefaultData();
         
    }
+
+   public Action OnXpChange;
 }

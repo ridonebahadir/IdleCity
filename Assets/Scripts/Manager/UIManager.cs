@@ -90,7 +90,7 @@ public class UIManager : MonoBehaviour
 
    private void SetText()
    {
-       xpTextCountMainMenu.SetText(soGameSettings.xp.ToString());
-       diamondTextCountMainMenu.SetText(soGameSettings.diamond.ToString());
+       xpTextCountMainMenu.SetText(soGameSettings.totalXp.ToString());
+       diamondTextCountMainMenu.SetText(soGameSettings.totalDiamond.ToString());
    }
 }

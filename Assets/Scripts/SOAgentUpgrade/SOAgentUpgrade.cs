@@ -18,7 +18,7 @@ public class SOAgentUpgrade : ScriptableObject
     public int stage;
     public int stageCount;
     public int totalLevel;
-    public float checkPointRateCost;
+    public int checkPointRateCost;
     public float checkPointRate;
     public int checkPointRateLevel;
     public Multipher multipherHealth;
@@ -51,7 +51,7 @@ public struct DefaultValueUpgrade
     public int stage; 
     public int level;
     public int totalLevel;
-    public float checkPointRateCost;
+    public int checkPointRateCost;
     public float checkPointRate;
     public int checkPointRateLevel;
 

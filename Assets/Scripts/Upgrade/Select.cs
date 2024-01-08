@@ -19,18 +19,40 @@ public class Select : MonoBehaviour,ISelectable
    [SerializeField] private Transform levelParent;
    [SerializeField] private SOAgentUpgrade soTownUpgrade;
    [SerializeField] private ParticleSystem cloud;
-   
+   [SerializeField] private SOGameSettings soGameSettings;
+   [SerializeField] private CharacterUpgradePanel characterUpgradePanel;
+   [SerializeField] private GameObject warning;
    
    private SelectCharacterUpgrade selectCharacterUpgrade;
    public Collider col;
-   
    [SerializeField] private List<Select> otherSelects;
+   private int _cost;
    private void Start()
    {
+      ControlWarning();
       selectCharacterUpgrade = transform.GetComponentInParent<SelectCharacterUpgrade>();
       LevelParentHome();
+      GameManager.Instance.OnXpChange += ControlWarning;
+   }
+   
+
+   private void ControlWarning()
+   {
+      if (soGameSettings.totalXp>=SetCost())
+      {
+         warning.SetActive(true);
+      }
+      else
+      {
+         warning.SetActive(false);
+      }
    }
 
+   private int SetCost()
+   {
+      var cost = characterUpgradePanel.FormulaCost(characterUpgradePanel.soAgentUpgrade.multipherCost.a,characterUpgradePanel.soAgentUpgrade.multipherCost.b,characterUpgradePanel.soAgentUpgrade.multipherCost.c,0,characterUpgradePanel.soAgentUpgrade.totalLevel);
+      return cost;
+   }
    public void Selected()
    {
       CloseCollider();
@@ -125,6 +147,8 @@ public class Select : MonoBehaviour,ISelectable
       {
          CharacterUpgradePanel.OnClickTownRequirement -= Selected;
       }
+
+      GameManager.Instance.OnXpChange -= ControlWarning;
    }
    
 }

@@ -10,7 +10,8 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class CharacterUpgradePanel : MonoBehaviour
-{
+{ 
+    public SOGameSettings soGameSettings;
     public CharactersType CharactersType;
     public SOAgent soAgent;
     public SOAgentUpgrade soAgentUpgrade;
@@ -38,7 +39,7 @@ public class CharacterUpgradePanel : MonoBehaviour
     
     
      private int _stageCount;
-
+     private GameManager _gameManager;
      private void OnEnable()
      {
          if (soAgentUpgrade.stage == _stageCount && (soAgentUpgrade.level != soTownUpgrade.level))
@@ -46,18 +47,27 @@ public class CharacterUpgradePanel : MonoBehaviour
              buttonRequiment.gameObject.SetActive(false);
              button.gameObject.SetActive(true);
          }
-        
+         ControlXp();
+     }
+
+     private void OnDisable()
+     {
+         ControlXp();
      }
 
      private void Start()
     {
+        _gameManager=GameManager.Instance;
         _stageCount = soAgentUpgrade.stageCount;
-        SetCost();
         SetHealth();
         SetDamage();
         SetSlider();
         SetDigSpeed();
-        ButtonRate();
+        ClickRateUpgrade();
+        soAgentUpgrade.cost = FormulaCost(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c,0,soAgentUpgrade.totalLevel);
+        costText.SetText(soAgentUpgrade.cost.ToString());
+        ControlXp();
+        
         levelText.SetText("Level "+soAgentUpgrade.level);
         characterName.SetText(soAgentUpgrade.name);
         currentIcon.sprite = soAgentUpgrade.icon;
@@ -66,12 +76,42 @@ public class CharacterUpgradePanel : MonoBehaviour
         buttonRate.onClick.AddListener(ButtonRate);
         buttonRequiment.onClick.AddListener(ClickedGoTown);
         closeButton.onClick.AddListener(CloseButton);
+        
+    }
+
+    private void ControlXp()
+    {
+        if (soGameSettings.totalXp>=soAgentUpgrade.cost)
+        {
+           
+            button.interactable = true;
+        }
+        else
+        {
+           
+            button.interactable = false;
+        }
+    }
+    private void ControlXpRate()
+    {
+        if (soGameSettings.totalXp>=soAgentUpgrade.checkPointRateCost)
+        {
+           
+            buttonRate.interactable = true;
+        }
+        else
+        {
+           
+            buttonRate.interactable = false;
+        }
     }
 
     private void SetCost()
     {
+        
         soAgentUpgrade.cost = FormulaCost(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c,0,soAgentUpgrade.totalLevel);
         costText.SetText(soAgentUpgrade.cost.ToString());
+        _gameManager.SetSoGameSettings();
     }
 
     private void SetSlider()
@@ -162,16 +202,24 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void Clicked()
     {
-        if (soAgentUpgrade.level>=5 && soAgentUpgrade.stage>=4) return;
-        if (CharactersType!=CharactersType.Town)
+        var cost=FormulaCost(soAgentUpgrade.multipherCost.a,soAgentUpgrade.multipherCost.b,soAgentUpgrade.multipherCost.c,1,soAgentUpgrade.totalLevel);
+        soGameSettings.totalXp -= soAgentUpgrade.cost;
+        _gameManager.OnXpChange?.Invoke();
+        if (soGameSettings.totalXp>=cost)
         {
-            if (soAgentUpgrade.stage == _stageCount && (soAgentUpgrade.level == soTownUpgrade.level))
+            if (soAgentUpgrade.level>=5 && soAgentUpgrade.stage>=4) return;
+            if (CharactersType!=CharactersType.Town)
             {
-                buttonRequiment.gameObject.SetActive(true);
-                button.gameObject.SetActive(false);
-                return;
+                if (soAgentUpgrade.stage == _stageCount && (soAgentUpgrade.level == soTownUpgrade.level))
+                {
+                    buttonRequiment.gameObject.SetActive(true);
+                    button.gameObject.SetActive(false);
+                    return;
+                }
             }
         }
+       
+        
        
       
         
@@ -185,12 +233,22 @@ public class CharacterUpgradePanel : MonoBehaviour
 
     private void ButtonRate()
     {
+       
             soAgentUpgrade.checkPointRateLevel++;
-            soAgentUpgrade.checkPointRateCost = FormulaCost(soAgentUpgrade.multipherRateCost.a, soAgentUpgrade.multipherRateCost.b,
-                soAgentUpgrade.multipherRateCost.c, 0,soAgentUpgrade.checkPointRateLevel);
-            checkPointRateTextCost.SetText(soAgentUpgrade.checkPointRateCost.ToString());
+            ClickRateUpgrade();
+            soGameSettings.totalXp -= soAgentUpgrade.checkPointRateCost;
+            _gameManager.OnXpChange?.Invoke();
+            _gameManager.SetSoGameSettings();
+            ControlXpRate();
             soAgentUpgrade.checkPointRate += 0.01f;
 
+    }
+
+    private void ClickRateUpgrade()
+    {
+        soAgentUpgrade.checkPointRateCost = FormulaCost(soAgentUpgrade.multipherRateCost.a, soAgentUpgrade.multipherRateCost.b,
+            soAgentUpgrade.multipherRateCost.c, 0,soAgentUpgrade.checkPointRateLevel);
+        checkPointRateTextCost.SetText(soAgentUpgrade.checkPointRateCost.ToString());
     }
 
     private void ClickedGoTown()
@@ -207,7 +265,7 @@ public class CharacterUpgradePanel : MonoBehaviour
         var formula=Math.Ceiling((a * Math.Pow(i, 2) + b * i + c) * Math.Pow(1.2, (i - 1) / 5));
         return (int)formula;
     }
-    private int FormulaCost(float a, float b, float c,int levelPlus,int level)
+    public int FormulaCost(float a, float b, float c,int levelPlus,int level)
     {
         //math.ceil((a**i+b*i+c)*(1.2**((i)//5)))
         var i = level+levelPlus;
@@ -228,6 +286,8 @@ public class CharacterUpgradePanel : MonoBehaviour
         SetHealth();
         SetCost();
         SetDamage();
+        ControlXp();
+       
 
     }
 

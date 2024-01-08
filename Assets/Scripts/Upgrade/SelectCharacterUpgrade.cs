@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class SelectCharacterUpgrade : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> characterUpgradePanels;
+    [SerializeField] private List<CharacterUpgradePanel> characterUpgradePanels;
 
     public RectTransform currentPanel;
     public RectTransform oldPanel;

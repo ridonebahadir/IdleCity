@@ -15,12 +15,12 @@ MonoBehaviour:
   agentType: 1
   speed: 10
   attackRate: 0
-  health: 20
-  damage: 2
+  health: 0
+  damage: 0
   attackDistance: 3
   cost: 10
   reward: 3
-  digSpeed: 0.2
+  digSpeed: 0.22
   DefaultValue:
     health: 20
     damage: 2
